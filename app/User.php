@@ -35,5 +35,6 @@ class User extends \TCG\Voyager\Models\User
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'settings' => 'json',
     ];
 }

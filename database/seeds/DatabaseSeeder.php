@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call(OpenRankPermissionRoleTableSeeder::class);
         $this->call(OpenRankSettingsTableSeeder::class);
         $this->call(OpenRankTranslationsTableSeeder::class);
+        $this->call(OpenRankUsersTableSeeder::class);
     }
 }

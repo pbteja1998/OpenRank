@@ -45,6 +45,20 @@ class OpenRankUsersTableSeeder extends Seeder
                 'created_at' => '2019-02-21 18:20:05',
                 'updated_at' => '2019-02-21 18:20:05',
             ),
+            2 => 
+            array (
+                'id' => 3,
+                'role_id' => 3,
+                'name' => 'Company User',
+                'email' => 'company_user@user.com',
+                'avatar' => 'users/default.png',
+                'email_verified_at' => NULL,
+                'password' => '$2y$10$BLhoy7swpVEeyfR9E4Tf4ermXxldmQutiL06rqczewR/XL0eeXJ86',
+                'remember_token' => NULL,
+                'settings' => '{"locale":"en"}',
+                'created_at' => '2019-02-22 19:24:01',
+                'updated_at' => '2019-02-22 19:24:01',
+            ),
         ));
         
         

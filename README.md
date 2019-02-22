@@ -79,6 +79,11 @@ $ php artisan iseed data_types,data_rows,menus,menu_items,roles,permissions,perm
 **Run the following commands if new files are added to the database/seeds directory**
 ```bash
 $ composer dump-autoload
+
+# (Recommended) You could add seeds of only the newly added/updated seed files by specifying the class name
+$ php artisan db:seed --class=OpenRankUsersTableSeeder
+
+# Else if you want to seed the entire database again, run the following command
 $ php artisan db:seed
 
 # In case of any error, run "php artisan migrate:fresh" before "php artisan db:seed"

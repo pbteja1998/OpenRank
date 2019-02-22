@@ -83,3 +83,11 @@ $ php artisan db:seed
 # In case of any error, run "php artisan migrate:fresh" before "php artisan db:seed"
 # Note that "php artisan migrate:fresh" will drop all the tables and runs the all migrations again 
 ```
+
+#### Updating voyager config
+**Run the following commands if you change `config/voyager.php` file**
+```bash
+$ php artisan config:cache
+
+# Restart the server after running the above command
+```

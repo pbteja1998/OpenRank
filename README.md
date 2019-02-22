@@ -97,3 +97,8 @@ $ php artisan config:cache
 
 # Restart the server after running the above command
 ```
+
+sudo docker-compose stop
+sudo docker-compose up -d nginx mysql
+sudo docker-compose exec mysql bash
+sudo docker-compose exec workspace bash

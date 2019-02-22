@@ -1,7 +1,9 @@
 # OpenRank
 
 
-### Setting up the project
+## Setting up the project
+
+### Local Repo setup
 ```bash
 $ git clone https://github.com/pbteja1998/OpenRank.git
 $ cd OpenRank
@@ -28,9 +30,7 @@ DB_PASSWORD=secret
 
 I am using [Laravel Voyager](https://laravelvoyager.com/) to make administration tasks easier.
 
-### Other Instructions
-
-#### Setting up voyager
+### Setting up migrations and seeds
 ```bash
 $ php artisan voyager:install
 
@@ -49,13 +49,13 @@ $ php artisan db:seed
 $ php artisan voyager:admin admin@email.com --create  # Follow the instructions to set name and password of admin
 ```
 
-#### Install npm packages
+### Install npm packages
 ```bash
 # Leave the following command running.
 $ npm install && npm run watch
 ```
 
-#### Run the server
+### Run the server
 ```bash
 # In an other terminal instance, leave the following command running
 $ php artisan serve
@@ -63,6 +63,9 @@ $ php artisan serve
 
 - You can open the application at [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 - To open the admin panel, go to [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin) and enter the admin credentials that you created earlier.
+
+
+## Other Instructions 
 
 #### Generating migrations and seeds 
 **Run the following commands only if you created any new tables and breads from voyager admin panel**

@@ -34,11 +34,19 @@ I am using [Laravel Voyager](https://laravelvoyager.com/) to make administration
 ```bash
 $ php artisan voyager:install
 
-# Create an admin user
-$ php artisan voyager:admin admin@admin.com --create  # Follow the instructions to set name and password of admin
-
 # Run the remaining migrations (if any)
 $ php artisan migrate
+
+# Seed the database
+$ composer dump-autoload
+$ php artisan db:seed
+
+# Seeding will create two users - 1 AdminUser and 1 NormalUser
+# Admin User Credentials (email: admin@admin.com, password: password)
+# Normal User Credentials (email: user@user.com, password: password)
+
+# You can also create your own admin user using the following command
+$ php artisan voyager:admin admin@email.com --create  # Follow the instructions to set name and password of admin
 ```
 
 #### Install npm packages

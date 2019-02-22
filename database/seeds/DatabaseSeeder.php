@@ -12,5 +12,14 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
+        $this->call(OpenRankDataTypesTableSeeder::class);
+        $this->call(OpenRankDataRowsTableSeeder::class);
+        $this->call(OpenRankMenusTableSeeder::class);
+        $this->call(OpenRankMenuItemsTableSeeder::class);
+        $this->call(OpenRankRolesTableSeeder::class);
+        $this->call(OpenRankPermissionsTableSeeder::class);
+        $this->call(OpenRankPermissionRoleTableSeeder::class);
+        $this->call(OpenRankSettingsTableSeeder::class);
+        $this->call(OpenRankTranslationsTableSeeder::class);
     }
 }

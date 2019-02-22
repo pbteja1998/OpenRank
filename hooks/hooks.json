@@ -1,1 +1,11 @@
-{}
+{
+    "last_remote_check": null,
+    "hooks": {
+        "voyager-bread-generator": {
+            "name": "voyager-bread-generator",
+            "description": "Create BREAD from the console using artisan",
+            "version": "dev-master",
+            "enabled": false
+        }
+    }
+}

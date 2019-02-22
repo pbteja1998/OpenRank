@@ -36,6 +36,9 @@ $ php artisan voyager:install
 
 # Create an admin user
 $ php artisan voyager:admin admin@admin.com --create  # Follow the instructions to set name and password of admin
+
+# Run the remaining migrations (if any)
+$ php artisan migrate
 ```
 
 #### Install npm packages
@@ -52,3 +55,9 @@ $ php artisan serve
 
 - You can open the application at [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 - To open the admin panel, go to [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin) and enter the admin credentials that you created earlier.
+
+#### Seeding and Generating migrations
+```bash
+$ php artisan migrate:generate table1,table2
+$ php artisan iseed data_types,data_rows,menus,menu_items,roles,permissions,permission_role,settings,translations --classnameprefix=OpenRank
+```

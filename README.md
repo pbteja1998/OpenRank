@@ -64,13 +64,15 @@ $ php artisan serve
 - You can open the application at [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 - To open the admin panel, go to [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin) and enter the admin credentials that you created earlier.
 
-#### Generating migrations and seeds
+#### Generating migrations and seeds 
+**Run the following commands only if you created any new tables and breads from voyager admin panel**
 ```bash
 $ php artisan migrate:generate table1,table2
 $ php artisan iseed data_types,data_rows,menus,menu_items,roles,permissions,permission_role,settings,translations --classnameprefix=OpenRank
 ```
 
 #### For Seeding the database
+**Run the following commands if new files are added to the database/seeds directory**
 ```bash
 $ composer dump-autoload
 $ php artisan db:seed

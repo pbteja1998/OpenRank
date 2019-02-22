@@ -65,6 +65,8 @@ $ php artisan iseed data_types,data_rows,menus,menu_items,roles,permissions,perm
 #### For Seeding the database
 ```bash
 $ composer dump-autoload
-$ php artisan migrate:fresh
 $ php artisan db:seed
+
+# In case of any error, run "php artisan migrate:fresh" before "php artisan db:seed"
+# Note that "php artisan migrate:fresh" will drop all the tables and runs the all migrations again 
 ```

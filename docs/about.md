@@ -13,3 +13,4 @@ This project mainly uses
     - [Laradock](https://laradock.io/) - A full PHP development environment for Docker.
 - [Vue Js](https://vuejs.org/) - The Progressive JavaScript Framework
 - [Bootstrap](https://getbootstrap.com/docs/4.0/getting-started/introduction/) - An open source toolkit for developing with HTML, CSS, and JS.
+- [Docusaurus](https://github.com/facebook/docusaurus) - Makes it easy to maintain Open Source Documentation Websites

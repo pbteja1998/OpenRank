@@ -56,11 +56,17 @@
 <pre><code class="hljs css language-bash"><span class="hljs-comment"># Clone the Repo</span>
 $ git <span class="hljs-built_in">clone</span> https://github.com/pbteja1998/OpenRank.git
 
+<span class="hljs-comment"># Navigate to OpenRank directory</span>
+$ <span class="hljs-built_in">cd</span> OpenRank
+
 <span class="hljs-comment"># Laravel uses "dot-env" for managing environment variables. Create ".env" file from ".env-example" file</span>
-$ cp .env-example .env
+$ cp .env.example .env
 
 <span class="hljs-comment"># Navigate to "laradock" directory</span>
 $ <span class="hljs-built_in">cd</span> laradock
+
+<span class="hljs-comment"># Create .env file for LaraDock</span>
+$ cp env-example .env
 
 <span class="hljs-comment"># Build the environment and run it using docker-compose</span>
 $ docker-compose up -d nginx mysql
@@ -70,6 +76,9 @@ $ docker-compose <span class="hljs-built_in">exec</span> workspace bash
 
 <span class="hljs-comment"># Install the composer dependencies</span>
 &gt;&gt; composer install
+
+<span class="hljs-comment"># Set the application key </span>
+&gt;&gt; php artisan key:generate
 
 <span class="hljs-comment"># Install the npm dependencies</span>
 &gt;&gt; npm install &amp;&amp; npm run dev
@@ -95,6 +104,19 @@ $ docker-compose <span class="hljs-built_in">exec</span> workspace bash
 <li>You can view the application at <a href="http://localhost">http://localhost</a></li>
 <li>To view the admin panel, navigate to <a href="http://localhost/admin">http://localhost/admin</a> and enter the admin credentials that were created earlier.</li>
 </ul>
+<h3><a class="anchor" aria-hidden="true" id="docs-update"></a><a href="#docs-update" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Docs Update</h3>
+<p>We are using <a href="https://github.com/facebook/docusaurus">Docusaurus</a> for managing documentation.</p>
+<p>The only directories that needs to be changed are <code>/docs</code> and <code>/website</code></p>
+<pre><code class="hljs css language-bash"><span class="hljs-comment"># Navigate to website directory</span>
+$ <span class="hljs-built_in">cd</span> website
+
+<span class="hljs-comment"># Install the dependencies</span>
+$ npm install
+
+<span class="hljs-comment"># To view the website locally</span>
+$ npm run start
+</code></pre>
+<p>The website will be opened automatically in the browser at <a href="http://localhost:3000">http://localhost:3000</a></p>
 <h3><a class="anchor" aria-hidden="true" id="other-instructions"></a><a href="#other-instructions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Other Instructions</h3>
 <p><strong>All of the following commands should be run in the <code>workspace</code> container.</strong></p>
 <p>To Enter workspace container, enter the following command.</p>

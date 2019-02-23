@@ -3,8 +3,12 @@
   "localized-strings": {
     "next": "Next",
     "previous": "Previous",
-    "tagline": "A website for testing",
+    "tagline": "A open-source alternative for hacker-rank platform",
     "docs": {
+      "about": {
+        "title": "About OpenRank",
+        "sidebar_label": "About"
+      },
       "doc1": {
         "title": "Latin-ish",
         "sidebar_label": "Example Page"
@@ -20,6 +24,10 @@
       },
       "doc5": {
         "title": "Fifth Document"
+      },
+      "intro": {
+        "title": "Installation",
+        "sidebar_label": "Installation"
       }
     },
     "links": {
@@ -29,9 +37,8 @@
       "Blog": "Blog"
     },
     "categories": {
-      "Docusaurus": "Docusaurus",
-      "First Category": "First Category",
-      "Second Category": "Second Category"
+      "Getting Started": "Getting Started",
+      "First Category": "First Category"
     }
   },
   "pages-strings": {

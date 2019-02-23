@@ -1,6 +1,6 @@
 # OpenRank
 
-## About
+### About
 Visit our [docs](https://pbteja1998.github.io/OpenRank/docs/about) to know more about OpenRank.
 
 ### Getting Started

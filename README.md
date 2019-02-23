@@ -15,13 +15,13 @@ This project mainly uses
 
 **First make sure that the docker is installed correctly.** 
 
-**If you do not have docker installed, you can follow the instructions in the [official docs](https://hub.docker.com/search/?type=edition&offering=community) based on your operating system.**
+**If you do not have docker installed, you can follow the instructions in the [official docs](https://hub.docker.com/search/?type=edition&offering=community) and follow the relevant instructions based on your operating system.**
 
 ```bash
 # Clone the Repo
 $ git clone https://github.com/pbteja1998/OpenRank.git
 
-# Laravel uses dot-env for managing different environments
+# Laravel uses "dot-env" for managing environment variables. Create ".env" file from ".env-example" file
 $ cp .env-example .env
 
 # Navigate to "laradock" directory
@@ -37,7 +37,7 @@ $ docker-compose exec workspace bash
 >> composer install
 
 # Install the npm dependencies
-> npm install && npm run dev
+>> npm install && npm run dev
 
 # Install voyager and run the migrations
 >> php artisan voyager:install
@@ -59,7 +59,7 @@ $ docker-compose exec workspace bash
 
 
 - You can view the application at [http://localhost](http://localhost)
-- To view the admin panel, navigate to [http://localhost/admin](http://localhost/admin) and enter the admin credentials that you created earlier.
+- To view the admin panel, navigate to [http://localhost/admin](http://localhost/admin) and enter the admin credentials that were created earlier.
 
 
 ### Other Instructions 

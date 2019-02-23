@@ -1,14 +1,14 @@
 ---
-id: intro
+id: installation
 title: Installation
 sidebar_label: Installation
 ---
 
 ### Running Locally
 
-**First make sure that the docker is installed correctly.** 
+First make sure that the docker is installed correctly. 
 
-**If you do not have docker installed, you can follow the instructions in the [official docs](https://hub.docker.com/search/?type=edition&offering=community) and follow the relevant instructions based on your operating system.**
+If you do not have docker installed, you can follow the instructions in the [official docs](https://hub.docker.com/search/?type=edition&offering=community) and follow the relevant instructions based on your operating system.
 
 ```bash
 # Clone the Repo

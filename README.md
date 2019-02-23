@@ -1,45 +1,49 @@
 # OpenRank
 
+## About
+This project mainly uses
+- [Laravel](https://laravel.com/) - A PHP web application framework with expressive, elegant syntax following the MVC architectural pattern.
+- [Laravel Voyager](https://laravelvoyager.com/) - A Laravel Admin Package that includes BREAD(CRUD) operations, a media manager, menu builder, and much more.
+    - [Migrations Generator](https://github.com/Xethron/migrations-generator) - A Laravel package that generates Laravel Migrations from an existing database, including indexes and foreign keys.
+    - [Inverse Seed Generator](https://github.com/orangehill/iseed) - A Laravel package that provides a method to generate a new seed file based on data from the existing database table.     
+- [Docker Engine](https://www.docker.com/products/docker-engine) - A software platform designed to make it easier to create, deploy, and run applications by using containers
+    - [Laradock](https://laradock.io/) - A full PHP development environment for Docker.
+- [Vue Js](https://vuejs.org/) - The Progressive JavaScript Framework
+- [Bootstrap](https://getbootstrap.com/docs/4.0/getting-started/introduction/) - An open source toolkit for developing with HTML, CSS, and JS.
 
-## Setting up the project
+### Running Locally
 
-### Local Repo setup
+**First make sure that the docker is installed correctly.** 
+
+**If you do not have docker installed, you can follow the instructions in the [official docs](https://hub.docker.com/search/?type=edition&offering=community) based on your operating system.**
+
 ```bash
+# Clone the Repo
 $ git clone https://github.com/pbteja1998/OpenRank.git
-$ cd OpenRank
-$ composer install
-$ cp .env.example .env
-$ php artisan key:generate
-```
 
-### Setting up the database configuration
-- Open `.env` file
+# Laravel uses dot-env for managing different environments
+$ cp .env-example .env
 
-#### If you want to use `MYSQL` as database, set the following as per your system's `MYSQL` settings. 
-( You would probably only need to change `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`.
-```bash
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=homestead
-DB_USERNAME=homestead
-DB_PASSWORD=secret
-```
+# Navigate to "laradock" directory
+$ cd laradock
 
-#### If you want to use `SQLITE` as your database, refer to [docs](https://laravel.com/docs/5.7/database) to set the configurations.
+# Build the environment and run it using docker-compose
+$ docker-compose up -d nginx mysql
 
-I am using [Laravel Voyager](https://laravelvoyager.com/) to make administration tasks easier.
+# Enter the Workspace container, to execute commands like (Artisan, Composer, PHPUnit, Gulp, …)
+$ docker-compose exec workspace bash
 
-### Setting up migrations and seeds
-```bash
-$ php artisan voyager:install
+# Install the composer dependencies
+>> composer install
 
-# Run the remaining migrations (if any)
-$ php artisan migrate
+# Install the npm dependencies
+> npm install && npm run dev
+
+# Install voyager and run the migrations
+>> php artisan voyager:install
 
 # Seed the database
-$ composer dump-autoload
-$ php artisan db:seed
+>> php artisan db:seed
 
 # Seeding will create three users - 1 AdminUser, 1 NormalUser and 1 CompanyUser
 # Admin User Credentials (email: admin@admin.com, password: password)
@@ -47,44 +51,42 @@ $ php artisan db:seed
 # Company User Credentials (email: company_user@user.com, password: password)
 
 # You can also create your own admin user using the following command
-$ php artisan voyager:admin admin@email.com --create  # Follow the instructions to set name and password of admin
+>> php artisan voyager:admin admin@email.com --create  # Follow the instructions to set name and password of admin
+
+# To exit the workspace container, simply enter the following command
+>> exit
 ```
 
-### Install npm packages
+
+- You can view the application at [http://localhost](http://localhost)
+- To view the admin panel, navigate to [http://localhost/admin](http://localhost/admin) and enter the admin credentials that you created earlier.
+
+
+### Other Instructions 
+**All of the following commands should be run in the `workspace` container.**
+
+To Enter workspace container, enter the following command.
 ```bash
-# Leave the following command running.
-$ npm install && npm run watch
+$ docker-compose exec workspace bash
 ```
-
-### Run the server
-```bash
-# In an other terminal instance, leave the following command running
-$ php artisan serve
-```
-
-- You can open the application at [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
-- To open the admin panel, go to [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin) and enter the admin credentials that you created earlier.
-
-
-## Other Instructions 
 
 #### Generating migrations and seeds 
 **Run the following commands only if you created any new tables and breads from voyager admin panel**
 ```bash
-$ php artisan migrate:generate table1,table2
-$ php artisan iseed data_types,data_rows,menus,menu_items,roles,permissions,permission_role,settings,translations --classnameprefix=OpenRank
+>> php artisan migrate:generate table1,table2
+>> php artisan iseed data_types,data_rows,menus,menu_items,roles,permissions,permission_role,settings,translations --classnameprefix=OpenRank
 ```
 
 #### For Seeding the database
-**Run the following commands if new files are added to the database/seeds directory**
+**Run the following commands if new files are added to the `database/seeds` directory**
 ```bash
-$ composer dump-autoload
+>> composer dump-autoload
 
 # (Recommended) You could add seeds of only the newly added/updated seed files by specifying the class name
-$ php artisan db:seed --class=OpenRankUsersTableSeeder
+>> php artisan db:seed --class=OpenRankUsersTableSeeder
 
 # Else if you want to seed the entire database again, run the following command
-$ php artisan db:seed
+>> php artisan db:seed
 
 # In case of any error, run "php artisan migrate:fresh" before "php artisan db:seed"
 # Note that "php artisan migrate:fresh" will drop all the tables and runs the all migrations again 
@@ -93,12 +95,42 @@ $ php artisan db:seed
 #### Updating voyager config
 **Run the following commands if you change `config/voyager.php` file**
 ```bash
-$ php artisan config:cache
-
-# Restart the server after running the above command
+>> php artisan config:cache
 ```
 
-sudo docker-compose stop
-sudo docker-compose up -d nginx mysql
-sudo docker-compose exec mysql bash
-sudo docker-compose exec workspace bash
+#### Docker related commands
+**All of the following commands should be run after navigating to `laradock` directory.**
+
+```bash
+# To Enter the Workspace container, to execute commands like (Artisan, Composer, PHPUnit, Gulp, …)
+$ docker-compose exec workspace bash
+
+# To Exit the Workspace container, after entering the Workspace container
+>> exit
+
+# To Enter the mysql container
+$ docker-compose exec mysql bash
+
+# To Exit the mysql container
+>> exit
+
+# To build the initial environment using nginx and mysql
+$ docker-compose up -d nginx mysql
+
+# To build mysql container (Optionally, you can add --no-cache as an argument)
+$ docker-compose build mysql
+```
+
+#### Laravel Related Commands
+**All of the following commands should be run after entering the workspace container.**
+
+```bash
+# If the images are not being rendered, run the following command
+>> php artisan storage:link
+
+# If you get an error which says something like the key is not set, run the following command
+>> php artisan key:generate
+
+# To view the list of routes, run
+>> php artisan route:list
+```

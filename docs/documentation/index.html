@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Contributing to Documentation · OpenRank</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;We are using &lt;a href=&quot;https://github.com/facebook/docusaurus&quot;&gt;Docusaurus&lt;/a&gt; for managing documentation.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Contributing to Documentation · OpenRank"/><meta property="og:type" content="website"/><meta property="og:url" content="https://pbteja1998.github.io/OpenRank/index.html"/><meta property="og:description" content="&lt;p&gt;We are using &lt;a href=&quot;https://github.com/facebook/docusaurus&quot;&gt;Docusaurus&lt;/a&gt; for managing documentation.&lt;/p&gt;
+"/><meta property="og:image" content="https://pbteja1998.github.io/OpenRank/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://pbteja1998.github.io/OpenRank/img/docusaurus.png"/><link rel="shortcut icon" href="/OpenRank/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="alternate" type="application/atom+xml" href="https://pbteja1998.github.io/OpenRank/blog/atom.xml" title="OpenRank Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://pbteja1998.github.io/OpenRank/blog/feed.xml" title="OpenRank Blog RSS Feed"/><link rel="stylesheet" href="/OpenRank/css/code-block-buttons.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script><script type="text/javascript" src="/OpenRank/js/code-block-buttons.js"></script><link rel="stylesheet" href="/OpenRank/css/prism.css"/><link rel="stylesheet" href="/OpenRank/css/main.css"/><script src="/OpenRank/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/OpenRank/"><img class="logo" src="/OpenRank/img/docusaurus.svg" alt="OpenRank"/><h2 class="headerTitleWithLogo">OpenRank</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/OpenRank/docs/about" target="_self">Docs</a></li><li class="siteNavGroupActive"><a href="/OpenRank/docs/about" target="_self">API</a></li><li class=""><a href="/OpenRank/about" target="_self">Help</a></li><li class=""><a href="/OpenRank/blog/" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Getting Started</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/OpenRank/docs/about">About</a></li><li class="navListItem"><a class="navItem" href="/OpenRank/docs/installation">Installation</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/OpenRank/docs/documentation">Docs</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Contributing to Documentation</h1></header><article><div><span><p>We are using <a href="https://github.com/facebook/docusaurus">Docusaurus</a> for managing documentation.</p>
+<p>The code related to the documentation is present in <a href="https://github.com/pbteja1998/OpenRank/tree/docs">docs</a> branch of the repo.</p>
+</span></div><div class="tabs"><div class="nav-tabs"><div class="nav-link active" id="2-tab" data-group="group_1" data-tab="tabpanel_2">Bash</div></div><div class="tab-content"><div class="tab-pane active" data-group="group_1" tabindex="-1" id="tabpanel_2"><div><span><pre><code class="hljs css language-bash">
+<span class="token comment"># Clone the Repo</span>
+<span class="token function">git</span> clone https://github.com/pbteja1998/OpenRank.git
+
+<span class="token comment"># Navigate to OpenRank directory</span>
+<span class="token function">cd</span> OpenRank
+
+<span class="token comment"># Change into the 'docs' branch</span>
+<span class="token function">git</span> checkout docs
+
+<span class="token comment"># Navigate to website directory</span>
+<span class="token function">cd</span> website
+
+<span class="token comment"># Install the dependencies</span>
+<span class="token function">npm</span> <span class="token function">install</span>
+
+<span class="token comment"># To view the website locally</span>
+<span class="token function">npm</span> run start
+</code></pre>
+</span></div></div></div></div><div><span><p>The website will be opened automatically in the browser at <a href="http://localhost:3000">http://localhost:3000</a></p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/OpenRank/docs/installation"><span class="arrow-prev">← </span><span>Installation</span></a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/OpenRank/" class="nav-home"><img src="/OpenRank/img/docusaurus.svg" alt="OpenRank" width="66" height="58"/></a><div><h5>Docs</h5><a href="/OpenRank/docs/en/about.html">Getting Started</a><a href="/OpenRank/docs/en/about.html">Guides</a><a href="/OpenRank/docs/en/about.html">API Reference</a></div><div><h5>Community</h5><a href="https://discord.gg/qEA8vxd">Project Chat</a></div><div><h5>More</h5><a href="/OpenRank/blog">Blog</a><a href="https://github.com/pbteja1998/OpenRank">GitHub</a><a class="github-button" href="https://github.com/pbteja1998/OpenRank" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2019 Bhanu Teja</section></footer></div></body></html>

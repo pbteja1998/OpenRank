@@ -1,17 +1,15 @@
-# Open Rank Documentation 
+# OpenRank Documentation
 
-We are using [Docusaurus](https://github.com/facebook/docusaurus) for managing documentation.
+### About
+Visit our [docs](https://pbteja1998.github.io/OpenRank/docs/about) to know more about OpenRank.
 
-The only directories that needs to be changed are `/docs` and `/website`
+This branch contains code related to the documentation of OpenRank.
 
-```bash
-# Navigate to website directory
-$ cd website
+### Getting Started
+Visit our [docs](https://pbteja1998.github.io/OpenRank/docs/documentation) to get started.
 
-# Install the dependencies
-$ npm install
-
-# To view the website locally
-$ npm run start
-```
-The website will be opened automatically in the browser at [http://localhost:3000](http://localhost:3000)
+### Contact
+We have a few channels for contact:
+- [Discord](https://discord.gg/qEA8vxd)
+    - `#open-source`    
+- [GitHub Issues](https://github.com/pbteja1998/OpenRank/issues)

@@ -12,6 +12,8 @@ We are using [VueJs](https://vuejs.org/) for the frontend part of the applicatio
 
 Now run the following commands
 
+<!--DOCUSAURUS_CODE_TABS-->
+<!--Bash-->
 ```bash
 # Navigate to "laradock" directory
 cd laradock
@@ -23,5 +25,6 @@ docker-compose exec workspace bash
 npm run watch
 
 ```
+<!--END_DOCUSAURUS_CODE_TABS-->
 
 For contributing to the frontend, the only files that needs to be touched are in `resources/js/` and `resources/sass/`

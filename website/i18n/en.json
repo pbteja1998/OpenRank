@@ -36,6 +36,10 @@
       "installation": {
         "title": "Contributing to Backend",
         "sidebar_label": "Installation"
+      },
+      "others": {
+        "title": "Other Instructions",
+        "sidebar_label": "Others"
       }
     },
     "links": {

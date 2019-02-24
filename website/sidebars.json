@@ -1,6 +1,6 @@
 {
   "docs": {
-    "Getting Started": ["about", "installation"]
+    "Getting Started": ["about", "installation", "documentation"]
   },
   "docs-other": {
     "First Category": ["doc4", "doc5"]

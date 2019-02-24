@@ -19,6 +19,10 @@
       "doc3": {
         "title": "This is document number 3"
       },
+      "documentation": {
+        "title": "Contributing to Documentation",
+        "sidebar_label": "Docs"
+      },
       "doc4": {
         "title": "Other Document"
       },
@@ -26,7 +30,7 @@
         "title": "Fifth Document"
       },
       "installation": {
-        "title": "Installation",
+        "title": "Contributing to Backend",
         "sidebar_label": "Installation"
       }
     },

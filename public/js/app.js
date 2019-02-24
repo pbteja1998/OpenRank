@@ -923,6 +923,118 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mdbvue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mdbvue */ "./node_modules/mdbvue/src/index.js");
+/* harmony import */ var _modals_createTestModal_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modals/createTestModal.vue */ "./resources/js/products/tests/modals/createTestModal.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'TestsPage',
+  components: {
+    mdbContainer: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbContainer"],
+    mdbRow: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbRow"],
+    mdbCol: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbCol"],
+    mdbBtn: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbBtn"],
+    createTestModal: _modals_createTestModal_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      showCreateTestModal: false,
+      newTest: {
+        role: '',
+        work_experience: 0,
+        jd_link: '',
+        name: '',
+        duration: 0,
+        type: 'predefined'
+      }
+    };
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/products/tests/modals/createTestModal.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/products/tests/modals/createTestModal.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var mdbvue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mdbvue */ "./node_modules/mdbvue/src/index.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -937,12 +1049,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'TestsPage',
+  name: 'createTestModal',
+  props: {
+    test: {
+      type: Object,
+      default: function _default() {
+        return {
+          role: '',
+          work_experience: 0,
+          jd_link: '',
+          name: '',
+          duration: 0,
+          type: 'predefined'
+        };
+      }
+    },
+    showModal: {
+      type: Boolean,
+      default: false
+    }
+  },
   components: {
     mdbContainer: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbContainer"],
     mdbRow: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbRow"],
     mdbCol: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbCol"],
-    mdbJumbotron: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbJumbotron"]
+    mdbBtn: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbBtn"],
+    mdbModal: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbModal"],
+    mdbModalHeader: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbModalHeader"],
+    mdbModalTitle: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbModalTitle"],
+    mdbModalBody: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbModalBody"],
+    mdbInput: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbInput"],
+    mdbNumericInput: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbNumericInput"],
+    mdbModalFooter: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbModalFooter"]
+  },
+  data: function data() {
+    return {};
   }
 });
 
@@ -58058,13 +58199,368 @@ var render = function() {
     [
       _c(
         "mdb-row",
+        { staticClass: "mt-5 align-items-center justify-content-start" },
         [
+          _c("mdb-col", [
+            _c("h4", { staticClass: "demo-title" }, [
+              _c("strong", [_vm._v("Tests")])
+            ])
+          ]),
+          _vm._v(" "),
           _c(
             "mdb-col",
-            { staticClass: "mx-auto", attrs: { md: "12" } },
+            { attrs: { col: "3" } },
             [
-              _c("mdb-jumbotron", { staticClass: "mt-5" }, [
-                _vm._v("\n                This is Tests Page\n            ")
+              _c(
+                "mdb-btn",
+                {
+                  attrs: { color: "success" },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.showCreateTestModal = true
+                    }
+                  }
+                },
+                [_vm._v("Create Test")]
+              ),
+              _vm._v(" "),
+              _c("create-test-modal", {
+                attrs: {
+                  test: _vm.newTest,
+                  "show-modal": _vm.showCreateTestModal
+                }
+              })
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("hr"),
+      _vm._v(" "),
+      _c("mdb-container", { staticClass: "mt-5" })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/products/tests/modals/createTestModal.vue?vue&type=template&id=19207061&scoped=true&":
+/*!*****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/products/tests/modals/createTestModal.vue?vue&type=template&id=19207061&scoped=true& ***!
+  \*****************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.showModal
+    ? _c(
+        "mdb-modal",
+        {
+          attrs: { size: "lg", centered: "" },
+          on: {
+            close: function($event) {
+              _vm.showModal = false
+            }
+          }
+        },
+        [
+          _c(
+            "mdb-modal-header",
+            [_c("mdb-modal-title", [_vm._v("Create a New Test")])],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "mdb-modal-body",
+            [
+              _c(
+                "mdb-container",
+                [
+                  _c(
+                    "mdb-row",
+                    [
+                      _c(
+                        "mdb-col",
+                        { attrs: { col: "8" } },
+                        [
+                          _c("mdb-input", {
+                            attrs: {
+                              type: "text",
+                              label: "What role is this test for?"
+                            },
+                            model: {
+                              value: _vm.test.role,
+                              callback: function($$v) {
+                                _vm.$set(_vm.test, "role", $$v)
+                              },
+                              expression: "test.role"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("mdb-col", [
+                        _c(
+                          "div",
+                          { staticClass: "md-form" },
+                          [
+                            _c("mdb-input", {
+                              attrs: {
+                                type: "number",
+                                label: "Experience (years)"
+                              },
+                              model: {
+                                value: _vm.test.work_experience,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.test, "work_experience", $$v)
+                                },
+                                expression: "test.work_experience"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "mdb-row",
+                    [
+                      _c(
+                        "mdb-col",
+                        [
+                          _c("mdb-input", {
+                            attrs: {
+                              type: "text",
+                              label: "Job Description Link"
+                            },
+                            model: {
+                              value: _vm.test.jd_link,
+                              callback: function($$v) {
+                                _vm.$set(_vm.test, "jd_link", $$v)
+                              },
+                              expression: "test.jd_link"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "mdb-row",
+                    [
+                      _c(
+                        "mdb-col",
+                        { attrs: { col: "8" } },
+                        [
+                          _c("mdb-input", {
+                            attrs: { type: "text", label: "Test Name" },
+                            model: {
+                              value: _vm.test.name,
+                              callback: function($$v) {
+                                _vm.$set(_vm.test, "name", $$v)
+                              },
+                              expression: "test.name"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "mdb-col",
+                        [
+                          _c("mdb-input", {
+                            attrs: { type: "number", label: "Duration (mins)" },
+                            model: {
+                              value: _vm.test.duration,
+                              callback: function($$v) {
+                                _vm.$set(_vm.test, "duration", $$v)
+                              },
+                              expression: "test.duration"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "mdb-row",
+                    [
+                      _c("mdb-col", [
+                        _c(
+                          "div",
+                          { staticClass: "custom-control custom-radio" },
+                          [
+                            _c(
+                              "mdb-row",
+                              [
+                                _c("mdb-col", [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.test.type,
+                                        expression: "test.type"
+                                      }
+                                    ],
+                                    staticClass: "custom-control-input",
+                                    attrs: {
+                                      type: "radio",
+                                      value: "predefined",
+                                      id: "predefined"
+                                    },
+                                    domProps: {
+                                      checked: _vm._q(
+                                        _vm.test.type,
+                                        "predefined"
+                                      )
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        return _vm.$set(
+                                          _vm.test,
+                                          "type",
+                                          "predefined"
+                                        )
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "label",
+                                    {
+                                      staticClass: "custom-control-label",
+                                      attrs: { for: "predefined" }
+                                    },
+                                    [_vm._v("Predefined Test")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "p",
+                                    {
+                                      staticClass: "text-left text-muted",
+                                      staticStyle: { "font-size": "0.8rem" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                    Automatically generate a test based on job role and experience\n                                "
+                                      )
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("mdb-col", [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.test.type,
+                                        expression: "test.type"
+                                      }
+                                    ],
+                                    staticClass: "custom-control-input",
+                                    attrs: {
+                                      type: "radio",
+                                      value: "custom",
+                                      id: "custom"
+                                    },
+                                    domProps: {
+                                      checked: _vm._q(_vm.test.type, "custom")
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        return _vm.$set(
+                                          _vm.test,
+                                          "type",
+                                          "custom"
+                                        )
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "label",
+                                    {
+                                      staticClass: "custom-control-label",
+                                      attrs: { for: "custom" }
+                                    },
+                                    [_vm._v("Build your own test")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "p",
+                                    {
+                                      staticClass: "text-left text-muted",
+                                      staticStyle: { "font-size": "0.8rem" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                    Set-up a test with questions from library or create your own\n                                "
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "mdb-modal-footer",
+            [
+              _c(
+                "mdb-btn",
+                {
+                  attrs: { color: "secondary" },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.showModal = false
+                    }
+                  }
+                },
+                [_vm._v("Close")]
+              ),
+              _vm._v(" "),
+              _c("mdb-btn", { attrs: { color: "success" } }, [
+                _vm._v("Create Test")
               ])
             ],
             1
@@ -58072,9 +58568,7 @@ var render = function() {
         ],
         1
       )
-    ],
-    1
-  )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -73653,6 +74147,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_index_vue_vue_type_template_id_2dbf6437_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_index_vue_vue_type_template_id_2dbf6437_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/products/tests/modals/createTestModal.vue":
+/*!****************************************************************!*\
+  !*** ./resources/js/products/tests/modals/createTestModal.vue ***!
+  \****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _createTestModal_vue_vue_type_template_id_19207061_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createTestModal.vue?vue&type=template&id=19207061&scoped=true& */ "./resources/js/products/tests/modals/createTestModal.vue?vue&type=template&id=19207061&scoped=true&");
+/* harmony import */ var _createTestModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./createTestModal.vue?vue&type=script&lang=js& */ "./resources/js/products/tests/modals/createTestModal.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _createTestModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _createTestModal_vue_vue_type_template_id_19207061_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _createTestModal_vue_vue_type_template_id_19207061_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "19207061",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/products/tests/modals/createTestModal.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/products/tests/modals/createTestModal.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/products/tests/modals/createTestModal.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_createTestModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./createTestModal.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/products/tests/modals/createTestModal.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_createTestModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/products/tests/modals/createTestModal.vue?vue&type=template&id=19207061&scoped=true&":
+/*!***********************************************************************************************************!*\
+  !*** ./resources/js/products/tests/modals/createTestModal.vue?vue&type=template&id=19207061&scoped=true& ***!
+  \***********************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_createTestModal_vue_vue_type_template_id_19207061_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./createTestModal.vue?vue&type=template&id=19207061&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/products/tests/modals/createTestModal.vue?vue&type=template&id=19207061&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_createTestModal_vue_vue_type_template_id_19207061_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_createTestModal_vue_vue_type_template_id_19207061_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

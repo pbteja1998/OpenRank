@@ -942,6 +942,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -58196,6 +58208,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "mdb-container",
+    { attrs: { fluid: "" } },
     [
       _c(
         "mdb-row",
@@ -58239,7 +58252,34 @@ var render = function() {
       _vm._v(" "),
       _c("hr"),
       _vm._v(" "),
-      _c("mdb-container", { staticClass: "mt-5" })
+      _c(
+        "mdb-container",
+        { staticClass: "mt-5", attrs: { fluid: "" } },
+        [
+          _c(
+            "mdb-row",
+            [
+              _c("mdb-col", [
+                _c("h3", [_vm._v("Left Side Navigation Menu goes here.")])
+              ]),
+              _vm._v(" "),
+              _c("mdb-col", { attrs: { col: "8" } }, [
+                _c("h1", [
+                  _vm._v(
+                    "The Main Content of Tests Product Goes Here. The left side and right side of this container will have side bar navigation menus."
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("mdb-col", [
+                _c("h3", [_vm._v("Right Side Navigation Menu goes here.")])
+              ])
+            ],
+            1
+          )
+        ],
+        1
+      )
     ],
     1
   )

@@ -29,6 +29,10 @@
       "doc5": {
         "title": "Fifth Document"
       },
+      "frontend": {
+        "title": "Contributing to Frontend",
+        "sidebar_label": "Frontend"
+      },
       "installation": {
         "title": "Contributing to Backend",
         "sidebar_label": "Installation"

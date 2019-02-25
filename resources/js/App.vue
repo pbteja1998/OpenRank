@@ -14,7 +14,7 @@
                 </mdb-navbar-nav>
             </mdb-navbar-toggler>
         </mdb-navbar>
-        <main :style="{marginTop: '60px'}">
+        <main class="custom-flex-css" :style="{marginTop: '60px'}">
             <router-view></router-view>
         </main>
         <mdb-footer color="default-color">

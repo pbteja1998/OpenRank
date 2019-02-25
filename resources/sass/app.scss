@@ -1,6 +1,17 @@
 
 // Fonts
 //@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 // Variables
 @import 'variables';
+
+#app {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.custom-flex-css {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}

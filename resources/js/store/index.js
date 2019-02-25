@@ -14,7 +14,7 @@ export default new Vuex.Store({
             jdLink: '',
             name: '',
             duration: 0,
-            type: 'predefined'
+            testType: 'predefined'
         },
         createTestModal: false
     },

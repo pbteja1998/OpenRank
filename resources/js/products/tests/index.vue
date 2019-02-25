@@ -1,36 +1,35 @@
-<template>
-    <mdb-container fluid>
-        <mdb-row class="mt-5 align-items-center justify-content-start">
-            <mdb-col>
-                <h4 class="demo-title"><strong>Tests</strong></h4>
-            </mdb-col>
-            <mdb-col col="3">
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+    <mdb-container fluid class="custom-flex-css">
+        <main-header>
+            <template v-slot:title>Tests</template>
+
+            <template v-slot:others>
                 <mdb-btn color="success" @click="showModal">Create Test</mdb-btn>
                 <create-test-modal />
-            </mdb-col>
-        </mdb-row>
+            </template>
+        </main-header>
+
         <hr />
-        <mdb-container class="mt-5" fluid>
-            <mdb-row>
-                <mdb-col>
-                    <h3>Left Side Navigation Menu goes here.</h3>
-                </mdb-col>
 
-                <mdb-col col="8">
-                    <h1>The Main Content of Tests Product Goes Here. The left side and right side of this container will have side bar navigation menus.</h1>
-                </mdb-col>
+        <main-content>
+            <template v-slot:leftSideBar>
+                <h1>Left Side Bar</h1>
+            </template>
 
-                <mdb-col>
-                    <h3>Right Side Navigation Menu goes here.</h3>
-                </mdb-col>
-            </mdb-row>
-        </mdb-container>
+            <h1>This is the main content</h1>
+
+            <template v-slot:rightSideBar>
+                <h1>Right Side Bar</h1>
+            </template>
+        </main-content>
     </mdb-container>
 </template>
 
 <script>
     import { mdbContainer, mdbRow, mdbCol, mdbBtn } from 'mdbvue';
-    import createTestModal from './modals/createTestModal.vue';
+    import { createTestModal } from './modals';
+    import { mainHeader, mainContent } from '../../components';
+
     import { mapMutations } from 'vuex';
     import { SHOW_CREATE_TEST_MODAL } from '../../store/mutation-types';
 
@@ -41,7 +40,9 @@
             mdbRow,
             mdbCol,
             mdbBtn,
-            createTestModal
+            createTestModal,
+            mainContent,
+            mainHeader
         },
         methods: {
             ...mapMutations({
@@ -56,4 +57,5 @@
 </script>
 
 <style scoped>
+
 </style>

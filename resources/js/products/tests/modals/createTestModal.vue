@@ -38,14 +38,14 @@
                         <div class="custom-control custom-radio">
                             <mdb-row>
                                 <mdb-col>
-                                    <input type="radio" class="custom-control-input" value="predefined" v-model="type" id="predefined">
+                                    <input type="radio" class="custom-control-input" value="predefined" v-model="testType" id="predefined">
                                     <label class="custom-control-label" for="predefined">Predefined Test</label>
                                     <p class="text-left text-muted" style="font-size: 0.8rem;">
                                         Automatically generate a test based on job role and experience
                                     </p>
                                 </mdb-col>
                                 <mdb-col>
-                                    <input type="radio" class="custom-control-input" value="custom" v-model="type" id="custom">
+                                    <input type="radio" class="custom-control-input" value="custom" v-model="testType" id="custom">
                                     <label class="custom-control-label" for="custom">Build your own test</label>
                                     <p class="text-left text-muted" style="font-size: 0.8rem;">
                                         Set-up a test with questions from library or create your own
@@ -127,13 +127,13 @@
                     });
                 }
             },
-            type: {
+            testType: {
                 get () {
-                    return this.newTest.type;
+                    return this.newTest.testType;
                 },
                 set (value) {
                     return this.updateTest({
-                        type: value
+                        testType: value
                     });
                 }
             }

@@ -63570,7 +63570,7 @@ var render = function() {
               key: "leftSideBar",
               fn: function() {
                 return [
-                  _c("div", { staticClass: "form-group px-5 pt-5 pb-5 m-0" }, [
+                  _c("div", { staticClass: "form-group px-5 pt-5 pb-3 m-0" }, [
                     _c("input", {
                       directives: [
                         {

@@ -13,7 +13,7 @@
 
         <main-content>
             <template v-slot:leftSideBar>
-                <div class="form-group px-5 pt-5 pb-5 m-0">
+                <div class="form-group px-5 pt-5 pb-3 m-0">
                     <input class="form-control" type="text" placeholder="Search for a test.." aria-label="Search" v-model="searchTest" />
                 </div>
                 <mdb-accordion :panes="leftSideBarPanes" custom/>

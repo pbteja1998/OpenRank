@@ -3,6 +3,8 @@ import Router from 'vue-router';
 
 import HomePage from '../products/HomePage.vue';
 import TestsPage from '../products/tests/index.vue';
+import TestPreviewPage from '../products/tests/TestPreview.vue';
+import ViewTestPage from '../products/tests/ViewTest.vue';
 import CodePairPage from '../products/code_pair/index.vue';
 import LibraryPage from '../products/library/index.vue';
 import InsightsPage from '../products/insights/index.vue';
@@ -38,6 +40,16 @@ export default new Router({
             name: 'Insights',
             component: InsightsPage
         },
+        {
+            path: '/tests/preview/:id',
+            name: 'Test Preview',
+            component: TestPreviewPage
+        },
+        {
+            path: '/tests/:id',
+            name: 'View Test',
+            component: ViewTestPage
+        }
 
     ]
 });

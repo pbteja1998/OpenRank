@@ -3,6 +3,11 @@
         <main-header>
             <template v-slot:title>Tests</template>
 
+            <mdb-breadcrumb>
+                <mdb-breadcrumb-item><router-link to="/tests">Tests</router-link></mdb-breadcrumb-item>
+                <mdb-breadcrumb-item active>Active</mdb-breadcrumb-item>
+            </mdb-breadcrumb>
+
             <template v-slot:others>
                 <mdb-btn color="success" @click="showModal">Create Test</mdb-btn>
                 <create-test-modal />
@@ -20,12 +25,12 @@
             </template>
 
             <mdb-list-group>
-                <mdb-list-group-item href="#" :action="true" class="flex-row text-black-50" v-for="test in filteredTests" style="align-items: flex-start!important;">
+                <mdb-list-group-item href="#" :action="true" class="flex-row text-black-50" style="align-items: flex-start!important;" v-for="test in filteredTests">
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input" :id="test.id" style="display: none;" v-model="test.selected" :checked="test.selected">
+                        <input type="checkbox" class="form-check-input" :id="test.id" style="display: none;" v-model="test.checked" :checked="test.checked">
                         <label class="form-check-label" :for="test.id"></label>
                     </div>
-                    <div class="d-flex flex-column w-100 justify-content-between">
+                    <div class="d-flex flex-column w-100 justify-content-between" @click="selectTestAndNavigate(test.id)" style="cursor: pointer;">
                         <h5 class="mb-1">{{ test.name }}
                             <small class="text-muted float-right">{{ test.duration }} min</small>
                         </h5>
@@ -43,12 +48,12 @@
 </template>
 
 <script>
-    import { mdbContainer, mdbRow, mdbCol, mdbBtn, mdbInput, mdbListGroup, mdbListGroupItem, mdbJumbotron, mdbIcon } from 'mdbvue';
+    import { mdbContainer, mdbRow, mdbCol, mdbBtn, mdbInput, mdbListGroup, mdbListGroupItem, mdbIcon, mdbBreadcrumb, mdbBreadcrumbItem } from 'mdbvue';
     import { createTestModal } from './modals';
     import { mainHeader, mainContent, mdbAccordion, mdbAccordionPane } from '../../components';
 
-    import { mapMutations } from 'vuex';
-    import { SHOW_CREATE_TEST_MODAL } from '../../store/mutation-types';
+    import { mapMutations, mapState } from 'vuex';
+    import { SHOW_CREATE_TEST_MODAL, SELECT_TEST } from '../../store/mutation-types';
 
     export default {
         name: 'TestsPage',
@@ -65,15 +70,24 @@
             mdbInput,
             mdbListGroup,
             mdbListGroupItem,
-            mdbJumbotron,
-            mdbIcon
+            mdbIcon,
+            mdbBreadcrumb,
+            mdbBreadcrumbItem
         },
         methods: {
             ...mapMutations({
-                showModal: SHOW_CREATE_TEST_MODAL
-            })
+                showModal: SHOW_CREATE_TEST_MODAL,
+                selectTest: SELECT_TEST
+            }),
+            selectTestAndNavigate: function (id) {
+                this.selectTest({id: id});
+                this.$router.push('/tests/preview/' + id);
+            }
         },
         computed: {
+            ...mapState([
+               'tests'
+            ]),
             filteredTests() {
                 return this.tests.filter(test => {
                     return test.name.toLowerCase().includes(this.searchTest.toLowerCase()) ||
@@ -119,54 +133,20 @@
                         content: 'Anim pariatur cliche reprehenderit,',
                     },
                 ],
-                searchTest: '',
-                tests: [
-                    {
-                        id: 1,
-                        name: 'HackerRank Hiring Test',
-                        role: 'Software Development Internship',
-                        workExperience: 0,
-                        duration: 90,
-                        selected: false
-                    },
-                    {
-                        id: 2,
-                        name: 'HackerRank Software Developer Hiring Test',
-                        role: 'Software Developer',
-                        workExperience: 3,
-                        duration: 60,
-                        selected: false
-                    },
-                    {
-                        id: 3,
-                        name: 'InterviewBit Software Developer Hiring Test',
-                        role: 'Software Developer',
-                        workExperience: 1,
-                        duration: 75,
-                        selected: false
-                    },
-                    {
-                        id: 4,
-                        name: 'HackerEarth IIIT-H Campus Placements Hiring Test',
-                        role: 'Software Developer',
-                        workExperience: 0,
-                        duration: 60,
-                        selected: false
-                    },
-                    {
-                        id: 5,
-                        name: 'HackerRank Campus Placements',
-                        role: 'Software Developer',
-                        workExperience: 0,
-                        duration: 60,
-                        selected: false
-                    },
-                ]
+                searchTest: ''
             };
         }
     };
 </script>
 
 <style scoped>
-
+    .breadcrumb {
+        background-color: white;
+    }
+    .breadcrumb-item+.breadcrumb-item::before {
+        display: inline-block;
+        padding-right: .5rem;
+        color: #6c757d;
+        content: ">";
+    }
 </style>

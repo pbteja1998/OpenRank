@@ -5,8 +5,8 @@
                 <h4 class="demo-title"><strong>Tests</strong></h4>
             </mdb-col>
             <mdb-col col="3">
-                <mdb-btn color="success" @click.native="showCreateTestModal = true">Create Test</mdb-btn>
-                <create-test-modal :test="newTest" :show-modal="showCreateTestModal" />
+                <mdb-btn color="success" @click="showModal">Create Test</mdb-btn>
+                <create-test-modal />
             </mdb-col>
         </mdb-row>
         <hr />
@@ -31,6 +31,8 @@
 <script>
     import { mdbContainer, mdbRow, mdbCol, mdbBtn } from 'mdbvue';
     import createTestModal from './modals/createTestModal.vue';
+    import { mapMutations } from 'vuex';
+    import { SHOW_CREATE_TEST_MODAL } from '../../store/mutation-types';
 
     export default {
         name: 'TestsPage',
@@ -41,17 +43,13 @@
             mdbBtn,
             createTestModal
         },
+        methods: {
+            ...mapMutations({
+                showModal: SHOW_CREATE_TEST_MODAL
+            })
+        },
         data() {
             return {
-                showCreateTestModal: false,
-                newTest: {
-                    role: '',
-                    work_experience: 0,
-                    jd_link: '',
-                    name: '',
-                    duration: 0,
-                    type: 'predefined'
-                }
             }
         }
     };

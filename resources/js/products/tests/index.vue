@@ -13,10 +13,27 @@
 
         <main-content>
             <template v-slot:leftSideBar>
+                <div class="form-group px-5 pt-5 pb-5 m-0">
+                    <input class="form-control" type="text" placeholder="Search for a test.." aria-label="Search" v-model="searchTest" />
+                </div>
                 <mdb-accordion :panes="leftSideBarPanes" custom/>
             </template>
 
-            <h1>This is the main content</h1>
+            <mdb-list-group>
+                <mdb-list-group-item href="#" :action="true" class="flex-row text-black-50" v-for="test in filteredTests" style="align-items: flex-start!important;">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" :id="test.id" style="display: none;" v-model="test.selected" :checked="test.selected">
+                        <label class="form-check-label" :for="test.id"></label>
+                    </div>
+                    <div class="d-flex flex-column w-100 justify-content-between">
+                        <h5 class="mb-1">{{ test.name }}
+                            <small class="text-muted float-right">{{ test.duration }} min</small>
+                        </h5>
+                        <p class="mb-1">{{ test.role }}</p>
+                        <small class="text-muted">0 - {{ test.workExperience }} years</small>
+                    </div>
+                </mdb-list-group-item>
+            </mdb-list-group>
 
             <template v-slot:rightSideBar>
                 <mdb-accordion :panes="rightSideBarPanes" custom/>
@@ -26,7 +43,7 @@
 </template>
 
 <script>
-    import { mdbContainer, mdbRow, mdbCol, mdbBtn } from 'mdbvue';
+    import { mdbContainer, mdbRow, mdbCol, mdbBtn, mdbInput, mdbListGroup, mdbListGroupItem, mdbJumbotron, mdbIcon } from 'mdbvue';
     import { createTestModal } from './modals';
     import { mainHeader, mainContent, mdbAccordion, mdbAccordionPane } from '../../components';
 
@@ -44,12 +61,25 @@
             mainContent,
             mainHeader,
             mdbAccordion,
-            mdbAccordionPane
+            mdbAccordionPane,
+            mdbInput,
+            mdbListGroup,
+            mdbListGroupItem,
+            mdbJumbotron,
+            mdbIcon
         },
         methods: {
             ...mapMutations({
                 showModal: SHOW_CREATE_TEST_MODAL
             })
+        },
+        computed: {
+            filteredTests() {
+                return this.tests.filter(test => {
+                    return test.name.toLowerCase().includes(this.searchTest.toLowerCase()) ||
+                        test.role.toLowerCase().includes(this.searchTest.toLowerCase());
+                })
+            }
         },
         data() {
             return {
@@ -87,6 +117,49 @@
                     {
                         title: 'Languages',
                         content: 'Anim pariatur cliche reprehenderit,',
+                    },
+                ],
+                searchTest: '',
+                tests: [
+                    {
+                        id: 1,
+                        name: 'HackerRank Hiring Test',
+                        role: 'Software Development Internship',
+                        workExperience: 0,
+                        duration: 90,
+                        selected: false
+                    },
+                    {
+                        id: 2,
+                        name: 'HackerRank Software Developer Hiring Test',
+                        role: 'Software Developer',
+                        workExperience: 3,
+                        duration: 60,
+                        selected: false
+                    },
+                    {
+                        id: 3,
+                        name: 'InterviewBit Software Developer Hiring Test',
+                        role: 'Software Developer',
+                        workExperience: 1,
+                        duration: 75,
+                        selected: false
+                    },
+                    {
+                        id: 4,
+                        name: 'HackerEarth IIIT-H Campus Placements Hiring Test',
+                        role: 'Software Developer',
+                        workExperience: 0,
+                        duration: 60,
+                        selected: false
+                    },
+                    {
+                        id: 5,
+                        name: 'HackerRank Campus Placements',
+                        role: 'Software Developer',
+                        workExperience: 0,
+                        duration: 60,
+                        selected: false
                     },
                 ]
             };

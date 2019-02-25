@@ -30,10 +30,10 @@
 
 <style scoped>
     .main-content {
-        border: 1px solid rgb(241, 235, 235);
+        border-top: 1px solid rgb(241, 235, 235);
     }
     .sidebar {
-        background-color: rgb(236, 237, 240);
+        background-color: rgb(228, 229, 232);
         padding: 0;
     }
 </style>

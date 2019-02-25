@@ -1345,6 +1345,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1361,11 +1378,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     mainContent: _components__WEBPACK_IMPORTED_MODULE_2__["mainContent"],
     mainHeader: _components__WEBPACK_IMPORTED_MODULE_2__["mainHeader"],
     mdbAccordion: _components__WEBPACK_IMPORTED_MODULE_2__["mdbAccordion"],
-    mdbAccordionPane: _components__WEBPACK_IMPORTED_MODULE_2__["mdbAccordionPane"]
+    mdbAccordionPane: _components__WEBPACK_IMPORTED_MODULE_2__["mdbAccordionPane"],
+    mdbInput: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbInput"],
+    mdbListGroup: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbListGroup"],
+    mdbListGroupItem: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbListGroupItem"],
+    mdbJumbotron: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbJumbotron"],
+    mdbIcon: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbIcon"]
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapMutations"])({
     showModal: _store_mutation_types__WEBPACK_IMPORTED_MODULE_4__["SHOW_CREATE_TEST_MODAL"]
   })),
+  computed: {
+    filteredTests: function filteredTests() {
+      var _this = this;
+
+      return this.tests.filter(function (test) {
+        return test.name.toLowerCase().includes(_this.searchTest.toLowerCase()) || test.role.toLowerCase().includes(_this.searchTest.toLowerCase());
+      });
+    }
+  },
   data: function data() {
     return {
       leftSideBarPanes: [{
@@ -1393,6 +1424,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, {
         title: 'Languages',
         content: 'Anim pariatur cliche reprehenderit,'
+      }],
+      searchTest: '',
+      tests: [{
+        id: 1,
+        name: 'HackerRank Hiring Test',
+        role: 'Software Development Internship',
+        workExperience: 0,
+        duration: 90,
+        selected: false
+      }, {
+        id: 2,
+        name: 'HackerRank Software Developer Hiring Test',
+        role: 'Software Developer',
+        workExperience: 3,
+        duration: 60,
+        selected: false
+      }, {
+        id: 3,
+        name: 'InterviewBit Software Developer Hiring Test',
+        role: 'Software Developer',
+        workExperience: 1,
+        duration: 75,
+        selected: false
+      }, {
+        id: 4,
+        name: 'HackerEarth IIIT-H Campus Placements Hiring Test',
+        role: 'Software Developer',
+        workExperience: 0,
+        duration: 60,
+        selected: false
+      }, {
+        id: 5,
+        name: 'HackerRank Campus Placements',
+        role: 'Software Developer',
+        workExperience: 0,
+        duration: 60,
+        selected: false
       }]
     };
   }
@@ -17381,7 +17449,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.main-content[data-v-6bc89785] {\n    border: 1px solid rgb(241, 235, 235);\n}\n.sidebar[data-v-6bc89785] {\n    background-color: rgb(236, 237, 240);\n    padding: 0;\n}\n", ""]);
+exports.push([module.i, "\n.main-content[data-v-6bc89785] {\n    border-top: 1px solid rgb(241, 235, 235);\n}\n.sidebar[data-v-6bc89785] {\n    background-color: rgb(228, 229, 232);\n    padding: 0;\n}\n", ""]);
 
 // exports
 
@@ -63502,6 +63570,34 @@ var render = function() {
               key: "leftSideBar",
               fn: function() {
                 return [
+                  _c("div", { staticClass: "form-group px-5 pt-5 pb-5 m-0" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.searchTest,
+                          expression: "searchTest"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        placeholder: "Search for a test..",
+                        "aria-label": "Search"
+                      },
+                      domProps: { value: _vm.searchTest },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.searchTest = $event.target.value
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
                   _c("mdb-accordion", {
                     attrs: { panes: _vm.leftSideBarPanes, custom: "" }
                   })
@@ -63522,7 +63618,102 @@ var render = function() {
             }
           ])
         },
-        [_vm._v(" "), _c("h1", [_vm._v("This is the main content")])]
+        [
+          _vm._v(" "),
+          _c(
+            "mdb-list-group",
+            _vm._l(_vm.filteredTests, function(test) {
+              return _c(
+                "mdb-list-group-item",
+                {
+                  staticClass: "flex-row text-black-50",
+                  staticStyle: { "align-items": "flex-start!important" },
+                  attrs: { href: "#", action: true }
+                },
+                [
+                  _c("div", { staticClass: "form-check" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: test.selected,
+                          expression: "test.selected"
+                        }
+                      ],
+                      staticClass: "form-check-input",
+                      staticStyle: { display: "none" },
+                      attrs: { type: "checkbox", id: test.id },
+                      domProps: {
+                        checked: test.selected,
+                        checked: Array.isArray(test.selected)
+                          ? _vm._i(test.selected, null) > -1
+                          : test.selected
+                      },
+                      on: {
+                        change: function($event) {
+                          var $$a = test.selected,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = null,
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 &&
+                                _vm.$set(test, "selected", $$a.concat([$$v]))
+                            } else {
+                              $$i > -1 &&
+                                _vm.$set(
+                                  test,
+                                  "selected",
+                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                )
+                            }
+                          } else {
+                            _vm.$set(test, "selected", $$c)
+                          }
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("label", {
+                      staticClass: "form-check-label",
+                      attrs: { for: test.id }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "d-flex flex-column w-100 justify-content-between"
+                    },
+                    [
+                      _c("h5", { staticClass: "mb-1" }, [
+                        _vm._v(
+                          _vm._s(test.name) + "\n                        "
+                        ),
+                        _c("small", { staticClass: "text-muted float-right" }, [
+                          _vm._v(_vm._s(test.duration) + " min")
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "mb-1" }, [
+                        _vm._v(_vm._s(test.role))
+                      ]),
+                      _vm._v(" "),
+                      _c("small", { staticClass: "text-muted" }, [
+                        _vm._v("0 - " + _vm._s(test.workExperience) + " years")
+                      ])
+                    ]
+                  )
+                ]
+              )
+            }),
+            1
+          )
+        ],
+        1
       )
     ],
     1

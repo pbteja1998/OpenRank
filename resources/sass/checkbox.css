@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans);input[type=checkbox],
+input[type=checkbox],
 input[type=radio] {
 	box-sizing: border-box;
 	padding: 0
@@ -25,7 +25,9 @@ input[type=radio] {
 }
 
 .form-check-inline {
+	display: -ms-inline-flexbox;
 	display: inline-flex;
+	-ms-flex-align: center;
 	align-items: center;
 	padding-left: 0;
 	margin-right: .75rem
@@ -88,8 +90,11 @@ label.btn input[type=checkbox]:not(.filled-in)+label:after {
 	height: 18px;
 	z-index: 0;
 	border: 2px solid #8a8a8a;
+	-webkit-border-radius: 1px;
 	border-radius: 1px;
 	margin-top: 3px;
+	-webkit-transition: .2s;
+	-o-transition: .2s;
 	transition: .2s
 }
 
@@ -97,6 +102,7 @@ label.btn input[type=checkbox]:not(.filled-in)+label:after {
 label.btn input[type=checkbox]:not(.filled-in)+label:after {
 	border: 0;
 	-webkit-transform: scale(0);
+	-ms-transform: scale(0);
 	transform: scale(0)
 }
 
@@ -117,10 +123,12 @@ label.btn input[type=checkbox]:checked+label:before {
 	border-right: 2px solid #4285f4;
 	border-bottom: 2px solid #4285f4;
 	-webkit-transform: rotate(40deg);
+	-ms-transform: rotate(40deg);
 	transform: rotate(40deg);
 	-webkit-backface-visibility: hidden;
 	backface-visibility: hidden;
 	-webkit-transform-origin: 100% 100%;
+	-ms-transform-origin: 100% 100%;
 	transform-origin: 100% 100%
 }
 
@@ -141,10 +149,12 @@ label.btn input[type=checkbox]:indeterminate+label:before {
 	border-right: 2px solid #4285f4;
 	border-bottom: none;
 	-webkit-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
 	transform: rotate(90deg);
 	-webkit-backface-visibility: hidden;
 	backface-visibility: hidden;
 	-webkit-transform-origin: 100% 100%;
+	-ms-transform-origin: 100% 100%;
 	transform-origin: 100% 100%
 }
 
@@ -156,6 +166,7 @@ label.btn input[type=checkbox]:indeterminate:disabled+label:before {
 
 .form-check-input[type=checkbox].filled-in+label:after,
 label.btn input[type=checkbox].filled-in+label:after {
+	-webkit-border-radius: .125rem;
 	border-radius: .125rem
 }
 
@@ -166,6 +177,8 @@ label.btn input[type=checkbox].filled-in+label:before {
 	content: '';
 	left: 0;
 	position: absolute;
+	-webkit-transition: border .25s, background-color .25s, width .2s .1s, height .2s .1s, top .2s .1s, left .2s .1s;
+	-o-transition: border .25s, background-color .25s, width .2s .1s, height .2s .1s, top .2s .1s, left .2s .1s;
 	transition: border .25s, background-color .25s, width .2s .1s, height .2s .1s, top .2s .1s, left .2s .1s;
 	z-index: 1
 }
@@ -178,8 +191,10 @@ label.btn input[type=checkbox].filled-in:not(:checked)+label:before {
 	left: 6px;
 	top: 10px;
 	-webkit-transform: rotateZ(37deg);
+	-ms-transform: rotate(37deg);
 	transform: rotateZ(37deg);
 	-webkit-transform-origin: 100% 100%;
+	-ms-transform-origin: 100% 100%;
 	transform-origin: 100% 100%
 }
 
@@ -204,8 +219,10 @@ label.btn input[type=checkbox].filled-in:checked+label:before {
 	border-right: 2px solid #fff;
 	border-bottom: 2px solid #fff;
 	-webkit-transform: rotateZ(37deg);
+	-ms-transform: rotate(37deg);
 	transform: rotateZ(37deg);
 	-webkit-transform-origin: 100% 100%;
+	-ms-transform-origin: 100% 100%;
 	transform-origin: 100% 100%
 }
 
@@ -247,13 +264,3 @@ label.btn input[type=checkbox]:disabled:checked+label:after {
 	background-color: #bdbdbd;
 	border-color: #bdbdbd
 }
-#app {
-  font-family: "Open Sans", sans-serif;
-}
-
-.custom-flex-css {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-

@@ -13,13 +13,13 @@
 
         <main-content>
             <template v-slot:leftSideBar>
-                <h1>Left Side Bar</h1>
+                <mdb-accordion :panes="leftSideBarPanes" custom/>
             </template>
 
             <h1>This is the main content</h1>
 
             <template v-slot:rightSideBar>
-                <h1>Right Side Bar</h1>
+                <mdb-accordion :panes="rightSideBarPanes" custom/>
             </template>
         </main-content>
     </mdb-container>
@@ -28,7 +28,7 @@
 <script>
     import { mdbContainer, mdbRow, mdbCol, mdbBtn } from 'mdbvue';
     import { createTestModal } from './modals';
-    import { mainHeader, mainContent } from '../../components';
+    import { mainHeader, mainContent, mdbAccordion, mdbAccordionPane } from '../../components';
 
     import { mapMutations } from 'vuex';
     import { SHOW_CREATE_TEST_MODAL } from '../../store/mutation-types';
@@ -42,7 +42,9 @@
             mdbBtn,
             createTestModal,
             mainContent,
-            mainHeader
+            mainHeader,
+            mdbAccordion,
+            mdbAccordionPane
         },
         methods: {
             ...mapMutations({
@@ -51,7 +53,43 @@
         },
         data() {
             return {
-            }
+                leftSideBarPanes: [
+                    {
+                        title: 'Labels',
+                        content: 'Anim pariatur cliche reprehenderit,',
+                    },
+                    {
+                        title: 'Owner',
+                        content: 'Anim pariatur cliche reprehenderit,',
+                    },
+                    {
+                        title: 'Role',
+                        content: 'Anim pariatur cliche reprehenderit,',
+                    },
+                    {
+                        title: 'Work Experience',
+                        content: 'Anim pariatur cliche reprehenderit,',
+                    },
+               ],
+                rightSideBarPanes: [
+                    {
+                        title: 'Difficulty',
+                        content: 'Anim pariatur cliche reprehenderit,',
+                    },
+                    {
+                        title: 'Type',
+                        content: 'Anim pariatur cliche reprehenderit,',
+                    },
+                    {
+                        title: 'Tags',
+                        content: 'Anim pariatur cliche reprehenderit,',
+                    },
+                    {
+                        title: 'Languages',
+                        content: 'Anim pariatur cliche reprehenderit,',
+                    },
+                ]
+            };
         }
     };
 </script>

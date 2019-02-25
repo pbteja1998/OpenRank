@@ -1,7 +1,7 @@
 <template>
     <mdb-container fluid class="main-content custom-flex-css">
         <mdb-row :style="{flexGrow: '1'}">
-            <mdb-col class="sidebar">
+            <mdb-col class="sidebar custom-flex-css">
                 <slot name="leftSideBar"></slot>
             </mdb-col>
 
@@ -33,6 +33,7 @@
         border: 1px solid rgb(241, 235, 235);
     }
     .sidebar {
-        background-color: rgb(237, 239, 241);
+        background-color: rgb(236, 237, 240);
+        padding: 0;
     }
 </style>

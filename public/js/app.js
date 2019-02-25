@@ -79637,10 +79637,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
   state: {
     newTest: {
       role: '',
-      workExperience: 80,
+      workExperience: 0,
       jdLink: '',
       name: '',
-      duration: 105,
+      duration: 0,
       type: 'predefined'
     },
     createTestModal: false

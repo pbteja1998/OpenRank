@@ -10,10 +10,10 @@ export default new Vuex.Store({
     state: {
         newTest: {
             role: '',
-            workExperience: 80,
+            workExperience: 0,
             jdLink: '',
             name: '',
-            duration: 105,
+            duration: 0,
             type: 'predefined'
         },
         createTestModal: false

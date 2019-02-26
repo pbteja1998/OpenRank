@@ -5,6 +5,7 @@
                 <slot name="leftSideBar"></slot>
             </mdb-col>
 
+            <mdb-col :col="marginLeft"></mdb-col>
             <mdb-col :col="contentColLength" v-if="hasDefaultSlot">
                 <slot></slot>
             </mdb-col>
@@ -27,7 +28,11 @@
         },
         props: {
             mainContentCol: {
-                type: Number
+                type: String
+            },
+            marginLeft: {
+                type: String,
+                default: '0'
             }
         },
         methods: {
@@ -57,7 +62,7 @@
 
 <style scoped>
     .main-content {
-        border-top: 1px solid rgb(241, 235, 235);
+        /*border-top: 1px solid rgb(241, 235, 235);*/
     }
     .sidebar {
         background-color: rgb(228, 229, 232);

@@ -2,9 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import HomePage from '../products/HomePage.vue';
-import TestsPage from '../products/tests/index.vue';
-import TestPreviewPage from '../products/tests/TestPreview.vue';
-import ViewTestPage from '../products/tests/ViewTest.vue';
+import { TestsPage, TestPreviewPage, ViewTestPage, SendInvitesPage } from "../products/tests";
 import CodePairPage from '../products/code_pair/index.vue';
 import LibraryPage from '../products/library/index.vue';
 import InsightsPage from '../products/insights/index.vue';
@@ -49,7 +47,11 @@ export default new Router({
             path: '/tests/:id',
             name: 'View Test',
             component: ViewTestPage
+        },
+        {
+            path: '/tests/:id/invite',
+            name: 'Send Invites',
+            component: SendInvitesPage
         }
-
     ]
 });

@@ -278,3 +278,7 @@ label.btn input[type=checkbox]:disabled:checked+label:after {
   margin-top: 100px;
 }
 
+.text-transform-initial {
+  text-transform: initial !important;
+}
+

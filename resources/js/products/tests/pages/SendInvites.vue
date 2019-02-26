@@ -27,7 +27,10 @@
                             <mdb-popover trigger="click" :options="{placement: 'bottom'}">
                                 <div class="popover">
                                     <div class="popover-header">
-                                        <b>Bulk Upload Candidates (CSV)</b>
+                                        <div class="mb-3"><b>Bulk Upload Candidates (CSV)</b></div>
+                                        <p class="text-muted">Sample Format
+                                            <mdb-btn color="success" size="sm" icon="download"></mdb-btn>
+                                        </p>    
                                     </div>
                                     <div class="popover-body">
                                         <mdb-tbl bordered>
@@ -52,10 +55,8 @@
                                             <input type="checkbox" class="form-check-input" id="csv-checkbox" style="display: none;" />
                                             <label class="form-check-label" for="csv-checkbox" style="font-size: small;">Ignore all rows with errors</label>
                                         </div>
-                                        <!--<mdb-btn color="success" size="sm" style="color: white; text-transform: initial;">Upload CSV</mdb-btn>-->
                                         <div class="choose_file">
                                             <mdb-btn color="success" size="sm" style="color: white; text-transform: initial;">Upload CSV</mdb-btn>
-                                            <!--<button type="button" class="btn btn-default" style="width: 125px;">Choose Image</button>-->
                                             <input name="img" type="file" accept="image/*" />
                                         </div>
                                         <mdb-btn size="sm" style="color: black; text-transform: initial;">Cancel</mdb-btn>

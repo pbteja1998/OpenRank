@@ -9,7 +9,7 @@
             </mdb-breadcrumb>
 
             <template v-slot:others>
-                <mdb-btn color="success" @click="showModal">Create Test</mdb-btn>
+                <mdb-btn color="success" @click="showModal" class="float-right mr-5">Create Test</mdb-btn>
                 <create-test-modal />
             </template>
         </main-header>
@@ -54,6 +54,7 @@
 
     import { mapMutations, mapState } from 'vuex';
     import { SHOW_CREATE_TEST_MODAL, CHANGE_CURRENT_TEST, TOGGLE_TEST_CHECKED_STATE } from '../../store/mutation-types';
+    import notifications from 'vue-notification';
 
     export default {
         name: 'TestsPage',
@@ -72,7 +73,8 @@
             mdbListGroupItem,
             mdbIcon,
             mdbBreadcrumb,
-            mdbBreadcrumbItem
+            mdbBreadcrumbItem,
+            notifications
         },
         methods: {
             ...mapMutations({
@@ -148,13 +150,4 @@
 </script>
 
 <style scoped>
-    .breadcrumb {
-        background-color: white;
-    }
-    .breadcrumb-item+.breadcrumb-item::before {
-        display: inline-block;
-        padding-right: .5rem;
-        color: #6c757d;
-        content: ">";
-    }
 </style>

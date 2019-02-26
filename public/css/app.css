@@ -257,3 +257,24 @@ label.btn input[type=checkbox]:disabled:checked+label:after {
   flex-direction: column;
 }
 
+.breadcrumb {
+  background-color: white !important;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  display: inline-block !important;
+  padding-right: 0.5rem !important;
+  color: #6c757d !important;
+  content: ">" !important;
+}
+
+.vue-notification.success {
+  border-left-color: #00c851 !important;
+  background-color: #00c851 !important;
+  color: white;
+}
+
+.notifications {
+  margin-top: 100px;
+}
+

@@ -9,7 +9,7 @@
             </mdb-breadcrumb>
 
             <template v-slot:others>
-                <mdb-btn color="default">Go to test</mdb-btn>
+                <router-link :to="'/tests/' + currentTest.id"><mdb-btn color="default" @click="goToTest()" class="float-right mr-5">Go to test</mdb-btn></router-link>
             </template>
         </main-header>
 
@@ -32,7 +32,7 @@
                         <button class="btn btn-success btn-sm" @click="selectQuestion({questionId: question.id})"><mdb-icon icon="plus"></mdb-icon></button>
                     </div>
                     <div class="d-flex flex-row w-100 align-items-start">
-                        <button class="btn btn-sm" style="color: black;">{{ question.topic }}</button>
+                        <button class="btn btn-sm" style="color: black;">{{ question.type }}</button>
                         <button class="btn btn-success btn-sm" v-if="question.difficulty === 'EASY'">{{ question.difficulty }}</button>
                         <button class="btn btn-warning btn-sm" v-else-if="question.difficulty === 'MEDIUM'">{{ question.difficulty }}</button>
                         <button class="btn btn-danger btn-sm" v-else>{{ question.difficulty }}</button>
@@ -55,7 +55,7 @@
                             <button class="btn btn-danger btn-sm" @click="unSelectQuestion({questionId: question.id})"><mdb-icon icon="minus"></mdb-icon></button>
                         </div>
                         <div class="d-flex flex-row w-100 align-items-start">
-                            <button class="btn btn-sm" style="color: black;">{{ question.topic }}</button>
+                            <button class="btn btn-sm" style="color: black;">{{ question.type }}</button>
                             <button class="btn btn-success btn-sm" v-if="question.difficulty === 'EASY'">{{ question.difficulty }}</button>
                             <button class="btn btn-warning btn-sm" v-else-if="question.difficulty === 'MEDIUM'">{{ question.difficulty }}</button>
                             <button class="btn btn-danger btn-sm" v-else>{{ question.difficulty }}</button>
@@ -71,7 +71,7 @@
     import { mdbContainer, mdbBreadcrumb, mdbBreadcrumbItem, mdbBtn, mdbListGroup, mdbListGroupItem, mdbIcon } from 'mdbvue';
     import { mainHeader, mainContent, mdbAccordion } from '../../components';
     import { mapGetters, mapState, mapMutations } from 'vuex';
-    import { SELECT_QUESTION, UNSELECT_QUESTION } from "../../store/mutation-types";
+    import { SELECT_QUESTION, UNSELECT_QUESTION, ADD_QUESTIONS_TO_TEST } from "../../store/mutation-types";
 
     export default {
         name: 'TestPreviewPage',
@@ -90,32 +90,38 @@
         methods: {
             ...mapMutations({
                 'selectQuestion': SELECT_QUESTION,
-                'unSelectQuestion': UNSELECT_QUESTION
-            })
+                'unSelectQuestion': UNSELECT_QUESTION,
+                'addQuestions': ADD_QUESTIONS_TO_TEST
+            }),
+            goToTest: function () {
+                this.addQuestions();
+                this.$router.push('/tests/' + this.currentTest.id);
+            }
+        },
+        mounted: function () {
+            if(this.$store.state.currentTestId === 0) {
+                this.$router.push('/tests/');
+            }
         },
         computed: {
             ...mapState([
-               'questions'
+               'questions',
             ]),
-            selectedQuestions() {
-                return this.questions.filter(question => question.selected);
-            },
-            unSelectedQuestions() {
-                return this.questions.filter(question => !question.selected);
-            },
+            ...mapGetters([
+                'selectedQuestions',
+                'unSelectedQuestions',
+                'currentTest'
+            ]),
             filteredQuestions() {
                 return this.unSelectedQuestions.filter(question => {
                     return question.name.toLowerCase().includes(this.searchQuestion.toLowerCase()) ||
-                        question.topic.toLowerCase().includes(this.searchQuestion.toLowerCase()) ||
+                        question.type.toLowerCase().includes(this.searchQuestion.toLowerCase()) ||
                         question.difficulty.toLowerCase().includes(this.searchQuestion.toLowerCase()) ||
                         question.tags.filter(tag => {
                             return tag.toLowerCase().includes(this.searchQuestion.toLowerCase());
                         }).length > 0;
                 })
-            },
-            ...mapGetters([
-                'currentTest'
-            ])
+            }
         },
         data() {
             return {
@@ -144,17 +150,4 @@
 </script>
 
 <style scoped>
-    .breadcrumb {
-        background-color: white;
-    }
-    .breadcrumb-item+.breadcrumb-item::before {
-        display: inline-block;
-        padding-right: .5rem;
-        color: #6c757d;
-        content: ">";
-    }
-    .btn-rounded{
-        -webkit-border-radius:10em;
-        border-radius:10em
-    }
 </style>

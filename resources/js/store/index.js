@@ -1,7 +1,20 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import 'es6-promise/auto'
-import { TOGGLE_CREATE_TEST_MODAL, SHOW_CREATE_TEST_MODAL, HIDE_CREATE_TEST_MODAL, UPDATE_NEW_TEST, CHANGE_CURRENT_TEST, TOGGLE_TEST_CHECKED_STATE, TOGGLE_QUESTION_SELECTION, SELECT_QUESTION, UNSELECT_QUESTION } from './mutation-types';
+import {
+    TOGGLE_CREATE_TEST_MODAL,
+    SHOW_CREATE_TEST_MODAL,
+    HIDE_CREATE_TEST_MODAL,
+    UPDATE_NEW_TEST,
+    CHANGE_CURRENT_TEST,
+    TOGGLE_TEST_CHECKED_STATE,
+    TOGGLE_QUESTION_SELECTION,
+    SELECT_QUESTION,
+    UNSELECT_QUESTION,
+    ADD_QUESTIONS_TO_TEST,
+    PUBLISH_CURRENT_TEST,
+    PUBLISH_TEST
+} from './mutation-types';
 import myPluginWithSnapshot from './plugins';
 
 Vue.use(Vuex);
@@ -10,6 +23,14 @@ const getIndexFromId = (array, id) => {
     let indices = [...Array(array.length).keys()].filter(index => array[index].id === id);
     if(indices.length > 0) return indices[0];
     else return 0;
+};
+
+const selectedItems = items => {
+    return items.filter(item => item.selected);
+};
+
+const unSelectedItems = items => {
+    return items.filter(item => !item.selected);
 };
 
 export default new Vuex.Store({
@@ -31,7 +52,8 @@ export default new Vuex.Store({
                 workExperience: 0,
                 duration: 0,
                 checked: false,
-                questionIds: []
+                questionIds: [],
+                published: false
             },
             {
                 id: 1,
@@ -40,7 +62,8 @@ export default new Vuex.Store({
                 workExperience: 0,
                 duration: 90,
                 checked: false,
-                questionIds: []
+                questionIds: [],
+                published: false
             },
             {
                 id: 2,
@@ -49,7 +72,8 @@ export default new Vuex.Store({
                 workExperience: 3,
                 duration: 60,
                 checked: false,
-                questionIds: []
+                questionIds: [],
+                published: false
             },
             {
                 id: 3,
@@ -58,7 +82,8 @@ export default new Vuex.Store({
                 workExperience: 1,
                 duration: 75,
                 checked: false,
-                questionIds: []
+                questionIds: [],
+                published: false
             },
             {
                 id: 4,
@@ -67,7 +92,8 @@ export default new Vuex.Store({
                 workExperience: 0,
                 duration: 60,
                 checked: false,
-                questionIds: []
+                questionIds: [],
+                published: false
             },
             {
                 id: 5,
@@ -76,169 +102,190 @@ export default new Vuex.Store({
                 workExperience: 0,
                 duration: 60,
                 checked: false,
-                questionIds: []
+                questionIds: [],
+                published: false
             },
         ],
         questions: [
             {
                 id: 1,
                 name: 'Student Rank',
-                topic: 'Database',
+                type: 'Database',
                 difficulty: 'EASY',
                 tags: ['Role Based', 'Selection', 'Databases', 'SQL'],
-                selected: false
+                selected: false,
+                marks: 50
             },
             {
                 id: 2,
                 name: 'Merge Strings',
-                topic: 'Coding',
+                type: 'Coding',
                 difficulty: 'EASY',
                 tags: ['Problem Solving', 'Core Skills', 'General Programming', 'Strings'],
-                selected: false
+                selected: false,
+                marks: 500
             },
             {
                 id: 3,
                 name: 'Long Break',
-                topic: 'Coding',
+                type: 'Coding',
                 difficulty: 'MEDIUM',
                 tags: ['Core Skills', 'Data Structures', 'Greedy', 'Arrays'],
-                selected: false
+                selected: false,
+                marks: 50
             },
             {
                 id: 4,
                 name: 'Maximum Difference in an Array',
-                topic: 'Coding',
+                type: 'Coding',
                 difficulty: 'MEDIUM',
                 tags: ['Problem Solving', 'Core Skills', 'Arrays', 'Algorithms', 'Data Structures'],
-                selected: false
+                selected: false,
+                marks: 500
             },
             {
                 id: 5,
                 name: 'Braces',
-                topic: 'Coding',
+                type: 'Coding',
                 difficulty: 'HARD',
                 tags: ['Problem Solving', 'Core Skills', 'Stacks', 'Algorithms', 'Data Structures'],
-                selected: false
+                selected: false,
+                marks: 50
             },
             {
                 id: 6,
                 name: 'Student Rank-2',
-                topic: 'Database',
+                type: 'Database',
                 difficulty: 'EASY',
                 tags: ['Role Based', 'Selection', 'Databases', 'SQL'],
-                selected: false
+                selected: false,
+                marks: 500
             },
             {
                 id: 7,
                 name: 'Merge Strings-2',
-                topic: 'Coding',
+                type: 'Coding',
                 difficulty: 'EASY',
                 tags: ['Problem Solving', 'Core Skills', 'General Programming', 'Strings'],
-                selected: false
+                selected: false,
+                marks: 50
             },
             {
                 id: 8,
                 name: 'Long Break-2',
-                topic: 'Coding',
+                type: 'Coding',
                 difficulty: 'MEDIUM',
                 tags: ['Core Skills', 'Data Structures', 'Greedy', 'Arrays'],
-                selected: false
+                selected: false,
+                marks: 500
             },
             {
                 id: 9,
                 name: 'Maximum Difference in an Array-2',
-                topic: 'Coding',
+                type: 'Coding',
                 difficulty: 'MEDIUM',
                 tags: ['Problem Solving', 'Core Skills', 'Arrays', 'Algorithms', 'Data Structures'],
-                selected: false
+                selected: false,
+                marks: 50
             },
             {
                 id: 10,
                 name: 'Braces-2',
-                topic: 'Coding',
+                type: 'Coding',
                 difficulty: 'HARD',
                 tags: ['Problem Solving', 'Core Skills', 'Stacks', 'Algorithms', 'Data Structures'],
-                selected: false
+                selected: false,
+                marks: 50
             },
             {
                 id: 11,
                 name: 'Student Rank-3',
-                topic: 'Database',
+                type: 'Database',
                 difficulty: 'EASY',
                 tags: ['Role Based', 'Selection', 'Databases', 'SQL'],
-                selected: false
+                selected: false,
+                marks: 50
             },
             {
                 id: 12,
                 name: 'Merge Strings-3',
-                topic: 'Coding',
+                type: 'Coding',
                 difficulty: 'EASY',
                 tags: ['Problem Solving', 'Core Skills', 'General Programming', 'Strings'],
-                selected: false
+                selected: false,
+                marks: 500
             },
             {
                 id: 13,
                 name: 'Long Break-3',
-                topic: 'Coding',
+                type: 'Coding',
                 difficulty: 'MEDIUM',
                 tags: ['Core Skills', 'Data Structures', 'Greedy', 'Arrays'],
-                selected: false
+                selected: false,
+                marks: 50
             },
             {
                 id: 14,
                 name: 'Maximum Difference in an Array-3',
-                topic: 'Coding',
+                type: 'Coding',
                 difficulty: 'MEDIUM',
                 tags: ['Problem Solving', 'Core Skills', 'Arrays', 'Algorithms', 'Data Structures'],
-                selected: false
+                selected: false,
+                marks: 500
             },
             {
                 id: 15,
                 name: 'Braces-3',
-                topic: 'Coding',
+                type: 'Coding',
                 difficulty: 'HARD',
                 tags: ['Problem Solving', 'Core Skills', 'Stacks', 'Algorithms', 'Data Structures'],
-                selected: false
+                selected: false,
+                marks: 50
             },
             {
                 id: 16,
                 name: 'Student Rank-4',
-                topic: 'Database',
+                type: 'Database',
                 difficulty: 'EASY',
                 tags: ['Role Based', 'Selection', 'Databases', 'SQL'],
-                selected: false
+                selected: false,
+                marks: 500
             },
             {
                 id: 17,
                 name: 'Merge Strings-4',
-                topic: 'Coding',
+                type: 'Coding',
                 difficulty: 'EASY',
                 tags: ['Problem Solving', 'Core Skills', 'General Programming', 'Strings'],
-                selected: false
+                selected: false,
+                marks: 50
             },
             {
                 id: 18,
                 name: 'Long Break-4',
-                topic: 'Coding',
+                type: 'Coding',
                 difficulty: 'MEDIUM',
                 tags: ['Core Skills', 'Data Structures', 'Greedy', 'Arrays'],
-                selected: false
+                selected: false,
+                marks: 50
             },
             {
                 id: 19,
                 name: 'Maximum Difference in an Array-4',
-                topic: 'Coding',
+                type: 'Coding',
                 difficulty: 'MEDIUM',
                 tags: ['Problem Solving', 'Core Skills', 'Arrays', 'Algorithms', 'Data Structures'],
-                selected: false
+                selected: false,
+                marks: 50
             },
             {
                 id: 20,
                 name: 'Braces-4',
-                topic: 'Coding',
+                type: 'Coding',
                 difficulty: 'HARD',
                 tags: ['Problem Solving', 'Core Skills', 'Stacks', 'Algorithms', 'Data Structures'],
-                selected: false
+                selected: false,
+                marks: 50
             },
         ],
         createTestModal: false
@@ -274,6 +321,19 @@ export default new Vuex.Store({
         [UNSELECT_QUESTION] (state, payload) {
             let questionIndex = getIndexFromId(state.questions, payload.questionId);
             state.questions[questionIndex].selected = false;
+        },
+        [ADD_QUESTIONS_TO_TEST] (state) {
+            let selectedQuestionIds = selectedItems(state.questions).map(({id}) => id);
+            let currentTestIndex = getIndexFromId(state.tests, state.currentTestId);
+            state.tests[currentTestIndex].questionIds = selectedQuestionIds;
+        },
+        [PUBLISH_CURRENT_TEST] (state) {
+            let currentTestIndex = getIndexFromId(state.tests, state.currentTestId);
+            state.tests[currentTestIndex].published = true;
+        },
+        [PUBLISH_TEST] (state, payload) {
+            let testIndex = getIndexFromId(state.tests, payload.testId);
+            state.tests[testIndex].published = true;
         }
     },
     actions: {
@@ -283,6 +343,15 @@ export default new Vuex.Store({
         currentTest: state => {
             return state.tests[getIndexFromId(state.tests, state.currentTestId)];
         },
+        selectedQuestions: state => {
+            return selectedItems(state.questions);
+        },
+        unSelectedQuestions: state => {
+            return unSelectedItems(state.questions);
+        },
+        currentTestQuestions: (state, getters) => {
+            return state.questions.filter(question => getters.currentTest.questionIds.includes(question.id));
+        }
     },
     plugins: [myPluginWithSnapshot],
     strict: true

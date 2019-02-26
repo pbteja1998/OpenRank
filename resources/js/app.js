@@ -18,7 +18,9 @@ import App from './App';
 import router from './router';
 import store from './store';
 import Vue2TouchEvents from 'vue2-touch-events';
+import Notifications from 'vue-notification';
 
+Vue.use(Notifications);
 Vue.use(Vue2TouchEvents);
 
 Vue.config.productionTip = false;

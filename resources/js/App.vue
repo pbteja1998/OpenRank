@@ -14,6 +14,7 @@
                 </mdb-navbar-nav>
             </mdb-navbar-toggler>
         </mdb-navbar>
+        <notifications group="tests" position="top center"/>
         <main class="custom-flex-css" :style="{marginTop: '60px'}">
             <router-view></router-view>
         </main>

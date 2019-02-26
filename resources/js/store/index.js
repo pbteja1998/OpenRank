@@ -1,10 +1,16 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import 'es6-promise/auto'
-import { TOGGLE_CREATE_TEST_MODAL, SHOW_CREATE_TEST_MODAL, HIDE_CREATE_TEST_MODAL, UPDATE_NEW_TEST, SELECT_TEST, ADD_QUESTIONS_TO_TEST } from './mutation-types';
+import { TOGGLE_CREATE_TEST_MODAL, SHOW_CREATE_TEST_MODAL, HIDE_CREATE_TEST_MODAL, UPDATE_NEW_TEST, CHANGE_CURRENT_TEST, TOGGLE_TEST_CHECKED_STATE, TOGGLE_QUESTION_SELECTION, SELECT_QUESTION, UNSELECT_QUESTION } from './mutation-types';
 import myPluginWithSnapshot from './plugins';
 
 Vue.use(Vuex);
+
+const getIndexFromId = (array, id) => {
+    let indices = [...Array(array.length).keys()].filter(index => array[index].id === id);
+    if(indices.length > 0) return indices[0];
+    else return 0;
+};
 
 export default new Vuex.Store({
     state: {
@@ -16,7 +22,7 @@ export default new Vuex.Store({
             duration: 0,
             testType: 'predefined'
         },
-        selectedTestId: 1,
+        currentTestId: 0,
         tests: [
             {
                 id: 0,
@@ -250,21 +256,33 @@ export default new Vuex.Store({
         [UPDATE_NEW_TEST] (state, payload) {
             state.newTest = { ...state.newTest, ...payload }
         },
-        [SELECT_TEST] (state, payload) {
-            state.selectedTestId = payload.id;
+        [CHANGE_CURRENT_TEST] (state, payload) {
+            state.currentTestId = payload.id;
         },
-        [ADD_QUESTIONS_TO_TEST] (state, payload) {
+        [TOGGLE_TEST_CHECKED_STATE] (state, payload) {
+            let testIndex = getIndexFromId(state.tests, payload.testId);
+            state.tests[testIndex].checked = !state.tests[testIndex].checked;
+        },
+        [TOGGLE_QUESTION_SELECTION] (state, payload) {
+            let questionIndex = getIndexFromId(state.questions, payload.questionId);
+            state.questions[questionIndex].selected = !state.questions[questionIndex].selected;
+        },
+        [SELECT_QUESTION] (state, payload) {
+            let questionIndex = getIndexFromId(state.questions, payload.questionId);
+            state.questions[questionIndex].selected = true;
+        },
+        [UNSELECT_QUESTION] (state, payload) {
+            let questionIndex = getIndexFromId(state.questions, payload.questionId);
+            state.questions[questionIndex].selected = false;
         }
     },
     actions: {
 
     },
     getters: {
-        selectedTest: state => {
-            let tests = state.tests.filter(test => test.id === state.selectedTestId);
-            if(tests.length > 0) return tests[0];
-            return null;
-        }
+        currentTest: state => {
+            return state.tests[getIndexFromId(state.tests, state.currentTestId)];
+        },
     },
     plugins: [myPluginWithSnapshot],
     strict: true

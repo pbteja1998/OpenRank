@@ -1312,6 +1312,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mdbvue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mdbvue */ "./node_modules/mdbvue/src/index.js");
 /* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components */ "./resources/js/components/index.js");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _store_mutation_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../store/mutation-types */ "./resources/js/store/mutation-types.js");
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -1388,6 +1389,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'TestPreviewPage',
   components: {
@@ -1402,7 +1404,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     mdbAccordion: _components__WEBPACK_IMPORTED_MODULE_1__["mdbAccordion"],
     mdbIcon: mdbvue__WEBPACK_IMPORTED_MODULE_0__["mdbIcon"]
   },
-  methods: {},
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapMutations"])({
+    'selectQuestion': _store_mutation_types__WEBPACK_IMPORTED_MODULE_3__["SELECT_QUESTION"],
+    'unSelectQuestion': _store_mutation_types__WEBPACK_IMPORTED_MODULE_3__["UNSELECT_QUESTION"]
+  })),
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapState"])(['questions']), {
     selectedQuestions: function selectedQuestions() {
       return this.questions.filter(function (question) {
@@ -1423,7 +1428,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).length > 0;
       });
     }
-  }, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(['selectedTest'])),
+  }, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(['currentTest'])),
   data: function data() {
     return {
       leftSideBarPanes: [{
@@ -1539,13 +1544,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapMutations"])({
     showModal: _store_mutation_types__WEBPACK_IMPORTED_MODULE_4__["SHOW_CREATE_TEST_MODAL"],
-    selectTest: _store_mutation_types__WEBPACK_IMPORTED_MODULE_4__["SELECT_TEST"]
+    selectTest: _store_mutation_types__WEBPACK_IMPORTED_MODULE_4__["CHANGE_CURRENT_TEST"],
+    toggleCheckedState: _store_mutation_types__WEBPACK_IMPORTED_MODULE_4__["TOGGLE_TEST_CHECKED_STATE"]
   }), {
     selectTestAndNavigate: function selectTestAndNavigate(id) {
       this.selectTest({
         id: id
       });
       this.$router.push('/tests/preview/' + id);
+    },
+    updateCheckedState: function updateCheckedState(test) {
+      // undo the action done as the state is not yet updated
+      document.getElementById(test.id).checked = !document.getElementById(test.id).checked; // change the checked state through a mutation
+
+      this.toggleCheckedState({
+        testId: test.id
+      });
     }
   }),
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapState"])(['tests']), {
@@ -63799,8 +63813,8 @@ var render = function() {
                 [
                   _c(
                     "router-link",
-                    { attrs: { to: "/tests/" + _vm.selectedTest.id } },
-                    [_vm._v(_vm._s(_vm.selectedTest.name))]
+                    { attrs: { to: "/tests/preview/" + _vm.currentTest.id } },
+                    [_vm._v(_vm._s(_vm.currentTest.name))]
                   )
                 ],
                 1
@@ -63881,7 +63895,7 @@ var render = function() {
                       _c("p", { staticClass: "text-sm" }, [
                         _vm._v(
                           "Duration: " +
-                            _vm._s(_vm.selectedTest.duration) +
+                            _vm._s(_vm.currentTest.duration) +
                             " mins"
                         )
                       ])
@@ -63920,7 +63934,9 @@ var render = function() {
                                   staticClass: "btn btn-danger btn-sm",
                                   on: {
                                     click: function($event) {
-                                      question.selected = false
+                                      return _vm.unSelectQuestion({
+                                        questionId: question.id
+                                      })
                                     }
                                   }
                                 },
@@ -64008,7 +64024,9 @@ var render = function() {
                           staticClass: "btn btn-success btn-sm",
                           on: {
                             click: function($event) {
-                              question.selected = true
+                              return _vm.selectQuestion({
+                                questionId: question.id
+                              })
                             }
                           }
                         },
@@ -64216,98 +64234,73 @@ var render = function() {
           _c(
             "mdb-list-group",
             _vm._l(_vm.filteredTests, function(test) {
-              return _c(
-                "mdb-list-group-item",
-                {
-                  staticClass: "flex-row text-black-50",
-                  staticStyle: { "align-items": "flex-start!important" },
-                  attrs: { href: "#", action: true }
-                },
-                [
-                  _c("div", { staticClass: "form-check" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: test.checked,
-                          expression: "test.checked"
-                        }
-                      ],
-                      staticClass: "form-check-input",
-                      staticStyle: { display: "none" },
-                      attrs: { type: "checkbox", id: test.id },
-                      domProps: {
-                        checked: test.checked,
-                        checked: Array.isArray(test.checked)
-                          ? _vm._i(test.checked, null) > -1
-                          : test.checked
-                      },
-                      on: {
-                        change: function($event) {
-                          var $$a = test.checked,
-                            $$el = $event.target,
-                            $$c = $$el.checked ? true : false
-                          if (Array.isArray($$a)) {
-                            var $$v = null,
-                              $$i = _vm._i($$a, $$v)
-                            if ($$el.checked) {
-                              $$i < 0 &&
-                                _vm.$set(test, "checked", $$a.concat([$$v]))
-                            } else {
-                              $$i > -1 &&
-                                _vm.$set(
-                                  test,
-                                  "checked",
-                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                )
-                            }
-                          } else {
-                            _vm.$set(test, "checked", $$c)
-                          }
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("label", {
-                      staticClass: "form-check-label",
-                      attrs: { for: test.id }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "div",
+              return test.id !== 0
+                ? _c(
+                    "mdb-list-group-item",
                     {
-                      staticClass:
-                        "d-flex flex-column w-100 justify-content-between",
-                      staticStyle: { cursor: "pointer" },
-                      on: {
-                        click: function($event) {
-                          return _vm.selectTestAndNavigate(test.id)
-                        }
-                      }
+                      key: test.id,
+                      staticClass: "flex-row text-black-50",
+                      staticStyle: { "align-items": "flex-start!important" },
+                      attrs: { href: "#", action: true }
                     },
                     [
-                      _c("h5", { staticClass: "mb-1" }, [
-                        _vm._v(
-                          _vm._s(test.name) + "\n                        "
-                        ),
-                        _c("small", { staticClass: "text-muted float-right" }, [
-                          _vm._v(_vm._s(test.duration) + " min")
-                        ])
+                      _c("div", { staticClass: "form-check" }, [
+                        _c("input", {
+                          staticClass: "form-check-input",
+                          staticStyle: { display: "none" },
+                          attrs: { type: "checkbox", id: test.id },
+                          domProps: { checked: test.checked },
+                          on: {
+                            input: function($event) {
+                              return _vm.updateCheckedState(test)
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("label", {
+                          staticClass: "form-check-label",
+                          attrs: { for: test.id }
+                        })
                       ]),
                       _vm._v(" "),
-                      _c("p", { staticClass: "mb-1" }, [
-                        _vm._v(_vm._s(test.role))
-                      ]),
-                      _vm._v(" "),
-                      _c("small", { staticClass: "text-muted" }, [
-                        _vm._v("0 - " + _vm._s(test.workExperience) + " years")
-                      ])
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "d-flex flex-column w-100 justify-content-between",
+                          staticStyle: { cursor: "pointer" },
+                          on: {
+                            click: function($event) {
+                              return _vm.selectTestAndNavigate(test.id)
+                            }
+                          }
+                        },
+                        [
+                          _c("h5", { staticClass: "mb-1" }, [
+                            _vm._v(
+                              _vm._s(test.name) + "\n                        "
+                            ),
+                            _c(
+                              "small",
+                              { staticClass: "text-muted float-right" },
+                              [_vm._v(_vm._s(test.duration) + " min")]
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "mb-1" }, [
+                            _vm._v(_vm._s(test.role))
+                          ]),
+                          _vm._v(" "),
+                          _c("small", { staticClass: "text-muted" }, [
+                            _vm._v(
+                              "0 - " + _vm._s(test.workExperience) + " years"
+                            )
+                          ])
+                        ]
+                      )
                     ]
                   )
-                ]
-              )
+                : _vm._e()
             }),
             1
           )
@@ -81888,12 +81881,29 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 
 
 
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
+var getIndexFromId = function getIndexFromId(array, id) {
+  var indices = _toConsumableArray(Array(array.length).keys()).filter(function (index) {
+    return array[index].id === id;
+  });
+
+  if (indices.length > 0) return indices[0];else return 0;
+};
+
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
     newTest: {
@@ -81904,7 +81914,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
       duration: 0,
       testType: 'predefined'
     },
-    selectedTestId: 1,
+    currentTestId: 0,
     tests: [{
       id: 0,
       name: 'Dummy Test',
@@ -82105,17 +82115,25 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
     state.createTestModal = false;
   }), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_3__["UPDATE_NEW_TEST"], function (state, payload) {
     state.newTest = _objectSpread({}, state.newTest, payload);
-  }), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_3__["SELECT_TEST"], function (state, payload) {
-    state.selectedTestId = payload.id;
-  }), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_3__["ADD_QUESTIONS_TO_TEST"], function (state, payload) {}), _mutations),
+  }), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_3__["CHANGE_CURRENT_TEST"], function (state, payload) {
+    state.currentTestId = payload.id;
+  }), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_3__["TOGGLE_TEST_CHECKED_STATE"], function (state, payload) {
+    var testIndex = getIndexFromId(state.tests, payload.testId);
+    state.tests[testIndex].checked = !state.tests[testIndex].checked;
+  }), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_3__["TOGGLE_QUESTION_SELECTION"], function (state, payload) {
+    var questionIndex = getIndexFromId(state.questions, payload.questionId);
+    state.questions[questionIndex].selected = !state.questions[questionIndex].selected;
+  }), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_3__["SELECT_QUESTION"], function (state, payload) {
+    var questionIndex = getIndexFromId(state.questions, payload.questionId);
+    state.questions[questionIndex].selected = true;
+  }), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_3__["UNSELECT_QUESTION"], function (state, payload) {
+    var questionIndex = getIndexFromId(state.questions, payload.questionId);
+    state.questions[questionIndex].selected = false;
+  }), _mutations),
   actions: {},
   getters: {
-    selectedTest: function selectedTest(state) {
-      var tests = state.tests.filter(function (test) {
-        return test.id === state.selectedTestId;
-      });
-      if (tests.length > 0) return tests[0];
-      return null;
+    currentTest: function currentTest(state) {
+      return state.tests[getIndexFromId(state.tests, state.currentTestId)];
     }
   },
   plugins: [_plugins__WEBPACK_IMPORTED_MODULE_4__["default"]],
@@ -82128,7 +82146,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
 /*!**********************************************!*\
   !*** ./resources/js/store/mutation-types.js ***!
   \**********************************************/
-/*! exports provided: TOGGLE_CREATE_TEST_MODAL, SHOW_CREATE_TEST_MODAL, HIDE_CREATE_TEST_MODAL, UPDATE_NEW_TEST, SELECT_TEST, ADD_QUESTIONS_TO_TEST */
+/*! exports provided: TOGGLE_CREATE_TEST_MODAL, SHOW_CREATE_TEST_MODAL, HIDE_CREATE_TEST_MODAL, UPDATE_NEW_TEST, TOGGLE_TEST_CHECKED_STATE, CHANGE_CURRENT_TEST, TOGGLE_QUESTION_SELECTION, SELECT_QUESTION, UNSELECT_QUESTION */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -82137,14 +82155,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SHOW_CREATE_TEST_MODAL", function() { return SHOW_CREATE_TEST_MODAL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HIDE_CREATE_TEST_MODAL", function() { return HIDE_CREATE_TEST_MODAL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UPDATE_NEW_TEST", function() { return UPDATE_NEW_TEST; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SELECT_TEST", function() { return SELECT_TEST; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ADD_QUESTIONS_TO_TEST", function() { return ADD_QUESTIONS_TO_TEST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_TEST_CHECKED_STATE", function() { return TOGGLE_TEST_CHECKED_STATE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CHANGE_CURRENT_TEST", function() { return CHANGE_CURRENT_TEST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_QUESTION_SELECTION", function() { return TOGGLE_QUESTION_SELECTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SELECT_QUESTION", function() { return SELECT_QUESTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UNSELECT_QUESTION", function() { return UNSELECT_QUESTION; });
 var TOGGLE_CREATE_TEST_MODAL = 'TOGGLE_CREATE_TEST_MODAL';
 var SHOW_CREATE_TEST_MODAL = 'SHOW_CREATE_TEST_MODAL';
 var HIDE_CREATE_TEST_MODAL = 'HIDE_CREATE_TEST_MODAL';
 var UPDATE_NEW_TEST = 'UPDATE_NEW_TEST';
-var SELECT_TEST = 'SELECT_TEST';
-var ADD_QUESTIONS_TO_TEST = 'ADD_QUESTIONS_TO_TEST';
+var TOGGLE_TEST_CHECKED_STATE = 'TOGGLE_TEST_CHECKED_STATE';
+var CHANGE_CURRENT_TEST = 'CHANGE_CURRENT_TEST';
+var TOGGLE_QUESTION_SELECTION = 'TOGGLE_QUESTION_SELECTION';
+var SELECT_QUESTION = 'SELECT_QUESTION';
+var UNSELECT_QUESTION = 'UNSELECT_QUESTION';
 
 /***/ }),
 

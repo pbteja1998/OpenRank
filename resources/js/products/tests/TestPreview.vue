@@ -4,7 +4,7 @@
             <template v-slot:title>Tests</template>
             <mdb-breadcrumb>
                 <mdb-breadcrumb-item><router-link to="/tests">Tests</router-link></mdb-breadcrumb-item>
-                <mdb-breadcrumb-item><router-link :to="'/tests/' + selectedTest.id">{{ selectedTest.name }}</router-link></mdb-breadcrumb-item>
+                <mdb-breadcrumb-item><router-link :to="'/tests/preview/' + currentTest.id">{{ currentTest.name }}</router-link></mdb-breadcrumb-item>
                 <mdb-breadcrumb-item active>Library - HackerRank</mdb-breadcrumb-item>
             </mdb-breadcrumb>
 
@@ -29,7 +29,7 @@
                         <h5 class="mb-1">{{ question.name }}
                             <!--<small class="text-muted float-right">{{ test.duration }} min</small>-->
                         </h5>
-                        <button class="btn btn-success btn-sm" @click="question.selected=true;"><mdb-icon icon="plus"></mdb-icon></button>
+                        <button class="btn btn-success btn-sm" @click="selectQuestion({questionId: question.id})"><mdb-icon icon="plus"></mdb-icon></button>
                     </div>
                     <div class="d-flex flex-row w-100 align-items-start">
                         <button class="btn btn-sm" style="color: black;">{{ question.topic }}</button>
@@ -46,13 +46,13 @@
             <template v-slot:rightSideBar>
                 <div class="p-3" style="letter-spacing: 0.01rem;font-weight: bold;color: rgb(109, 109, 109);">
                     <h5>TEST PREVIEW</h5>
-                    <p class="text-sm">Duration: {{ selectedTest.duration }} mins</p>
+                    <p class="text-sm">Duration: {{ currentTest.duration }} mins</p>
                 </div>
                 <mdb-list-group>
                     <mdb-list-group-item href="#" :action="true" class="flex-column text-black-50" v-for="question in selectedQuestions" style="align-items: flex-start!important;">
                         <div class="d-flex flex-row w-100 justify-content-between">
                             <h5 class="mb-1">{{ question.name | truncate(20) }}</h5>
-                            <button class="btn btn-danger btn-sm" @click="question.selected=false;"><mdb-icon icon="minus"></mdb-icon></button>
+                            <button class="btn btn-danger btn-sm" @click="unSelectQuestion({questionId: question.id})"><mdb-icon icon="minus"></mdb-icon></button>
                         </div>
                         <div class="d-flex flex-row w-100 align-items-start">
                             <button class="btn btn-sm" style="color: black;">{{ question.topic }}</button>
@@ -70,7 +70,8 @@
 <script>
     import { mdbContainer, mdbBreadcrumb, mdbBreadcrumbItem, mdbBtn, mdbListGroup, mdbListGroupItem, mdbIcon } from 'mdbvue';
     import { mainHeader, mainContent, mdbAccordion } from '../../components';
-    import { mapGetters, mapState } from 'vuex';
+    import { mapGetters, mapState, mapMutations } from 'vuex';
+    import { SELECT_QUESTION, UNSELECT_QUESTION } from "../../store/mutation-types";
 
     export default {
         name: 'TestPreviewPage',
@@ -87,6 +88,10 @@
             mdbIcon,
         },
         methods: {
+            ...mapMutations({
+                'selectQuestion': SELECT_QUESTION,
+                'unSelectQuestion': UNSELECT_QUESTION
+            })
         },
         computed: {
             ...mapState([
@@ -109,7 +114,7 @@
                 })
             },
             ...mapGetters([
-                'selectedTest'
+                'currentTest'
             ])
         },
         data() {

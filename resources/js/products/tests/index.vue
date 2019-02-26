@@ -25,9 +25,9 @@
             </template>
 
             <mdb-list-group>
-                <mdb-list-group-item href="#" :action="true" class="flex-row text-black-50" style="align-items: flex-start!important;" v-for="test in filteredTests">
+                <mdb-list-group-item href="#" :action="true" class="flex-row text-black-50" style="align-items: flex-start!important;" v-for="test in filteredTests" :key="test.id" v-if="test.id !== 0">
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input" :id="test.id" style="display: none;" v-model="test.checked" :checked="test.checked">
+                        <input type="checkbox" class="form-check-input" :id="test.id" :checked="test.checked" @input="updateCheckedState(test)" style="display: none;" />
                         <label class="form-check-label" :for="test.id"></label>
                     </div>
                     <div class="d-flex flex-column w-100 justify-content-between" @click="selectTestAndNavigate(test.id)" style="cursor: pointer;">
@@ -53,7 +53,7 @@
     import { mainHeader, mainContent, mdbAccordion, mdbAccordionPane } from '../../components';
 
     import { mapMutations, mapState } from 'vuex';
-    import { SHOW_CREATE_TEST_MODAL, SELECT_TEST } from '../../store/mutation-types';
+    import { SHOW_CREATE_TEST_MODAL, CHANGE_CURRENT_TEST, TOGGLE_TEST_CHECKED_STATE } from '../../store/mutation-types';
 
     export default {
         name: 'TestsPage',
@@ -77,11 +77,19 @@
         methods: {
             ...mapMutations({
                 showModal: SHOW_CREATE_TEST_MODAL,
-                selectTest: SELECT_TEST
+                selectTest: CHANGE_CURRENT_TEST,
+                toggleCheckedState: TOGGLE_TEST_CHECKED_STATE
             }),
             selectTestAndNavigate: function (id) {
                 this.selectTest({id: id});
                 this.$router.push('/tests/preview/' + id);
+            },
+            updateCheckedState(test) {
+                // undo the action done as the state is not yet updated
+                document.getElementById(test.id).checked = !document.getElementById(test.id).checked;
+
+                // change the checked state through a mutation
+                this.toggleCheckedState({testId: test.id});
             }
         },
         computed: {

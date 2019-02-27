@@ -73,13 +73,6 @@ export default new Vuex.Store({
                 name: 'Java Developer',
                 id: 7
             },
-            // 'Software Developer',
-            // 'Full Stack Developer',
-            // 'Frontend Developer',
-            // 'Backend Developer',
-            // 'C++ Developer',
-            // 'Python Developer',
-            // 'Java Developer'
         ],
         workExperiences: [
             {
@@ -106,12 +99,6 @@ export default new Vuex.Store({
                 name: 'All Experience Levels',
                 id: 6
             },
-            // 'Intern',
-            // 'New Graduate',
-            // '0-2 years',
-            // '2-5 years',
-            // '>5 years',
-            // 'All Experience Levels'
         ],
         tests: [
             {
@@ -121,7 +108,7 @@ export default new Vuex.Store({
                 workExperience: 0,
                 duration: 0,
                 checked: false,
-                questionIds: [],
+                questionIds: [1, 2, 3],
                 published: false
             },
             {

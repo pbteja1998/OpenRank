@@ -43,7 +43,32 @@
                         <td class="text-warning" v-else-if="question.difficulty === 'MEDIUM'">{{ question.difficulty }}</td>
                         <td class="text-danger" v-else>{{ question.difficulty }}</td>
                         <td>{{ question.marks }}</td>
-                        <td><mdb-icon icon="ellipsis-v" color="primary" style="cursor: pointer;" /></td>
+                        <td>
+                            <mdb-tooltip :options="{placement: 'top'}">
+                                <div class="tooltip">
+                                    Edit
+                                </div>
+                                <mdb-icon slot="reference" icon="pencil-alt" color="" style="cursor: pointer;" class="mr-3 custom-hover" />
+                            </mdb-tooltip>
+                            <mdb-tooltip :options="{placement: 'top'}">
+                                <div class="tooltip">
+                                    Insights
+                                </div>
+                                <mdb-icon slot="reference" icon="chart-bar" color="" style="cursor: pointer;" class="mr-3 custom-hover" />
+                            </mdb-tooltip>
+                            <mdb-popover trigger="click" :options="{placement: 'bottom'}">
+                                <div class="popover">
+                                    <div class="popover-header">
+                                        Actions
+                                    </div>
+                                    <div class="popover-body">
+                                        <mdb-btn style="color: black;">Try question</mdb-btn>
+                                        <mdb-btn style="color: black;">Remove</mdb-btn>
+                                    </div>
+                                </div>
+                                <mdb-icon slot="reference" icon="ellipsis-v" color="" style="cursor: pointer;" class="mr-3 custom-hover" />
+                            </mdb-popover>
+                        </td>
                     </tr>
                 </mdb-tbl-body>
             </mdb-tbl>
@@ -52,7 +77,7 @@
 </template>
 
 <script>
-    import { mdbContainer, mdbBreadcrumb, mdbBreadcrumbItem, mdbBtn, mdbIcon, mdbTbl, mdbTblHead, mdbTblBody } from 'mdbvue';
+    import { mdbContainer, mdbBreadcrumb, mdbBreadcrumbItem, mdbBtn, mdbIcon, mdbTbl, mdbTblHead, mdbTblBody, mdbTooltip, mdbPopover } from 'mdbvue';
     import { mainHeader, mainContent } from '../../../components';
     import { mapGetters, mapMutations } from 'vuex';
     import { PUBLISH_CURRENT_TEST } from "../../../store/mutation-types";
@@ -69,7 +94,9 @@
             mainContent,
             mdbTbl,
             mdbTblHead,
-            mdbTblBody
+            mdbTblBody,
+            mdbTooltip,
+            mdbPopover
         },
         methods: {
             ...mapMutations({
@@ -82,7 +109,7 @@
         },
         mounted: function () {
             if(this.$store.state.currentTestId === 0) {
-                this.$router.push('/tests/');
+                // this.$router.push('/tests/');
             }
         },
         computed: {
@@ -104,5 +131,8 @@
     }
     thead > tr > th {
         font-weight: bold;
+    }
+    .custom-hover:hover {
+        color: blue;
     }
 </style>

@@ -19,5 +19,6 @@ This project mainly uses
     - [Material Design Bootstrap (Vue Version)](https://mdbootstrap.com/docs/vue/) - Material Design Vue Bootstrap UI Kit.
         - [Bootstrap](https://getbootstrap.com/docs/4.0/getting-started/introduction/) - An open source toolkit for developing with HTML, CSS, and JS.
         - [Vue Notification](https://github.com/euvl/vue-notification) - A VueJs 2 library for showing notifications .
+        - [Vue Select](https://sagalbot.github.io/vue-select/) - A Vue.js select component that provides similar functionality to Select2/Chosen without the overhead of jQuery.
 
 - [Docusaurus](https://docusaurus.io/) - Makes it easy to maintain Open Source Documentation Websites.

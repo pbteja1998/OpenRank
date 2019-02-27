@@ -24,7 +24,7 @@
             </template>
 
             <mdb-list-group>
-                <mdb-list-group-item href="#" :action="true" class="flex-column text-black-50" v-for="question in filteredQuestions" style="align-items: flex-start!important;">
+                <mdb-list-group-item href="#" :action="true" class="flex-column text-black-50" v-for="question in filteredQuestions" :key="question.id" style="align-items: flex-start!important;">
                     <div class="d-flex flex-row w-100 justify-content-between">
                         <h5 class="mb-1">{{ question.name }}
                             <!--<small class="text-muted float-right">{{ test.duration }} min</small>-->
@@ -49,7 +49,7 @@
                     <p class="text-sm">Duration: {{ currentTest.duration }} mins</p>
                 </div>
                 <mdb-list-group>
-                    <mdb-list-group-item href="#" :action="true" class="flex-column text-black-50" v-for="question in selectedQuestions" style="align-items: flex-start!important;">
+                    <mdb-list-group-item href="#" :action="true" class="flex-column text-black-50" v-for="question in selectedQuestions" :key="question.id" style="align-items: flex-start!important;">
                         <div class="d-flex flex-row w-100 justify-content-between">
                             <h5 class="mb-1">{{ question.name | truncate(20) }}</h5>
                             <button class="btn btn-danger btn-sm" @click="unSelectQuestion({questionId: question.id})"><mdb-icon icon="minus"></mdb-icon></button>

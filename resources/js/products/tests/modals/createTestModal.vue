@@ -7,13 +7,15 @@
             <mdb-container>
                 <mdb-row>
                     <mdb-col col="8">
-                        <mdb-input type="text" label="What role is this test for?" v-model="role" />
+                        <div class="md-form">
+                            <label class="mr-5 active">What role is this test for?</label>
+                            <v-select :options="jobProfiles" label="name" v-model="roles" multiple class="pt-2"></v-select>
+                        </div>
                     </mdb-col>
                     <mdb-col>
                         <div class="md-form">
-                            <!--<mdb-numeric-input :min="0" :max="5" :emptyValue="0" />-->
-                            <!--<label class="active mr-5">Work Experience (years)</label>-->
-                            <mdb-input type="number" label="Experience (years)" v-model="workExperience" />
+                            <label class="active mr-5">Work Experience</label>
+                            <v-select :options="workExperiences" label="name" v-model="workExperience" class="pt-2"></v-select>
                         </div>
                     </mdb-col>
                 </mdb-row>
@@ -69,21 +71,24 @@
     import { mdbContainer, mdbRow, mdbCol, mdbBtn, mdbModal, mdbModalHeader, mdbModalTitle, mdbModalBody, mdbInput, mdbNumericInput, mdbModalFooter} from 'mdbvue';
     import { mapState, mapMutations } from 'vuex';
     import { HIDE_CREATE_TEST_MODAL, UPDATE_NEW_TEST } from '../../../store/mutation-types';
+    import vSelect from 'vue-select';
 
     export default {
         name: 'createTestModal',
         computed: {
             ...mapState([
                 'newTest',
-                'createTestModal'
+                'createTestModal',
+                'jobProfiles',
+                'workExperiences'
             ]),
-            role: {
+            roles: {
                 get () {
-                    return this.newTest.role;
+                    return this.newTest.roles;
                 },
-                set (value) {
+                set (newTestRoles) {
                     return this.updateTest({
-                        role: value
+                        roles: newTestRoles
                     });
                 }
             },
@@ -156,13 +161,16 @@
             mdbInput,
             mdbNumericInput,
             mdbModalFooter,
+            vSelect
         },
         data() {
             return {
+
             }
         }
     };
 </script>
 
 <style scoped>
+
 </style>

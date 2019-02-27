@@ -36,7 +36,7 @@ const unSelectedItems = items => {
 export default new Vuex.Store({
     state: {
         newTest: {
-            role: '',
+            roles: [],
             workExperience: 0,
             jdLink: '',
             name: '',
@@ -44,6 +44,75 @@ export default new Vuex.Store({
             testType: 'predefined'
         },
         currentTestId: 0,
+        jobProfiles: [
+            {
+                name: 'Software Developer',
+                id: 1
+            },
+            {
+                name: 'Full Stack Developer',
+                id: 2
+            },
+            {
+                name: 'Frontend Developer',
+                id: 3
+            },
+            {
+                name: 'Backend Developer',
+                id: 4
+            },
+            {
+                name: 'C++ Developer',
+                id: 5
+            },
+            {
+                name: 'Python Developer',
+                id: 6
+            },
+            {
+                name: 'Java Developer',
+                id: 7
+            },
+            // 'Software Developer',
+            // 'Full Stack Developer',
+            // 'Frontend Developer',
+            // 'Backend Developer',
+            // 'C++ Developer',
+            // 'Python Developer',
+            // 'Java Developer'
+        ],
+        workExperiences: [
+            {
+                name: 'Intern',
+                id: 1
+            },
+            {
+                name: 'New Graduate',
+                id: 2
+            },
+            {
+                name: '0-2 years',
+                id: 3
+            },
+            {
+                name: '2-5 years',
+                id: 4
+            },
+            {
+                name: '>5 years',
+                id: 5
+            },
+            {
+                name: 'All Experience Levels',
+                id: 6
+            },
+            // 'Intern',
+            // 'New Graduate',
+            // '0-2 years',
+            // '2-5 years',
+            // '>5 years',
+            // 'All Experience Levels'
+        ],
         tests: [
             {
                 id: 0,

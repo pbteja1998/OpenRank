@@ -42,3 +42,45 @@
 .text-transform-initial {
   text-transform: initial !important;
 }
+
+.v-select.searchable > div.dropdown-toggle {
+  border: 0 !important;
+}
+.v-select input[type=search], .v-select input[type=search]:focus {
+  border-bottom: 1px solid #ced4da !important;
+}
+
+.open-indicator {
+  display: none !important;
+}
+
+.clear {
+  display: none !important;
+}
+
+.selected-tag {
+  display: inline-block;
+  height: 32px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0,0,0,.6);
+  line-height: 32px;
+  padding: 0 12px;
+  -webkit-border-radius: 16px;
+  border-radius: 16px;
+  background-color: #eceff1;
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+  cursor: pointer;
+  -webkit-transition: all .3s linear;
+  -o-transition: all .3s linear;
+  transition: all .3s linear;
+  border-bottom: 1px solid #ced4da !important;
+}
+
+.selected-tag:hover {
+  -webkit-transition: all .3s linear;
+  -o-transition: all .3s linear;
+  transition: all .3s linear;
+  background-color: #e0e0e0;
+}

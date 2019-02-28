@@ -1,8 +1,11 @@
 <template>
-    <v-navigation-drawer app fixed clipped>
-        <v-breadcrumbs
-                :items="breadcrumbItems"
-        >
+    <v-navigation-drawer
+            app
+            fixed
+            clipped
+            v-model="leftDrawer"
+    >
+        <v-breadcrumbs :items="breadcrumbItems">
             <v-icon slot="divider">forward</v-icon>
         </v-breadcrumbs>
         <v-tabs
@@ -80,6 +83,8 @@
         VListTileTitle,
         VListTileAction
     } from 'vuetify/lib';
+    import { mapMutations } from 'vuex';
+    import { TOGGLE_LEFT_DRAWER } from "../../store/mutation-types";
 
     export default {
         name: 'TestsPage',
@@ -100,6 +105,11 @@
             VListTileTitle,
             VListTileAction
         },
+        methods: {
+            ...mapMutations({
+                'toggleLeftDrawer': TOGGLE_LEFT_DRAWER
+            })
+        },
         computed: {
             breadcrumbItems: function () {
                 return [
@@ -114,6 +124,14 @@
                         href: '/#/tests'
                     }
                 ]
+            },
+            leftDrawer: {
+                get () {
+                    return this.$store.state.leftDrawer;
+                },
+                set (leftDrawer) {
+                    this.toggleLeftDrawer({leftDrawer: leftDrawer});
+                }
             }
         },
         data () {

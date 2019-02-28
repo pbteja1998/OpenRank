@@ -8,7 +8,7 @@
                     fixed
                     clipped-left
             >
-                <v-toolbar-side-icon></v-toolbar-side-icon>
+                <v-toolbar-side-icon @click="toggleLeftDrawer"></v-toolbar-side-icon>
 
                 <v-toolbar-title class="white--text">OpenRank</v-toolbar-title>
 
@@ -84,6 +84,8 @@
         VLayout,
         VFlex
     } from 'vuetify/lib';
+    import { TOGGLE_LEFT_DRAWER } from "./store/mutation-types";
+    import { mapMutations } from 'vuex';
 
     export default {
         name: 'app',
@@ -100,6 +102,11 @@
             VFooter,
             VLayout,
             VFlex
+        },
+        methods: {
+            ...mapMutations({
+                toggleLeftDrawer: TOGGLE_LEFT_DRAWER
+            })
         },
         data () {
             return {

@@ -96,6 +96,12 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetify_lib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuetify/lib */ "./node_modules/vuetify/lib/index.js");
+/* harmony import */ var _store_mutation_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store/mutation-types */ "./resources/js/store/mutation-types.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -168,6 +174,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'app',
   components: {
@@ -184,6 +192,9 @@ __webpack_require__.r(__webpack_exports__);
     VLayout: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VLayout"],
     VFlex: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VFlex"]
   },
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapMutations"])({
+    toggleLeftDrawer: _store_mutation_types__WEBPACK_IMPORTED_MODULE_1__["TOGGLE_LEFT_DRAWER"]
+  })),
   data: function data() {
     return {
       footerLinks: ['Home', 'About Us', 'Team', 'Services', 'Blog', 'Contact Us']
@@ -255,6 +266,15 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetify_lib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuetify/lib */ "./node_modules/vuetify/lib/index.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _store_mutation_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store/mutation-types */ "./resources/js/store/mutation-types.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
 //
 //
 //
@@ -320,6 +340,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'TestsPage',
   components: {
@@ -339,6 +361,9 @@ __webpack_require__.r(__webpack_exports__);
     VListTileTitle: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VListTileTitle"],
     VListTileAction: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VListTileAction"]
   },
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])({
+    'toggleLeftDrawer': _store_mutation_types__WEBPACK_IMPORTED_MODULE_2__["TOGGLE_LEFT_DRAWER"]
+  })),
   computed: {
     breadcrumbItems: function breadcrumbItems() {
       return [{
@@ -350,6 +375,16 @@ __webpack_require__.r(__webpack_exports__);
         disabled: true,
         href: '/#/tests'
       }];
+    },
+    leftDrawer: {
+      get: function get() {
+        return this.$store.state.leftDrawer;
+      },
+      set: function set(leftDrawer) {
+        this.toggleLeftDrawer({
+          leftDrawer: leftDrawer
+        });
+      }
     }
   },
   data: function data() {
@@ -7206,7 +7241,9 @@ var render = function() {
               }
             },
             [
-              _c("v-toolbar-side-icon"),
+              _c("v-toolbar-side-icon", {
+                on: { click: _vm.toggleLeftDrawer }
+              }),
               _vm._v(" "),
               _c("v-toolbar-title", { staticClass: "white--text" }, [
                 _vm._v("OpenRank")
@@ -7447,7 +7484,16 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-navigation-drawer",
-    { attrs: { app: "", fixed: "", clipped: "" } },
+    {
+      attrs: { app: "", fixed: "", clipped: "" },
+      model: {
+        value: _vm.leftDrawer,
+        callback: function($$v) {
+          _vm.leftDrawer = $$v
+        },
+        expression: "leftDrawer"
+      }
+    },
     [
       _c(
         "v-breadcrumbs",
@@ -51908,19 +51954,45 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var es6_promise_auto__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! es6-promise/auto */ "./node_modules/es6-promise/auto.js");
 /* harmony import */ var es6_promise_auto__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(es6_promise_auto__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _plugins__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plugins */ "./resources/js/store/plugins.js");
+/* harmony import */ var _mutation_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./mutation-types */ "./resources/js/store/mutation-types.js");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
 
 
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
-  state: {},
-  mutations: {},
+  state: {
+    leftDrawer: true
+  },
+  mutations: _defineProperty({}, _mutation_types__WEBPACK_IMPORTED_MODULE_4__["TOGGLE_LEFT_DRAWER"], function (state, payload) {
+    if (payload.leftDrawer === undefined) {
+      state.leftDrawer = !state.leftDrawer;
+    } else {
+      state.leftDrawer = payload.leftDrawer;
+    }
+  }),
   actions: {},
   getters: {},
   plugins: [_plugins__WEBPACK_IMPORTED_MODULE_3__["default"]],
   strict: true
 }));
+
+/***/ }),
+
+/***/ "./resources/js/store/mutation-types.js":
+/*!**********************************************!*\
+  !*** ./resources/js/store/mutation-types.js ***!
+  \**********************************************/
+/*! exports provided: TOGGLE_LEFT_DRAWER */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_LEFT_DRAWER", function() { return TOGGLE_LEFT_DRAWER; });
+var TOGGLE_LEFT_DRAWER = 'TOGGLE_LEFT_DRAWER';
 
 /***/ }),
 

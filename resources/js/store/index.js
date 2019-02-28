@@ -162,23 +162,23 @@ export default new Vuex.Store({
         archivedTests: state => {
             return state.tests.filter(({active}) => !active);
         },
-        getTestIndexFromId: state => id => {
-            return getIndexFromId(state.tests, id);
+        getTestIndexFromId: state => testId => {
+            return getIndexFromId(state.tests, testId);
         },
-        getTestFromId: state => id => {
-            return state.tests[getIndexFromId(state.tests, id)];
+        getTestFromId: state => testId => {
+            return state.tests[getIndexFromId(state.tests, testId)];
         },
-        getJobProfileIndexFromId: state => id => {
-            return getIndexFromId(state.jobProfiles, id);
+        getJobProfileIndex: state => jobProfileId => {
+            return getIndexFromId(state.jobProfiles, jobProfileId);
         },
-        getJobProfileFromId: state => id => {
-            return state.jobProfiles[getIndexFromId(state.jobProfiles, id)];
+        getJobProfileFromId: state => jobProfileId => {
+            return state.jobProfiles[getIndexFromId(state.jobProfiles, jobProfileId)];
         },
-        getWorkExperienceTypeIndexFromId: state => id => {
-            return getIndexFromId(state.workExperienceTypes, id);
+        getWorkExperienceTypeIndexFromId: state => workExperienceTypeId => {
+            return getIndexFromId(state.workExperienceTypes, workExperienceTypeId);
         },
-        getWorkExperienceTypeFromId: state => id => {
-            return state.workExperienceTypes[getIndexFromId(state.workExperienceTypes, id)];
+        getWorkExperienceTypeFromId: state => workExperienceTypeId => {
+            return state.workExperienceTypes[getIndexFromId(state.workExperienceTypes, workExperienceTypeId)];
         }
     },
     plugins: [myPluginWithSnapshot],

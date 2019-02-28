@@ -56,7 +56,10 @@
                                     </v-list-tile-content>
 
                                     <v-list-tile-action>
-                                        <v-icon>{{ subItem.action }}</v-icon>
+                                        <v-checkbox
+                                                :value="subItem.id"
+                                                v-model="selectedFilterItemIds[item.index]"
+                                        ></v-checkbox>
                                     </v-list-tile-action>
                                 </v-list-tile>
                             </v-list-group>
@@ -75,7 +78,7 @@
                                 three-line
                         >
                             <v-subheader>
-                                {{ `${this.tests.length} ${this.tabs[tab_id].name.toUpperCase()}` }}
+                                {{ `${this.filteredTests.length} TESTS` }}
                             </v-subheader>
                             <!--<v-divider></v-divider>-->
                             <v-list-tile v-for="test in filteredTests" :key="test.id">
@@ -88,8 +91,8 @@
 
                                 <v-list-tile-content @click.prevent="test.checked = !test.checked">
                                     <v-list-tile-title>{{ test.name }}</v-list-tile-title>
-                                    <v-list-tile-sub-title>{{ jobProfile(test.id).title }}</v-list-tile-sub-title>
-                                    <v-list-tile-sub-title>{{ workExperienceType(test.id).title }}</v-list-tile-sub-title>
+                                    <v-list-tile-sub-title>{{ jobProfile(test.jobProfileId).title }}</v-list-tile-sub-title>
+                                    <v-list-tile-sub-title>{{ workExperienceType(test.workExperienceTypeId).title }}</v-list-tile-sub-title>
                                 </v-list-tile-content>
                             </v-list-tile>
 
@@ -126,7 +129,7 @@
         VDivider,
         VBtn
     } from 'vuetify/lib';
-    import { mapMutations, mapGetters } from 'vuex';
+    import { mapMutations, mapGetters, mapState } from 'vuex';
     import { TOGGLE_LEFT_DRAWER } from "../../store/mutation-types";
 
     export default {
@@ -157,7 +160,7 @@
         methods: {
             ...mapMutations({
                 'toggleLeftDrawer': TOGGLE_LEFT_DRAWER
-            })
+            }),
         },
         computed: {
             breadcrumbItems: function () {
@@ -190,22 +193,71 @@
                 jobProfile: 'getJobProfileFromId',
                 workExperienceType: 'getWorkExperienceTypeFromId'
             }),
+            ...mapState([
+                'jobProfiles',
+                'workExperienceTypes'
+            ]),
             tests: function () {
                 return this.tab_id === 0 ? this.activeTests : this.archivedTests;
             },
             filteredTests: function () {
-                return this.tests.filter(test => {
+                let filteredTests = this.tests.filter(test => {
                     return test.name.toLowerCase().includes(this.searchTest.toLowerCase()) ||
-                            this.jobProfile(test.id).title.toLowerCase().includes(this.searchTest.toLowerCase()) ||
-                            this.workExperienceType(test.id).title.toLowerCase().includes(this.searchTest.toLowerCase()) ||
+                            this.jobProfile(test.jobProfileId).title.toLowerCase().includes(this.searchTest.toLowerCase()) ||
+                            this.workExperienceType(test.workExperienceTypeId).title.toLowerCase().includes(this.searchTest.toLowerCase()) ||
                             test.duration.toString().toLowerCase().includes(this.searchTest.toLowerCase());
-                })
+                });
+                let empty = true;
+                for(let i = 0; i < this.selectedFilterItemIds.length; i++) {
+                    if(this.selectedFilterItemIds[i].length > 0) {
+                        empty = false;
+                        break;
+                    }
+                }
+                if(empty) {
+                    return filteredTests;
+                } else {
+                    return filteredTests.filter(test => {
+                        // TODO: Remove the following hard-coded code and replace it with generalized code.
+                        return this.selectedFilterItemIds[2].includes(test.jobProfileId) || this.selectedFilterItemIds[3].includes(test.workExperienceTypeId);
+                    });
+                }
+            },
+            items: function () {
+                return [
+                    {
+                        index: 0,
+                        action: 'label',
+                        title: 'Labels',
+                        // active: true,
+                        items: []
+                    },
+                    {
+                        index: 1,
+                        action: 'verified_user',
+                        title: 'Owner',
+                        items: []
+                    },
+                    {
+                        index: 2,
+                        action: 'extension',
+                        title: 'Role',
+                        items: this.jobProfiles
+                    },
+                    {
+                        index: 3,
+                        action: 'work',
+                        title: 'Work Experience',
+                        items: this.workExperienceTypes
+                    }
+                ];
             }
         },
         data () {
             return {
                 searchTest: '',
                 selectedTestIds: [],
+                selectedFilterItemIds: [[],[],[],[]],
                 tabs: [
                     {
                         name: 'Active Tests',
@@ -216,42 +268,7 @@
                         id: 2
                     }
                 ],
-                tab_id: 0,
-                items: [
-                    {
-                        action: 'label',
-                        title: 'Labels',
-                        // active: true,
-                        items: [
-                            { title: 'Label 1' },
-                            { title: 'Label 2' }
-                        ]
-                    },
-                    {
-                        action: 'verified_user',
-                        title: 'Owner',
-                        items: [
-                            { title: 'Label 1' },
-                            { title: 'Label 2' }
-                        ]
-                    },
-                    {
-                        action: 'extension',
-                        title: 'Role',
-                        items: [
-                            { title: 'Label 1' },
-                            { title: 'Label 2' }
-                        ]
-                    },
-                    {
-                        action: 'work',
-                        title: 'Work Experience',
-                        items: [
-                            { title: 'Label 1' },
-                            { title: 'Label 2' }
-                        ]
-                    }
-                ],
+                tab_id: 0
             }
         },
     }

@@ -376,6 +376,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
@@ -432,22 +435,64 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   }, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['activeTests', 'archivedTests']), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
     jobProfile: 'getJobProfileFromId',
     workExperienceType: 'getWorkExperienceTypeFromId'
-  }), {
+  }), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])(['jobProfiles', 'workExperienceTypes']), {
     tests: function tests() {
       return this.tab_id === 0 ? this.activeTests : this.archivedTests;
     },
     filteredTests: function filteredTests() {
       var _this = this;
 
-      return this.tests.filter(function (test) {
-        return test.name.toLowerCase().includes(_this.searchTest.toLowerCase()) || _this.jobProfile(test.id).title.toLowerCase().includes(_this.searchTest.toLowerCase()) || _this.workExperienceType(test.id).title.toLowerCase().includes(_this.searchTest.toLowerCase()) || test.duration.toString().toLowerCase().includes(_this.searchTest.toLowerCase());
+      var filteredTests = this.tests.filter(function (test) {
+        return test.name.toLowerCase().includes(_this.searchTest.toLowerCase()) || _this.jobProfile(test.jobProfileId).title.toLowerCase().includes(_this.searchTest.toLowerCase()) || _this.workExperienceType(test.workExperienceTypeId).title.toLowerCase().includes(_this.searchTest.toLowerCase()) || test.duration.toString().toLowerCase().includes(_this.searchTest.toLowerCase());
       });
+      var empty = true;
+
+      for (var i = 0; i < this.selectedFilterItemIds.length; i++) {
+        if (this.selectedFilterItemIds[i].length > 0) {
+          empty = false;
+          break;
+        }
+      }
+
+      if (empty) {
+        return filteredTests;
+      } else {
+        return filteredTests.filter(function (test) {
+          // TODO: Remove the following hard-coded code and replace it with generalized code.
+          return _this.selectedFilterItemIds[2].includes(test.jobProfileId) || _this.selectedFilterItemIds[3].includes(test.workExperienceTypeId);
+        });
+      }
+    },
+    items: function items() {
+      return [{
+        index: 0,
+        action: 'label',
+        title: 'Labels',
+        // active: true,
+        items: []
+      }, {
+        index: 1,
+        action: 'verified_user',
+        title: 'Owner',
+        items: []
+      }, {
+        index: 2,
+        action: 'extension',
+        title: 'Role',
+        items: this.jobProfiles
+      }, {
+        index: 3,
+        action: 'work',
+        title: 'Work Experience',
+        items: this.workExperienceTypes
+      }];
     }
   }),
   data: function data() {
     return {
       searchTest: '',
       selectedTestIds: [],
+      selectedFilterItemIds: [[], [], [], []],
       tabs: [{
         name: 'Active Tests',
         id: 1
@@ -455,41 +500,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         name: 'Archived Tests',
         id: 2
       }],
-      tab_id: 0,
-      items: [{
-        action: 'label',
-        title: 'Labels',
-        // active: true,
-        items: [{
-          title: 'Label 1'
-        }, {
-          title: 'Label 2'
-        }]
-      }, {
-        action: 'verified_user',
-        title: 'Owner',
-        items: [{
-          title: 'Label 1'
-        }, {
-          title: 'Label 2'
-        }]
-      }, {
-        action: 'extension',
-        title: 'Role',
-        items: [{
-          title: 'Label 1'
-        }, {
-          title: 'Label 2'
-        }]
-      }, {
-        action: 'work',
-        title: 'Work Experience',
-        items: [{
-          title: 'Label 1'
-        }, {
-          title: 'Label 2'
-        }]
-      }]
+      tab_id: 0
     };
   }
 });
@@ -7676,9 +7687,24 @@ var render = function() {
                                     _c(
                                       "v-list-tile-action",
                                       [
-                                        _c("v-icon", [
-                                          _vm._v(_vm._s(subItem.action))
-                                        ])
+                                        _c("v-checkbox", {
+                                          attrs: { value: subItem.id },
+                                          model: {
+                                            value:
+                                              _vm.selectedFilterItemIds[
+                                                item.index
+                                              ],
+                                            callback: function($$v) {
+                                              _vm.$set(
+                                                _vm.selectedFilterItemIds,
+                                                item.index,
+                                                $$v
+                                              )
+                                            },
+                                            expression:
+                                              "selectedFilterItemIds[item.index]"
+                                          }
+                                        })
                                       ],
                                       1
                                     )
@@ -7725,11 +7751,7 @@ var render = function() {
                           _c("v-subheader", [
                             _vm._v(
                               "\n                            " +
-                                _vm._s(
-                                  this.tests.length +
-                                    " " +
-                                    this.tabs[_vm.tab_id].name.toUpperCase()
-                                ) +
+                                _vm._s(this.filteredTests.length + " TESTS") +
                                 "\n                        "
                             )
                           ]),
@@ -7773,14 +7795,19 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("v-list-tile-sub-title", [
                                       _vm._v(
-                                        _vm._s(_vm.jobProfile(test.id).title)
+                                        _vm._s(
+                                          _vm.jobProfile(test.jobProfileId)
+                                            .title
+                                        )
                                       )
                                     ]),
                                     _vm._v(" "),
                                     _c("v-list-tile-sub-title", [
                                       _vm._v(
                                         _vm._s(
-                                          _vm.workExperienceType(test.id).title
+                                          _vm.workExperienceType(
+                                            test.workExperienceTypeId
+                                          ).title
                                         )
                                       )
                                     ])
@@ -52290,33 +52317,33 @@ var getIndexFromId = function getIndexFromId(array, id) {
       });
     },
     getTestIndexFromId: function getTestIndexFromId(state) {
-      return function (id) {
-        return getIndexFromId(state.tests, id);
+      return function (testId) {
+        return getIndexFromId(state.tests, testId);
       };
     },
     getTestFromId: function getTestFromId(state) {
-      return function (id) {
-        return state.tests[getIndexFromId(state.tests, id)];
+      return function (testId) {
+        return state.tests[getIndexFromId(state.tests, testId)];
       };
     },
-    getJobProfileIndexFromId: function getJobProfileIndexFromId(state) {
-      return function (id) {
-        return getIndexFromId(state.jobProfiles, id);
+    getJobProfileIndex: function getJobProfileIndex(state) {
+      return function (jobProfileId) {
+        return getIndexFromId(state.jobProfiles, jobProfileId);
       };
     },
     getJobProfileFromId: function getJobProfileFromId(state) {
-      return function (id) {
-        return state.jobProfiles[getIndexFromId(state.jobProfiles, id)];
+      return function (jobProfileId) {
+        return state.jobProfiles[getIndexFromId(state.jobProfiles, jobProfileId)];
       };
     },
     getWorkExperienceTypeIndexFromId: function getWorkExperienceTypeIndexFromId(state) {
-      return function (id) {
-        return getIndexFromId(state.workExperienceTypes, id);
+      return function (workExperienceTypeId) {
+        return getIndexFromId(state.workExperienceTypes, workExperienceTypeId);
       };
     },
     getWorkExperienceTypeFromId: function getWorkExperienceTypeFromId(state) {
-      return function (id) {
-        return state.workExperienceTypes[getIndexFromId(state.workExperienceTypes, id)];
+      return function (workExperienceTypeId) {
+        return state.workExperienceTypes[getIndexFromId(state.workExperienceTypes, workExperienceTypeId)];
       };
     }
   },

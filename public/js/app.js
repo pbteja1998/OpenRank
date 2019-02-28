@@ -339,6 +339,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -359,12 +396,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     VListTile: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VListTile"],
     VListTileContent: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VListTileContent"],
     VListTileTitle: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VListTileTitle"],
-    VListTileAction: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VListTileAction"]
+    VListTileAction: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VListTileAction"],
+    VContainer: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VContainer"],
+    VSubheader: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VSubheader"],
+    VCheckbox: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VCheckbox"],
+    VListTileSubTitle: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VListTileSubTitle"],
+    VDivider: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VDivider"],
+    VBtn: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VBtn"]
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])({
     'toggleLeftDrawer': _store_mutation_types__WEBPACK_IMPORTED_MODULE_2__["TOGGLE_LEFT_DRAWER"]
   })),
-  computed: {
+  computed: _objectSpread({
     breadcrumbItems: function breadcrumbItems() {
       return [{
         text: 'Tests',
@@ -386,9 +429,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       }
     }
-  },
+  }, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['activeTests', 'archivedTests']), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
+    jobProfile: 'getJobProfileFromId',
+    workExperienceType: 'getWorkExperienceTypeFromId'
+  }), {
+    tests: function tests() {
+      return this.tab_id === 0 ? this.activeTests : this.archivedTests;
+    },
+    filteredTests: function filteredTests() {
+      var _this = this;
+
+      return this.tests.filter(function (test) {
+        return test.name.toLowerCase().includes(_this.searchTest.toLowerCase()) || _this.jobProfile(test.id).title.toLowerCase().includes(_this.searchTest.toLowerCase()) || _this.workExperienceType(test.id).title.toLowerCase().includes(_this.searchTest.toLowerCase()) || test.duration.toString().toLowerCase().includes(_this.searchTest.toLowerCase());
+      });
+    }
+  }),
   data: function data() {
     return {
+      searchTest: '',
+      selectedTestIds: [],
       tabs: [{
         name: 'Active Tests',
         id: 1
@@ -7483,127 +7542,247 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-navigation-drawer",
-    {
-      attrs: { app: "", fixed: "", clipped: "" },
-      model: {
-        value: _vm.leftDrawer,
-        callback: function($$v) {
-          _vm.leftDrawer = $$v
-        },
-        expression: "leftDrawer"
-      }
-    },
+    "div",
     [
       _c(
-        "v-breadcrumbs",
-        { attrs: { items: _vm.breadcrumbItems } },
+        "v-navigation-drawer",
+        {
+          attrs: { app: "", fixed: "", clipped: "" },
+          model: {
+            value: _vm.leftDrawer,
+            callback: function($$v) {
+              _vm.leftDrawer = $$v
+            },
+            expression: "leftDrawer"
+          }
+        },
         [
-          _c("v-icon", { attrs: { slot: "divider" }, slot: "divider" }, [
-            _vm._v("forward")
-          ])
+          _c(
+            "v-breadcrumbs",
+            { attrs: { items: _vm.breadcrumbItems } },
+            [
+              _c("v-icon", { attrs: { slot: "divider" }, slot: "divider" }, [
+                _vm._v("forward")
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-tabs",
+            {
+              attrs: { centered: "", "slider-color": "black" },
+              model: {
+                value: _vm.tab_id,
+                callback: function($$v) {
+                  _vm.tab_id = $$v
+                },
+                expression: "tab_id"
+              }
+            },
+            _vm._l(_vm.tabs, function(tab) {
+              return _c("v-tab", { key: tab.id }, [
+                _vm._v(
+                  "\n                " + _vm._s(tab.name) + "\n            "
+                )
+              ])
+            }),
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-layout",
+            { attrs: { row: "" } },
+            [
+              _c(
+                "v-flex",
+                [
+                  _c(
+                    "v-card",
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          solo: "",
+                          label: "Search for a test",
+                          "append-icon": "search"
+                        },
+                        model: {
+                          value: _vm.searchTest,
+                          callback: function($$v) {
+                            _vm.searchTest = $$v
+                          },
+                          expression: "searchTest"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "v-list",
+                        _vm._l(_vm.items, function(item) {
+                          return _c(
+                            "v-list-group",
+                            {
+                              key: item.title,
+                              attrs: {
+                                "prepend-icon": item.action,
+                                "no-action": ""
+                              },
+                              model: {
+                                value: item.active,
+                                callback: function($$v) {
+                                  _vm.$set(item, "active", $$v)
+                                },
+                                expression: "item.active"
+                              }
+                            },
+                            [
+                              _c(
+                                "v-list-tile",
+                                {
+                                  attrs: { slot: "activator" },
+                                  slot: "activator"
+                                },
+                                [
+                                  _c(
+                                    "v-list-tile-content",
+                                    [
+                                      _c("v-list-tile-title", [
+                                        _vm._v(_vm._s(item.title))
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _vm._l(item.items, function(subItem) {
+                                return _c(
+                                  "v-list-tile",
+                                  {
+                                    key: subItem.title,
+                                    on: { click: function($event) {} }
+                                  },
+                                  [
+                                    _c(
+                                      "v-list-tile-content",
+                                      [
+                                        _c("v-list-tile-title", [
+                                          _vm._v(_vm._s(subItem.title))
+                                        ])
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-list-tile-action",
+                                      [
+                                        _c("v-icon", [
+                                          _vm._v(_vm._s(subItem.action))
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              })
+                            ],
+                            2
+                          )
+                        }),
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
         ],
         1
       ),
       _vm._v(" "),
       _c(
-        "v-tabs",
-        {
-          attrs: { centered: "", "slider-color": "black" },
-          model: {
-            value: _vm.tab_id,
-            callback: function($$v) {
-              _vm.tab_id = $$v
-            },
-            expression: "tab_id"
-          }
-        },
-        _vm._l(_vm.tabs, function(tab) {
-          return _c("v-tab", { key: tab.id }, [
-            _vm._v("\n            " + _vm._s(tab.name) + "\n        ")
-          ])
-        }),
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-layout",
-        { attrs: { row: "" } },
+        "v-container",
         [
           _c(
-            "v-flex",
+            "v-layout",
+            { attrs: { row: "" } },
             [
               _c(
-                "v-card",
+                "v-flex",
                 [
-                  _c("v-text-field", {
-                    attrs: {
-                      solo: "",
-                      label: "Search for a test",
-                      "append-icon": "search"
-                    }
-                  }),
-                  _vm._v(" "),
                   _c(
-                    "v-list",
-                    _vm._l(_vm.items, function(item) {
-                      return _c(
-                        "v-list-group",
-                        {
-                          key: item.title,
-                          attrs: {
-                            "prepend-icon": item.action,
-                            "no-action": ""
-                          },
-                          model: {
-                            value: item.active,
-                            callback: function($$v) {
-                              _vm.$set(item, "active", $$v)
-                            },
-                            expression: "item.active"
-                          }
-                        },
+                    "v-card",
+                    [
+                      _c(
+                        "v-list",
+                        { attrs: { subheader: "", "three-line": "" } },
                         [
-                          _c(
-                            "v-list-tile",
-                            { attrs: { slot: "activator" }, slot: "activator" },
-                            [
-                              _c(
-                                "v-list-tile-content",
-                                [
-                                  _c("v-list-tile-title", [
-                                    _vm._v(_vm._s(item.title))
-                                  ])
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
+                          _c("v-subheader", [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(
+                                  this.tests.length +
+                                    " " +
+                                    this.tabs[_vm.tab_id].name.toUpperCase()
+                                ) +
+                                "\n                        "
+                            )
+                          ]),
                           _vm._v(" "),
-                          _vm._l(item.items, function(subItem) {
+                          _vm._l(_vm.filteredTests, function(test) {
                             return _c(
                               "v-list-tile",
-                              {
-                                key: subItem.title,
-                                on: { click: function($event) {} }
-                              },
+                              { key: test.id },
                               [
                                 _c(
-                                  "v-list-tile-content",
+                                  "v-list-tile-action",
                                   [
-                                    _c("v-list-tile-title", [
-                                      _vm._v(_vm._s(subItem.title))
-                                    ])
+                                    _c("v-checkbox", {
+                                      attrs: { value: test.id },
+                                      model: {
+                                        value: _vm.selectedTestIds,
+                                        callback: function($$v) {
+                                          _vm.selectedTestIds = $$v
+                                        },
+                                        expression: "selectedTestIds"
+                                      }
+                                    })
                                   ],
                                   1
                                 ),
                                 _vm._v(" "),
                                 _c(
-                                  "v-list-tile-action",
+                                  "v-list-tile-content",
+                                  {
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        test.checked = !test.checked
+                                      }
+                                    }
+                                  },
                                   [
-                                    _c("v-icon", [
-                                      _vm._v(_vm._s(subItem.action))
+                                    _c("v-list-tile-title", [
+                                      _vm._v(_vm._s(test.name))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("v-list-tile-sub-title", [
+                                      _vm._v(
+                                        _vm._s(_vm.jobProfile(test.id).title)
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("v-list-tile-sub-title", [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.workExperienceType(test.id).title
+                                        )
+                                      )
                                     ])
                                   ],
                                   1
@@ -7615,7 +7794,7 @@ var render = function() {
                         ],
                         2
                       )
-                    }),
+                    ],
                     1
                   )
                 ],
@@ -51957,15 +52136,137 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mutation_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./mutation-types */ "./resources/js/store/mutation-types.js");
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 
 
 
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
+var getIndexFromId = function getIndexFromId(array, id) {
+  var indices = _toConsumableArray(Array(array.length).keys()).filter(function (index) {
+    return array[index].id === id;
+  });
+
+  if (indices.length > 0) return indices[0];else return -1;
+};
+
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
-    leftDrawer: true
+    leftDrawer: true,
+    jobProfiles: [{
+      id: 1,
+      title: 'Software Developer'
+    }, {
+      id: 2,
+      title: 'Full-stack Developer'
+    }, {
+      id: 3,
+      title: 'Front-end Developer'
+    }, {
+      id: 4,
+      title: 'Back-end Developer'
+    }, {
+      id: 5,
+      title: 'C++ Developer'
+    }, {
+      id: 6,
+      title: 'Python Developer'
+    }, {
+      id: 7,
+      title: 'Java Developer'
+    }],
+    workExperienceTypes: [{
+      id: 1,
+      title: 'Intern'
+    }, {
+      id: 2,
+      title: 'New Graduate'
+    }, {
+      id: 3,
+      title: '0-2 years'
+    }, {
+      id: 4,
+      title: '2-5 years'
+    }, {
+      id: 5,
+      title: '>5 years'
+    }, {
+      id: 6,
+      title: 'All Experience Levels'
+    }],
+    tests: [{
+      id: 0,
+      name: 'Dummy Test',
+      jobProfileId: 1,
+      workExperienceTypeId: 1,
+      duration: 6,
+      questionIds: [1, 2, 3],
+      published: false,
+      active: false
+    }, {
+      id: 1,
+      name: 'HackerRank Hiring Test',
+      jobProfileId: 2,
+      workExperienceTypeId: 3,
+      duration: 90,
+      questionIds: [],
+      published: false,
+      active: true
+    }, {
+      id: 2,
+      name: 'HackerRank Software Developer Hiring Test',
+      jobProfileId: 3,
+      workExperienceTypeId: 5,
+      duration: 60,
+      questionIds: [],
+      published: false,
+      active: true
+    }, {
+      id: 3,
+      name: 'InterviewBit Software Developer Hiring Test',
+      jobProfileId: 4,
+      workExperienceTypeId: 4,
+      duration: 75,
+      questionIds: [],
+      published: false,
+      active: true
+    }, {
+      id: 4,
+      name: 'HackerEarth IIIT-H Campus Placements Hiring Test',
+      jobProfileId: 5,
+      workExperienceTypeId: 2,
+      duration: 60,
+      questionIds: [],
+      published: false,
+      active: true
+    }, {
+      id: 5,
+      name: 'HackerRank Campus Internships',
+      jobProfileId: 6,
+      workExperienceTypeId: 1,
+      duration: 60,
+      questionIds: [],
+      published: false,
+      active: true
+    }, {
+      id: 6,
+      name: 'HackerRank Campus Placements',
+      jobProfileId: 7,
+      workExperienceTypeId: 2,
+      duration: 60,
+      questionIds: [],
+      published: false,
+      active: true
+    }]
   },
   mutations: _defineProperty({}, _mutation_types__WEBPACK_IMPORTED_MODULE_4__["TOGGLE_LEFT_DRAWER"], function (state, payload) {
     if (payload.leftDrawer === undefined) {
@@ -51975,7 +52276,50 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
     }
   }),
   actions: {},
-  getters: {},
+  getters: {
+    activeTests: function activeTests(state) {
+      return state.tests.filter(function (_ref) {
+        var active = _ref.active;
+        return active;
+      });
+    },
+    archivedTests: function archivedTests(state) {
+      return state.tests.filter(function (_ref2) {
+        var active = _ref2.active;
+        return !active;
+      });
+    },
+    getTestIndexFromId: function getTestIndexFromId(state) {
+      return function (id) {
+        return getIndexFromId(state.tests, id);
+      };
+    },
+    getTestFromId: function getTestFromId(state) {
+      return function (id) {
+        return state.tests[getIndexFromId(state.tests, id)];
+      };
+    },
+    getJobProfileIndexFromId: function getJobProfileIndexFromId(state) {
+      return function (id) {
+        return getIndexFromId(state.jobProfiles, id);
+      };
+    },
+    getJobProfileFromId: function getJobProfileFromId(state) {
+      return function (id) {
+        return state.jobProfiles[getIndexFromId(state.jobProfiles, id)];
+      };
+    },
+    getWorkExperienceTypeIndexFromId: function getWorkExperienceTypeIndexFromId(state) {
+      return function (id) {
+        return getIndexFromId(state.workExperienceTypes, id);
+      };
+    },
+    getWorkExperienceTypeFromId: function getWorkExperienceTypeFromId(state) {
+      return function (id) {
+        return state.workExperienceTypes[getIndexFromId(state.workExperienceTypes, id)];
+      };
+    }
+  },
   plugins: [_plugins__WEBPACK_IMPORTED_MODULE_3__["default"]],
   strict: true
 }));

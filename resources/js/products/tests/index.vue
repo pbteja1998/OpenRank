@@ -1,152 +1,172 @@
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-    <mdb-container fluid class="custom-flex-css">
-        <main-header>
-            <template v-slot:title>Tests</template>
+<template>
+    <v-navigation-drawer app fixed clipped>
+        <v-breadcrumbs
+                :items="breadcrumbItems"
+        >
+            <v-icon slot="divider">forward</v-icon>
+        </v-breadcrumbs>
+        <v-tabs
+                v-model="tab_id"
+                centered
+                slider-color="black"
+        >
+            <v-tab
+                    v-for="tab in tabs"
+                    :key="tab.id"
+            >
+                {{ tab.name }}
+            </v-tab>
+        </v-tabs>
 
-            <mdb-breadcrumb>
-                <mdb-breadcrumb-item><router-link to="/tests">Tests</router-link></mdb-breadcrumb-item>
-                <mdb-breadcrumb-item active>Active</mdb-breadcrumb-item>
-            </mdb-breadcrumb>
+        <v-layout row>
+            <v-flex>
+                <v-card>
+                    <v-text-field
+                            solo
+                            label="Search for a test"
+                            append-icon="search"
+                    ></v-text-field>
 
-            <template v-slot:others>
-                <mdb-btn color="success" @click="showModal" class="float-right mr-5">Create Test</mdb-btn>
-                <create-test-modal />
-            </template>
-        </main-header>
+                    <v-list>
+                        <v-list-group
+                                v-for="item in items"
+                                :key="item.title"
+                                v-model="item.active"
+                                :prepend-icon="item.action"
+                                no-action
+                        >
+                            <v-list-tile slot="activator">
+                                <v-list-tile-content>
+                                    <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                                </v-list-tile-content>
+                            </v-list-tile>
 
-        <hr />
+                            <v-list-tile
+                                    v-for="subItem in item.items"
+                                    :key="subItem.title"
+                                    @click=""
+                            >
+                                <v-list-tile-content>
+                                    <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
+                                </v-list-tile-content>
 
-        <main-content>
-            <template v-slot:leftSideBar>
-                <div class="form-group px-5 pt-5 pb-3 m-0">
-                    <input class="form-control" type="text" placeholder="Search for a test.." aria-label="Search" v-model="searchTest" />
-                </div>
-                <mdb-accordion :panes="leftSideBarPanes" custom/>
-            </template>
-
-            <mdb-list-group>
-                <mdb-list-group-item href="#" :action="true" class="flex-row text-black-50" style="align-items: flex-start!important;" v-for="test in filteredTests" :key="test.id" v-if="test.id !== 0">
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" :id="test.id" :checked="test.checked" @input="updateCheckedState(test)" style="display: none;" />
-                        <label class="form-check-label" :for="test.id"></label>
-                    </div>
-                    <div class="d-flex flex-column w-100 justify-content-between" @click="selectTestAndNavigate(test.id)" style="cursor: pointer;">
-                        <h5 class="mb-1">{{ test.name }}
-                            <small class="text-muted float-right">{{ test.duration }} min</small>
-                        </h5>
-                        <p class="mb-1">{{ test.role }}</p>
-                        <small class="text-muted">0 - {{ test.workExperience }} years</small>
-                    </div>
-                </mdb-list-group-item>
-            </mdb-list-group>
-
-            <template v-slot:rightSideBar>
-                <mdb-accordion :panes="rightSideBarPanes" custom/>
-            </template>
-        </main-content>
-    </mdb-container>
+                                <v-list-tile-action>
+                                    <v-icon>{{ subItem.action }}</v-icon>
+                                </v-list-tile-action>
+                            </v-list-tile>
+                        </v-list-group>
+                    </v-list>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </v-navigation-drawer>
 </template>
 
 <script>
-    import { mdbContainer, mdbRow, mdbCol, mdbBtn, mdbInput, mdbListGroup, mdbListGroupItem, mdbIcon, mdbBreadcrumb, mdbBreadcrumbItem } from 'mdbvue';
-    import { createTestModal } from './modals';
-    import { mainHeader, mainContent, mdbAccordion, mdbAccordionPane } from '../../components';
-
-    import { mapMutations, mapState } from 'vuex';
-    import { SHOW_CREATE_TEST_MODAL, CHANGE_CURRENT_TEST, TOGGLE_TEST_CHECKED_STATE } from '../../store/mutation-types';
-    import notifications from 'vue-notification';
+    import {
+        VNavigationDrawer,
+        VBreadcrumbs,
+        VIcon,
+        VTabs,
+        VTab,
+        VLayout,
+        VFlex,
+        VCard,
+        VTextField,
+        VList,
+        VListGroup,
+        VListTile,
+        VListTileContent,
+        VListTileTitle,
+        VListTileAction
+    } from 'vuetify/lib';
 
     export default {
         name: 'TestsPage',
         components: {
-            mdbContainer,
-            mdbRow,
-            mdbCol,
-            mdbBtn,
-            createTestModal,
-            mainContent,
-            mainHeader,
-            mdbAccordion,
-            mdbAccordionPane,
-            mdbInput,
-            mdbListGroup,
-            mdbListGroupItem,
-            mdbIcon,
-            mdbBreadcrumb,
-            mdbBreadcrumbItem,
-            notifications
-        },
-        methods: {
-            ...mapMutations({
-                showModal: SHOW_CREATE_TEST_MODAL,
-                selectTest: CHANGE_CURRENT_TEST,
-                toggleCheckedState: TOGGLE_TEST_CHECKED_STATE
-            }),
-            selectTestAndNavigate: function (id) {
-                this.selectTest({id: id});
-                this.$router.push('/tests/preview/' + id);
-            },
-            updateCheckedState(test) {
-                // undo the action done as the state is not yet updated
-                document.getElementById(test.id).checked = !document.getElementById(test.id).checked;
-
-                // change the checked state through a mutation
-                this.toggleCheckedState({testId: test.id});
-            }
+            VNavigationDrawer,
+            VBreadcrumbs,
+            VIcon,
+            VTabs,
+            VTab,
+            VLayout,
+            VFlex,
+            VCard,
+            VTextField,
+            VList,
+            VListGroup,
+            VListTile,
+            VListTileContent,
+            VListTileTitle,
+            VListTileAction
         },
         computed: {
-            ...mapState([
-               'tests'
-            ]),
-            filteredTests() {
-                return this.tests.filter(test => {
-                    return test.name.toLowerCase().includes(this.searchTest.toLowerCase()) ||
-                        test.role.toLowerCase().includes(this.searchTest.toLowerCase());
-                })
+            breadcrumbItems: function () {
+                return [
+                    {
+                        text: 'Tests',
+                        disabled: false,
+                        href: '/#/tests'
+                    },
+                    {
+                        text: !this.tab_id ? 'Active' : 'Archived',
+                        disabled: true,
+                        href: '/#/tests'
+                    }
+                ]
             }
         },
-        data() {
+        data () {
             return {
-                leftSideBarPanes: [
+                tabs: [
                     {
-                        title: 'Labels',
-                        content: 'Anim pariatur cliche reprehenderit,',
+                        name: 'Active Tests',
+                        id: 1
                     },
                     {
-                        title: 'Owner',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-                    {
-                        title: 'Role',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-                    {
-                        title: 'Work Experience',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-               ],
-                rightSideBarPanes: [
-                    {
-                        title: 'Difficulty',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-                    {
-                        title: 'Type',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-                    {
-                        title: 'Tags',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-                    {
-                        title: 'Languages',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
+                        name: 'Archived Tests',
+                        id: 2
+                    }
                 ],
-                searchTest: ''
-            };
-        }
-    };
+                tab_id: 0,
+                items: [
+                    {
+                        action: 'label',
+                        title: 'Labels',
+                        // active: true,
+                        items: [
+                            { title: 'Label 1' },
+                            { title: 'Label 2' }
+                        ]
+                    },
+                    {
+                        action: 'verified_user',
+                        title: 'Owner',
+                        items: [
+                            { title: 'Label 1' },
+                            { title: 'Label 2' }
+                        ]
+                    },
+                    {
+                        action: 'extension',
+                        title: 'Role',
+                        items: [
+                            { title: 'Label 1' },
+                            { title: 'Label 2' }
+                        ]
+                    },
+                    {
+                        action: 'work',
+                        title: 'Work Experience',
+                        items: [
+                            { title: 'Label 1' },
+                            { title: 'Label 2' }
+                        ]
+                    }
+                ],
+            }
+        },
+    }
 </script>
 
 <style scoped>

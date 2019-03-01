@@ -2,19 +2,33 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import 'es6-promise/auto'
 import myPluginWithSnapshot from './plugins';
-import { TOGGLE_LEFT_DRAWER } from './mutation-types';
+import {
+    TOGGLE_LEFT_DRAWER,
+    SET_CURRENT_TEST,
+    SET_LEFT_SIDEBAR_TAB_ID,
+    SELECT_QUESTION,
+    UNSELECT_QUESTION
+} from './mutation-types';
 
 Vue.use(Vuex);
 
 const getIndexFromId = (array, id) => {
-    let indices = [...Array(array.length).keys()].filter(index => array[index].id === id);
+    // let indices = [...Array(array.length).keys()].filter(index => array[index].id === id);
+    let indices = getIndicesFromId(array, [id]);
     if(indices.length > 0) return indices[0];
     else return -1;
+};
+
+const getIndicesFromId = (array, ids) => {
+    return [...Array(array.length).keys()].filter(index => ids.includes(array[index].id));
 };
 
 export default new Vuex.Store({
     state: {
         leftDrawer: true,
+        leftSidebarTabId: 0,
+        searchFilter: '',
+        currentTestId: 0,
         jobProfiles: [
             {
                 id: 1,
@@ -69,6 +83,102 @@ export default new Vuex.Store({
             {
                 id: 6,
                 title: 'All Experience Levels'
+            },
+        ],
+        difficultyTypes: [
+            {
+                id: 1,
+                title: 'Easy'
+            },
+            {
+                id: 2,
+                title: 'Medium'
+            },
+            {
+                id: 3,
+                title: 'Hard'
+            }
+        ],
+        questionTypes: [
+            {
+                id: 1,
+                title: 'Coding'
+            },
+            {
+                id: 2,
+                title: 'Database'
+            }
+        ],
+        questionTags: [
+            {
+                id: 1,
+                title: 'Role Based'
+            },
+            {
+                id: 2,
+                title: 'Selection'
+            },
+            {
+                id: 3,
+                title: 'Databases'
+            },
+            {
+                id: 4,
+                title: 'SQL'
+            },
+            {
+                id: 5,
+                title: 'Problem Solving'
+            },
+            {
+                id: 6,
+                title: 'Core Skills'
+            },
+            {
+                id: 7,
+                title: 'General Programming'
+            },
+            {
+                id: 8,
+                title: 'Data Structures'
+            },
+            {
+                id: 9,
+                title: 'Greedy'
+            },
+            {
+                id: 10,
+                title: 'Arrays'
+            },
+            {
+                id: 11,
+                title: 'Algorithms'
+            },
+            {
+                id: 12,
+                title: 'Stacks'
+            },
+        ],
+        languages: [
+            {
+                id: 1,
+                title: 'C'
+            },
+            {
+                id: 2,
+                title: 'C++'
+            },
+            {
+                id: 3,
+                title: 'C++14'
+            },
+            {
+                id: 4,
+                title: 'Python'
+            },
+            {
+                id: 5,
+                title: 'Java'
             },
         ],
         tests: [
@@ -143,6 +253,54 @@ export default new Vuex.Store({
                 active: true
             },
         ],
+        selectedQuestionIds: [],
+        questions: [
+            {
+                id: 1,
+                name: 'Student Rank',
+                questionTypeId: 2,
+                difficultyTypeId: 1,
+                questionTagIds: [1, 2, 3, 4],
+                languageIds: [1, 2, 3, 4, 5],
+                points: 50
+            },
+            {
+                id: 2,
+                name: 'Merge Strings',
+                questionTypeId: 1,
+                difficultyTypeId: 1,
+                questionTagIds: [5, 6, 7],
+                languageIds: [1, 2, 3, 4, 5],
+                points: 100
+            },
+            {
+                id: 3,
+                name: 'Long Break',
+                questionTypeId: 1,
+                difficultyTypeId: 2,
+                questionTagIds: [6, 8, 9, 10],
+                languageIds: [1, 2, 3, 4, 5],
+                points: 90
+            },
+            {
+                id: 4,
+                name: 'Maximum Difference in an Array',
+                questionTypeId: 1,
+                difficultyTypeId: 3,
+                questionTagIds: [5, 6, 10, 11, 8],
+                languageIds: [1, 2, 3, 4, 5],
+                points: 500
+            },
+            {
+                id: 5,
+                name: 'Braces',
+                questionTypeId: 1,
+                difficultyTypeId: 1,
+                questionTagIds: [5, 6, 12, 11, 8, 10],
+                languageIds: [1, 2, 3, 4, 5],
+                points: 50
+            },
+        ],
     },
     mutations: {
         [TOGGLE_LEFT_DRAWER] (state, payload) {
@@ -151,11 +309,27 @@ export default new Vuex.Store({
             } else {
                 state.leftDrawer = payload.leftDrawer
             }
+        },
+        [SET_CURRENT_TEST] (state, payload) {
+            state.currentTestId = payload.testId;
+        },
+        [SET_LEFT_SIDEBAR_TAB_ID] (state, payload) {
+            state.leftSidebarTabId = payload.tabId;
+        },
+        [SELECT_QUESTION] (state, payload) {
+            state.selectedQuestionIds.push(payload.questionId);
+        },
+        [UNSELECT_QUESTION] (state, payload) {
+            console.log(state.selectedQuestionIds, payload.questionId, state.selectedQuestionIds.filter(questionId => questionId !== payload.questionId));
+            state.selectedQuestionIds = state.selectedQuestionIds.filter(questionId => questionId !== payload.questionId);
         }
     },
     actions: {
     },
     getters: {
+        currentTest: state => {
+            return state.tests[getIndexFromId(state.tests, state.currentTestId)];
+        },
         activeTests: state => {
             return state.tests.filter(({active}) => active);
         },
@@ -165,20 +339,44 @@ export default new Vuex.Store({
         getTestIndexFromId: state => testId => {
             return getIndexFromId(state.tests, testId);
         },
-        getTestFromId: state => testId => {
-            return state.tests[getIndexFromId(state.tests, testId)];
+        getTestFromId: (state, getters) => testId => {
+            return state.tests[getters.getTestFromId(testId)];
         },
         getJobProfileIndex: state => jobProfileId => {
             return getIndexFromId(state.jobProfiles, jobProfileId);
         },
-        getJobProfileFromId: state => jobProfileId => {
-            return state.jobProfiles[getIndexFromId(state.jobProfiles, jobProfileId)];
+        getJobProfileFromId: (state, getters) => jobProfileId => {
+            return state.jobProfiles[getters.getJobProfileIndex(jobProfileId)];
         },
         getWorkExperienceTypeIndexFromId: state => workExperienceTypeId => {
             return getIndexFromId(state.workExperienceTypes, workExperienceTypeId);
         },
-        getWorkExperienceTypeFromId: state => workExperienceTypeId => {
-            return state.workExperienceTypes[getIndexFromId(state.workExperienceTypes, workExperienceTypeId)];
+        getWorkExperienceTypeFromId: (state, getters) => workExperienceTypeId => {
+            return state.workExperienceTypes[getters.getWorkExperienceTypeIndexFromId(workExperienceTypeId)];
+        },
+        getQuestionTypeIndex: state => questionTypeId => {
+            return getIndexFromId(state.questionTypes, questionTypeId);
+        },
+        getQuestionType: (state, getters) => questionTypeId => {
+            return state.questionTypes[getters.getQuestionTypeIndex(questionTypeId)];
+        },
+        getDifficultyTypeIndex: state => difficultyTypeId => {
+            return getIndexFromId(state.difficultyTypes, difficultyTypeId);
+        },
+        getDifficultyType: (state, getters) => difficultyTypeId => {
+            return state.difficultyTypes[getters.getDifficultyTypeIndex(difficultyTypeId)];
+        },
+        getQuestionTagIndices: state => questionTagIds => {
+            return getIndicesFromId(state.questionTags, questionTagIds);
+        },
+        getQuestionTags: state => questionTagIds => {
+            return state.questionTags.filter(tag => questionTagIds.includes(tag.id));
+        },
+        selectedQuestions: state => {
+            return state.questions.filter(question => state.selectedQuestionIds.includes(question.id));
+        },
+        nonSelectedQuestions: state => {
+            return state.questions.filter(question => !state.selectedQuestionIds.includes(question.id));
         }
     },
     plugins: [myPluginWithSnapshot],

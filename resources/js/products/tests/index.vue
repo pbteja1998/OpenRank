@@ -1,77 +1,33 @@
 <template>
     <div>
-        <v-navigation-drawer
-                app
-                fixed
-                clipped
-                v-model="leftDrawer"
+        <side-bar
+                :tab-items="tabItems"
+                :breadcrumb-items="breadcrumbItems"
+                :selected-filter-item-ids="selectedFilterItemIds"
+                :tabs="tabs"
         >
-            <v-breadcrumbs :items="breadcrumbItems">
-                <v-icon slot="divider">forward</v-icon>
-            </v-breadcrumbs>
-            <v-tabs
-                    v-model="tab_id"
-                    centered
-                    slider-color="black"
-            >
-                <v-tab
-                        v-for="tab in tabs"
-                        :key="tab.id"
-                >
-                    {{ tab.name }}
-                </v-tab>
-            </v-tabs>
+            <template v-slot:head>
+                <v-text-field
+                        solo
+                        label="Search for a test"
+                        append-icon="search"
+                        v-model="searchTest"
+                        clearable
+                ></v-text-field>
+            </template>
+        </side-bar>
+        <v-container fluid>
+            <v-layout column>
+                <v-layout row align-start justify-space-between>
+                    <v-breadcrumbs :items="breadcrumbItems">
+                        <v-icon slot="divider">forward</v-icon>
+                    </v-breadcrumbs>
 
-            <v-layout row>
-                <v-flex>
-                    <v-card>
-                        <v-text-field
-                                solo
-                                label="Search for a test"
-                                append-icon="search"
-                                v-model="searchTest"
-                        ></v-text-field>
-
-                        <v-list>
-                            <v-list-group
-                                    v-for="item in items"
-                                    :key="item.title"
-                                    v-model="item.active"
-                                    :prepend-icon="item.action"
-                                    no-action
-                            >
-                                <v-list-tile slot="activator">
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                                    </v-list-tile-content>
-                                </v-list-tile>
-
-                                <v-list-tile
-                                        v-for="subItem in item.items"
-                                        :key="subItem.title"
-                                        @click=""
-                                >
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
-                                    </v-list-tile-content>
-
-                                    <v-list-tile-action>
-                                        <v-checkbox
-                                                :value="subItem.id"
-                                                v-model="selectedFilterItemIds[item.index]"
-                                        ></v-checkbox>
-                                    </v-list-tile-action>
-                                </v-list-tile>
-                            </v-list-group>
-                        </v-list>
-                    </v-card>
-                </v-flex>
-            </v-layout>
-        </v-navigation-drawer>
-
-        <v-container>
-            <v-layout row>
-                <v-flex>
+                    <v-btn large color="success">
+                        Create Test
+                    </v-btn>
+                </v-layout>
+                <v-layout row align-start justify-space-between fill-height>
                     <v-card>
                         <v-list
                                 subheader
@@ -80,25 +36,27 @@
                             <v-subheader>
                                 {{ `${this.filteredTests.length} TESTS` }}
                             </v-subheader>
-                            <!--<v-divider></v-divider>-->
-                            <v-list-tile v-for="test in filteredTests" :key="test.id">
-                                <v-list-tile-action>
-                                    <v-checkbox
-                                            :value="test.id"
-                                            v-model="selectedTestIds"
-                                    ></v-checkbox>
-                                </v-list-tile-action>
+                            <template v-for="test in filteredTests">
+                                <v-divider></v-divider>
+                                <v-list-tile :key="test.id" @click="">
+                                    <v-list-tile-action>
+                                        <v-checkbox
+                                                :value="test.id"
+                                                v-model="selectedTestIds"
+                                        ></v-checkbox>
+                                    </v-list-tile-action>
 
-                                <v-list-tile-content @click.prevent="test.checked = !test.checked">
-                                    <v-list-tile-title>{{ test.name }}</v-list-tile-title>
-                                    <v-list-tile-sub-title>{{ jobProfile(test.jobProfileId).title }}</v-list-tile-sub-title>
-                                    <v-list-tile-sub-title>{{ workExperienceType(test.workExperienceTypeId).title }}</v-list-tile-sub-title>
-                                </v-list-tile-content>
-                            </v-list-tile>
+                                    <v-list-tile-content @click="setCurrentTestAndNavigate(test)">
+                                        <v-list-tile-title>{{ test.name }}</v-list-tile-title>
+                                        <v-list-tile-sub-title>{{ jobProfile(test.jobProfileId).title }}</v-list-tile-sub-title>
+                                        <v-list-tile-sub-title>{{ workExperienceType(test.workExperienceTypeId).title }}</v-list-tile-sub-title>
+                                    </v-list-tile-content>
 
+                                </v-list-tile>
+                            </template>
                         </v-list>
                     </v-card>
-                </v-flex>
+                </v-layout>
             </v-layout>
         </v-container>
     </div>
@@ -107,62 +65,61 @@
 
 <script>
     import {
-        VNavigationDrawer,
+        VTextField,
+        VContainer,
+        VLayout,
         VBreadcrumbs,
         VIcon,
-        VTabs,
-        VTab,
-        VLayout,
-        VFlex,
+        VBtn,
         VCard,
-        VTextField,
         VList,
-        VListGroup,
+        VSubheader,
+        VDivider,
         VListTile,
+        VListTileAction,
+        VCheckbox,
         VListTileContent,
         VListTileTitle,
-        VListTileAction,
-        VContainer,
-        VSubheader,
-        VCheckbox,
         VListTileSubTitle,
-        VDivider,
-        VBtn
     } from 'vuetify/lib';
     import { mapMutations, mapGetters, mapState } from 'vuex';
-    import { TOGGLE_LEFT_DRAWER } from "../../store/mutation-types";
+    import { SET_CURRENT_TEST } from "../../store/mutation-types";
+    import { SideBar } from '../../components';
 
     export default {
         name: 'TestsPage',
         components: {
-            VNavigationDrawer,
+            SideBar,
+            VTextField,
+            VContainer,
+            VLayout,
             VBreadcrumbs,
             VIcon,
-            VTabs,
-            VTab,
-            VLayout,
-            VFlex,
+            VBtn,
             VCard,
-            VTextField,
             VList,
-            VListGroup,
+            VSubheader,
+            VDivider,
             VListTile,
+            VListTileAction,
+            VCheckbox,
             VListTileContent,
             VListTileTitle,
-            VListTileAction,
-            VContainer,
-            VSubheader,
-            VCheckbox,
             VListTileSubTitle,
-            VDivider,
-            VBtn
         },
         methods: {
             ...mapMutations({
-                'toggleLeftDrawer': TOGGLE_LEFT_DRAWER
+                'setCurrentTest': SET_CURRENT_TEST
             }),
+            setCurrentTestAndNavigate: function (test) {
+                this.setCurrentTest({testId: test.id});
+                this.$router.push('/tests/preview/' + test.id);
+            }
         },
         computed: {
+            ...mapState([
+                "leftSidebarTabId"
+            ]),
             breadcrumbItems: function () {
                 return [
                     {
@@ -171,36 +128,29 @@
                         href: '/#/tests'
                     },
                     {
-                        text: !this.tab_id ? 'Active' : 'Archived',
+                        text: !this.leftSidebarTabId ? 'Active' : 'Archived',
                         disabled: true,
                         href: '/#/tests'
                     }
                 ]
             },
-            leftDrawer: {
-                get () {
-                    return this.$store.state.leftDrawer;
-                },
-                set (leftDrawer) {
-                    this.toggleLeftDrawer({leftDrawer: leftDrawer});
-                }
-            },
             ...mapGetters([
-                'activeTests',
-                'archivedTests'
+                "activeTests",
+                "archivedTests"
             ]),
             ...mapGetters({
-                jobProfile: 'getJobProfileFromId',
-                workExperienceType: 'getWorkExperienceTypeFromId'
+                jobProfile: "getJobProfileFromId",
+                workExperienceType: "getWorkExperienceTypeFromId"
             }),
             ...mapState([
-                'jobProfiles',
-                'workExperienceTypes'
+                "jobProfiles",
+                "workExperienceTypes"
             ]),
             tests: function () {
-                return this.tab_id === 0 ? this.activeTests : this.archivedTests;
+                return this.leftSidebarTabId === 0 ? this.activeTests : this.archivedTests;
             },
             filteredTests: function () {
+                if(this.searchTest === null) return this.tests;
                 let filteredTests = this.tests.filter(test => {
                     return test.name.toLowerCase().includes(this.searchTest.toLowerCase()) ||
                             this.jobProfile(test.jobProfileId).title.toLowerCase().includes(this.searchTest.toLowerCase()) ||
@@ -223,7 +173,7 @@
                     });
                 }
             },
-            items: function () {
+            tabItems: function () {
                 return [
                     {
                         index: 0,
@@ -251,7 +201,7 @@
                         items: this.workExperienceTypes
                     }
                 ];
-            }
+            },
         },
         data () {
             return {
@@ -268,7 +218,6 @@
                         id: 2
                     }
                 ],
-                tab_id: 0
             }
         },
     }

@@ -24,7 +24,7 @@
                             <v-icon slot="divider">forward</v-icon>
                         </v-breadcrumbs>
 
-                        <v-btn large>
+                        <v-btn large @click="saveTestQuestionsAndNavigate">
                             Go To Test
                         </v-btn>
                 </v-layout>
@@ -35,7 +35,7 @@
                                 {{ `${this.filteredQuestions.length} QUESTIONS` }}
                             </v-subheader>
                             <v-divider></v-divider>
-                            <v-card v-for="question in filteredQuestions" :key="question.id">
+                            <v-card v-for="question in filteredQuestions" :key="question.id" hover ripple>
                                 <v-card-title primary-title>
                                     <v-layout row align-start justify-space-between>
                                         <div>
@@ -142,7 +142,7 @@
     } from 'vuetify/lib';
     import { mapState, mapGetters, mapMutations } from 'vuex';
     import { SideBar } from "../../../components";
-    import { SELECT_QUESTION, UNSELECT_QUESTION } from "../../../store/mutation-types";
+    import { SELECT_QUESTION, UNSELECT_QUESTION, SAVE_TEST_QUESTIONS } from "../../../store/mutation-types";
 
     export default {
         name: 'TestPreviewPage',
@@ -170,8 +170,13 @@
         methods: {
             ...mapMutations({
                 'selectQuestion': SELECT_QUESTION,
-                'unselectQuestion': UNSELECT_QUESTION
-            })
+                'unselectQuestion': UNSELECT_QUESTION,
+                'saveTestQuestions': SAVE_TEST_QUESTIONS
+            }),
+            saveTestQuestionsAndNavigate: function () {
+                this.saveTestQuestions();
+                this.$router.push('/tests/' + this.currentTest.id);
+            }
         },
         computed: {
             ...mapGetters([

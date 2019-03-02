@@ -7,7 +7,8 @@ import {
     SET_CURRENT_TEST,
     SET_LEFT_SIDEBAR_TAB_ID,
     SELECT_QUESTION,
-    UNSELECT_QUESTION
+    UNSELECT_QUESTION,
+    SAVE_TEST_QUESTIONS
 } from './mutation-types';
 
 Vue.use(Vuex);
@@ -188,7 +189,7 @@ export default new Vuex.Store({
                 jobProfileId: 1,
                 workExperienceTypeId: 1,
                 duration: 6,
-                questionIds: [1, 2, 3],
+                questionIds: [1, 2, 3, 4, 5, 6],
                 published: false,
                 active: false
             },
@@ -300,6 +301,15 @@ export default new Vuex.Store({
                 languageIds: [1, 2, 3, 4, 5],
                 points: 50
             },
+            {
+                id: 6,
+                name: 'Braces Extended',
+                questionTypeId: 1,
+                difficultyTypeId: 1,
+                questionTagIds: [5, 6, 12, 11, 8, 10],
+                languageIds: [1, 2, 3, 4, 5],
+                points: 50
+            },
         ],
     },
     mutations: {
@@ -320,8 +330,13 @@ export default new Vuex.Store({
             state.selectedQuestionIds.push(payload.questionId);
         },
         [UNSELECT_QUESTION] (state, payload) {
-            console.log(state.selectedQuestionIds, payload.questionId, state.selectedQuestionIds.filter(questionId => questionId !== payload.questionId));
             state.selectedQuestionIds = state.selectedQuestionIds.filter(questionId => questionId !== payload.questionId);
+        },
+        [SAVE_TEST_QUESTIONS] (state) {
+            let testIndex = getIndexFromId(state.tests, state.currentTestId);
+
+            // REFERENCE: https://vuejs.org/v2/guide/list.html#Caveats
+            Vue.set(state.tests, testIndex, { ...state.tests[testIndex], questionIds: state.selectedQuestionIds});
         }
     },
     actions: {
@@ -377,6 +392,9 @@ export default new Vuex.Store({
         },
         nonSelectedQuestions: state => {
             return state.questions.filter(question => !state.selectedQuestionIds.includes(question.id));
+        },
+        currentTestQuestions: (state, getters) => {
+            return state.questions.filter(question => getters.currentTest.questionIds.includes(question.id));
         }
     },
     plugins: [myPluginWithSnapshot],

@@ -462,8 +462,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetify_lib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuetify/lib */ "./node_modules/vuetify/lib/index.js");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _store_mutation_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store/mutation-types */ "./resources/js/store/mutation-types.js");
-/* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components */ "./resources/js/components/index.js");
+/* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components */ "./resources/js/components/index.js");
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -536,11 +535,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'TestsPage',
   components: {
-    SideBar: _components__WEBPACK_IMPORTED_MODULE_3__["SideBar"],
+    SideBar: _components__WEBPACK_IMPORTED_MODULE_2__["SideBar"],
     VTextField: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VTextField"],
     VContainer: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VContainer"],
     VLayout: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VLayout"],
@@ -558,16 +556,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     VListTileTitle: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VListTileTitle"],
     VListTileSubTitle: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VListTileSubTitle"]
   },
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])({
-    'setCurrentTest': _store_mutation_types__WEBPACK_IMPORTED_MODULE_2__["SET_CURRENT_TEST"]
-  }), {
-    setCurrentTestAndNavigate: function setCurrentTestAndNavigate(test) {
-      this.setCurrentTest({
-        testId: test.id
-      });
-      this.$router.push('/tests/preview/' + test.id);
-    }
-  }),
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])(["leftSidebarTabId"]), {
     breadcrumbItems: function breadcrumbItems() {
       return [{
@@ -973,6 +961,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetify_lib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuetify/lib */ "./node_modules/vuetify/lib/index.js");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _store_mutation_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../store/mutation-types */ "./resources/js/store/mutation-types.js");
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -1063,6 +1052,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1081,11 +1082,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     VDataTable: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VDataTable"],
     VCheckbox: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VCheckbox"],
     VCard: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VCard"],
-    VChip: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VChip"]
+    VChip: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VChip"],
+    VDialog: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VDialog"],
+    VCardTitle: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VCardTitle"],
+    VCardActions: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VCardActions"]
   },
   data: function data() {
     return {
       expand: false,
+      deleteDialog: false,
       selected: [],
       tabId: 0,
       tabItems: [{
@@ -1161,6 +1166,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.questions.reduce(function (totalPoints, question) {
         return totalPoints + question.points;
       }, 0);
+    }
+  }),
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])({
+    "removeQuestion": _store_mutation_types__WEBPACK_IMPORTED_MODULE_2__["REMOVE_QUESTION_FROM_CURRENT_TEST"]
+  }), {
+    removeQuestionAndCloseDialog: function removeQuestionAndCloseDialog(questionId) {
+      this.removeQuestion({
+        questionId: questionId
+      });
+      this.deleteDialog = false;
     }
   })
 });
@@ -8446,11 +8461,20 @@ var render = function() {
                                 "v-list-tile",
                                 {
                                   key: test.id,
+                                  attrs: { to: "/tests/preview/" + test.id },
                                   on: { click: function($event) {} }
                                 },
                                 [
                                   _c(
                                     "v-list-tile-action",
+                                    {
+                                      on: {
+                                        click: function($event) {
+                                          $event.stopPropagation()
+                                          $event.preventDefault()
+                                        }
+                                      }
+                                    },
                                     [
                                       _c("v-checkbox", {
                                         attrs: { value: test.id },
@@ -8468,15 +8492,6 @@ var render = function() {
                                   _vm._v(" "),
                                   _c(
                                     "v-list-tile-content",
-                                    {
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.setCurrentTestAndNavigate(
-                                            test
-                                          )
-                                        }
-                                      }
-                                    },
                                     [
                                       _c("v-list-tile-title", [
                                         _vm._v(_vm._s(test.name))
@@ -9167,7 +9182,7 @@ var render = function() {
           _c(
             "v-btn",
             { attrs: { icon: "", outline: "", color: "primary", small: "" } },
-            [_c("v-icon", [_vm._v("lock")])],
+            [_c("v-icon", { attrs: { small: "" } }, [_vm._v("lock")])],
             1
           ),
           _vm._v(" "),
@@ -9271,10 +9286,85 @@ var render = function() {
                             ),
                             _vm._v(" "),
                             _c(
+                              "v-dialog",
+                              {
+                                attrs: { "max-width": "290" },
+                                model: {
+                                  value: _vm.deleteDialog,
+                                  callback: function($$v) {
+                                    _vm.deleteDialog = $$v
+                                  },
+                                  expression: "deleteDialog"
+                                }
+                              },
+                              [
+                                _c(
+                                  "v-card",
+                                  [
+                                    _c("v-card-title", [
+                                      _vm._v(
+                                        "Are you sure that you want to remove " +
+                                          _vm._s(
+                                            props.item.name.toUpperCase()
+                                          ) +
+                                          " from the test?"
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-card-actions",
+                                      [
+                                        _c("v-spacer"),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-btn",
+                                          {
+                                            attrs: {
+                                              color: "success",
+                                              flat: ""
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                _vm.deleteDialog = false
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("No")]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-btn",
+                                          {
+                                            attrs: { color: "red", flat: "" },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.removeQuestionAndCloseDialog(
+                                                  props.item.id
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("Yes")]
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
                               "v-icon",
                               {
-                                attrs: { small: "" },
-                                on: { click: function($event) {} }
+                                attrs: { small: "", color: "red" },
+                                on: {
+                                  click: function($event) {
+                                    _vm.deleteDialog = true
+                                  }
+                                }
                               },
                               [
                                 _vm._v(
@@ -51581,6 +51671,92 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/vuex-router-sync/index.js":
+/*!************************************************!*\
+  !*** ./node_modules/vuex-router-sync/index.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+exports.sync = function (store, router, options) {
+  var moduleName = (options || {}).moduleName || 'route'
+
+  store.registerModule(moduleName, {
+    namespaced: true,
+    state: cloneRoute(router.currentRoute),
+    mutations: {
+      'ROUTE_CHANGED': function ROUTE_CHANGED (state, transition) {
+        store.state[moduleName] = cloneRoute(transition.to, transition.from)
+      }
+    }
+  })
+
+  var isTimeTraveling = false
+  var currentPath
+
+  // sync router on store change
+  var storeUnwatch = store.watch(
+    function (state) { return state[moduleName]; },
+    function (route) {
+      var fullPath = route.fullPath;
+      if (fullPath === currentPath) {
+        return
+      }
+      if (currentPath != null) {
+        isTimeTraveling = true
+        router.push(route)
+      }
+      currentPath = fullPath
+    },
+    { sync: true }
+  )
+
+  // sync store on router navigation
+  var afterEachUnHook = router.afterEach(function (to, from) {
+    if (isTimeTraveling) {
+      isTimeTraveling = false
+      return
+    }
+    currentPath = to.fullPath
+    store.commit(moduleName + '/ROUTE_CHANGED', { to: to, from: from })
+  })
+
+  return function unsync () {
+    // On unsync, remove router hook
+    if (afterEachUnHook != null) {
+      afterEachUnHook()
+    }
+
+    // On unsync, remove store watch
+    if (storeUnwatch != null) {
+      storeUnwatch()
+    }
+
+    // On unsync, unregister Module with store
+    store.unregisterModule(moduleName)
+  }
+}
+
+function cloneRoute (to, from) {
+  var clone = {
+    name: to.name,
+    path: to.path,
+    hash: to.hash,
+    query: to.query,
+    params: to.params,
+    fullPath: to.fullPath,
+    meta: to.meta
+  }
+  if (from) {
+    clone.from = cloneRoute(from)
+  }
+  return Object.freeze(clone)
+}
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vuex/dist/vuex.esm.js":
 /*!********************************************!*\
   !*** ./node_modules/vuex/dist/vuex.esm.js ***!
@@ -52747,16 +52923,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./App */ "./resources/js/App.vue");
-/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./router */ "./resources/js/router/index.js");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
-/* harmony import */ var vuetify_lib__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuetify/lib */ "./node_modules/vuetify/lib/index.js");
+/* harmony import */ var vuex_router_sync__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex-router-sync */ "./node_modules/vuex-router-sync/index.js");
+/* harmony import */ var vuex_router_sync__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vuex_router_sync__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./router */ "./resources/js/router/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
+/* harmony import */ var vuetify_lib__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuetify/lib */ "./node_modules/vuetify/lib/index.js");
 
 
 
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuetify_lib__WEBPACK_IMPORTED_MODULE_5__["default"]);
+
+var unsync = Object(vuex_router_sync__WEBPACK_IMPORTED_MODULE_3__["sync"])(_store__WEBPACK_IMPORTED_MODULE_5__["default"], _router__WEBPACK_IMPORTED_MODULE_4__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuetify_lib__WEBPACK_IMPORTED_MODULE_6__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.config.productionTip = false;
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.filter('truncate', function (text, stop, clamp) {
   return text.slice(0, stop) + (stop < text.length ? clamp || '...' : '');
@@ -52765,8 +52945,8 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.filter('truncate', function (text, st
 
 new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   el: '#app',
-  router: _router__WEBPACK_IMPORTED_MODULE_3__["default"],
-  store: _store__WEBPACK_IMPORTED_MODULE_4__["default"],
+  router: _router__WEBPACK_IMPORTED_MODULE_4__["default"],
+  store: _store__WEBPACK_IMPORTED_MODULE_5__["default"],
   template: '<App/>',
   components: {
     App: _App__WEBPACK_IMPORTED_MODULE_2__["default"]
@@ -53615,15 +53795,15 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
     name: 'Insights',
     component: _products_insights_index_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
   }, {
-    path: '/tests/preview/:id',
+    path: '/tests/preview/:testId',
     name: 'Test Preview',
     component: _products_tests__WEBPACK_IMPORTED_MODULE_3__["TestPreviewPage"]
   }, {
-    path: '/tests/:id',
+    path: '/tests/:testId',
     name: 'View Test',
     component: _products_tests__WEBPACK_IMPORTED_MODULE_3__["ViewTestPage"]
   }, {
-    path: '/tests/:id/invite',
+    path: '/tests/:testId/invite',
     name: 'Send Invites',
     component: _products_tests__WEBPACK_IMPORTED_MODULE_3__["SendInvitesPage"]
   }]
@@ -53669,12 +53849,16 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
 var getIndexFromId = function getIndexFromId(array, id) {
-  // let indices = [...Array(array.length).keys()].filter(index => array[index].id === id);
+  id = Number(id); // let indices = [...Array(array.length).keys()].filter(index => array[index].id === id);
+
   var indices = getIndicesFromId(array, [id]);
   if (indices.length > 0) return indices[0];else return -1;
 };
 
 var getIndicesFromId = function getIndicesFromId(array, ids) {
+  ids = ids.map(function (id) {
+    return Number(id);
+  });
   return _toConsumableArray(Array(array.length).keys()).filter(function (index) {
     return ids.includes(array[index].id);
   });
@@ -53685,7 +53869,6 @@ var getIndicesFromId = function getIndicesFromId(array, ids) {
     leftDrawer: true,
     leftSidebarTabId: 0,
     searchFilter: '',
-    currentTestId: 0,
     jobProfiles: [{
       id: 1,
       title: 'Software Developer'
@@ -53918,8 +54101,6 @@ var getIndicesFromId = function getIndicesFromId(array, ids) {
     } else {
       state.leftDrawer = payload.leftDrawer;
     }
-  }), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_4__["SET_CURRENT_TEST"], function (state, payload) {
-    state.currentTestId = payload.testId;
   }), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_4__["SET_LEFT_SIDEBAR_TAB_ID"], function (state, payload) {
     state.leftSidebarTabId = payload.tabId;
   }), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_4__["SELECT_QUESTION"], function (state, payload) {
@@ -53929,16 +54110,31 @@ var getIndicesFromId = function getIndicesFromId(array, ids) {
       return questionId !== payload.questionId;
     });
   }), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_4__["SAVE_TEST_QUESTIONS"], function (state) {
-    var testIndex = getIndexFromId(state.tests, state.currentTestId); // REFERENCE: https://vuejs.org/v2/guide/list.html#Caveats
+    var testIndex = getIndexFromId(state.tests, state.route.params.testId); // REFERENCE: https://vuejs.org/v2/guide/list.html#Caveats
 
     vue__WEBPACK_IMPORTED_MODULE_0___default.a.set(state.tests, testIndex, _objectSpread({}, state.tests[testIndex], {
       questionIds: state.selectedQuestionIds
     }));
+  }), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_4__["REMOVE_QUESTION_FROM_CURRENT_TEST"], function (state, payload) {
+    var testIndex = getIndexFromId(state.tests, state.route.params.testId);
+    var questionIds = state.tests[testIndex].questionIds.filter(function (questionId) {
+      return questionId !== payload.questionId;
+    }); // REFERENCE: https://vuejs.org/v2/guide/list.html#Caveats
+
+    vue__WEBPACK_IMPORTED_MODULE_0___default.a.set(state.tests, testIndex, _objectSpread({}, state.tests[testIndex], {
+      questionIds: questionIds
+    }));
   }), _mutations),
   actions: {},
   getters: {
-    currentTest: function currentTest(state) {
-      return state.tests[getIndexFromId(state.tests, state.currentTestId)];
+    currentTestId: function currentTestId(state) {
+      return state.route.params.testId;
+    },
+    currentTestIndex: function currentTestIndex(state, getters) {
+      return getIndexFromId(state.tests, getters.currentTestId);
+    },
+    currentTest: function currentTest(state, getters) {
+      return state.tests[getters.currentTestIndex];
     },
     activeTests: function activeTests(state) {
       return state.tests.filter(function (_ref) {
@@ -54040,23 +54236,23 @@ var getIndicesFromId = function getIndicesFromId(array, ids) {
 /*!**********************************************!*\
   !*** ./resources/js/store/mutation-types.js ***!
   \**********************************************/
-/*! exports provided: TOGGLE_LEFT_DRAWER, SET_CURRENT_TEST, SET_LEFT_SIDEBAR_TAB_ID, SELECT_QUESTION, UNSELECT_QUESTION, SAVE_TEST_QUESTIONS */
+/*! exports provided: TOGGLE_LEFT_DRAWER, SET_LEFT_SIDEBAR_TAB_ID, SELECT_QUESTION, UNSELECT_QUESTION, SAVE_TEST_QUESTIONS, REMOVE_QUESTION_FROM_CURRENT_TEST */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_LEFT_DRAWER", function() { return TOGGLE_LEFT_DRAWER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_CURRENT_TEST", function() { return SET_CURRENT_TEST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_LEFT_SIDEBAR_TAB_ID", function() { return SET_LEFT_SIDEBAR_TAB_ID; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SELECT_QUESTION", function() { return SELECT_QUESTION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UNSELECT_QUESTION", function() { return UNSELECT_QUESTION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SAVE_TEST_QUESTIONS", function() { return SAVE_TEST_QUESTIONS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REMOVE_QUESTION_FROM_CURRENT_TEST", function() { return REMOVE_QUESTION_FROM_CURRENT_TEST; });
 var TOGGLE_LEFT_DRAWER = 'TOGGLE_LEFT_DRAWER';
-var SET_CURRENT_TEST = 'SET_CURRENT_TEST';
 var SET_LEFT_SIDEBAR_TAB_ID = 'SET_LEFT_SIDEBAR_TAB_ID';
 var SELECT_QUESTION = 'SELECT_QUESTION';
 var UNSELECT_QUESTION = 'UNSELECT_QUESTION';
 var SAVE_TEST_QUESTIONS = 'SAVE_TEST_QUESTIONS';
+var REMOVE_QUESTION_FROM_CURRENT_TEST = 'REMOVE_QUESTION_FROM_CURRENT_TEST';
 
 /***/ }),
 

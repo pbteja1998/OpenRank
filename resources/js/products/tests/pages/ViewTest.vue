@@ -8,7 +8,7 @@
             <v-toolbar-title class="text-xs-center">{{ currentTest.name }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn icon outline color="primary" small>
-                <v-icon>lock</v-icon>
+                <v-icon small>lock</v-icon>
             </v-btn>
             <v-btn>Try Test</v-btn>
             <v-btn color="success">Publish</v-btn>
@@ -56,9 +56,20 @@
                             >
                                 edit
                             </v-icon>
+                            <v-dialog v-model="deleteDialog" max-width="290">
+                                <v-card>
+                                    <v-card-title>Are you sure that you want to remove {{ props.item.name.toUpperCase() }} from the test?</v-card-title>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn color="success" flat @click="deleteDialog = false">No</v-btn>
+                                        <v-btn color="red" flat @click="removeQuestionAndCloseDialog(props.item.id)">Yes</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
                             <v-icon
                                     small
-                                    @click=""
+                                    @click="deleteDialog=true"
+                                    color="red"
                             >
                                 delete
                             </v-icon>
@@ -100,8 +111,12 @@
         VCheckbox,
         VCard,
         VChip,
+        VDialog,
+        VCardTitle,
+        VCardActions,
     } from 'vuetify/lib';
-    import { mapGetters } from 'vuex';
+    import { mapGetters, mapMutations } from 'vuex';
+    import { REMOVE_QUESTION_FROM_CURRENT_TEST } from "../../../store/mutation-types";
 
     export default {
         name: 'ViewTestPage',
@@ -120,9 +135,13 @@
             VCheckbox,
             VCard,
             VChip,
+            VDialog,
+            VCardTitle,
+            VCardActions,
         },
         data: () => ({
             expand: false,
+            deleteDialog: false,
             selected: [],
             tabId: 0,
             tabItems: [
@@ -213,6 +232,15 @@
             },
             totalPoints: function () {
                 return this.questions.reduce((totalPoints, question) => totalPoints + question.points, 0);
+            }
+        },
+        methods: {
+            ...mapMutations({
+                "removeQuestion": REMOVE_QUESTION_FROM_CURRENT_TEST
+            }),
+            removeQuestionAndCloseDialog: function (questionId) {
+                this.removeQuestion({questionId: questionId});
+                this.deleteDialog = false;
             }
         }
     }

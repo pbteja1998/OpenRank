@@ -38,15 +38,15 @@
                             </v-subheader>
                             <template v-for="test in filteredTests">
                                 <v-divider></v-divider>
-                                <v-list-tile :key="test.id" @click="">
-                                    <v-list-tile-action>
+                                <v-list-tile :key="test.id" @click="" :to="'/tests/preview/' + test.id">
+                                    <v-list-tile-action @click.stop.prevent="">
                                         <v-checkbox
                                                 :value="test.id"
                                                 v-model="selectedTestIds"
                                         ></v-checkbox>
                                     </v-list-tile-action>
 
-                                    <v-list-tile-content @click="setCurrentTestAndNavigate(test)">
+                                    <v-list-tile-content>
                                         <v-list-tile-title>{{ test.name }}</v-list-tile-title>
                                         <v-list-tile-sub-title>{{ jobProfile(test.jobProfileId).title }}</v-list-tile-sub-title>
                                         <v-list-tile-sub-title>{{ workExperienceType(test.workExperienceTypeId).title }}</v-list-tile-sub-title>
@@ -82,8 +82,7 @@
         VListTileTitle,
         VListTileSubTitle,
     } from 'vuetify/lib';
-    import { mapMutations, mapGetters, mapState } from 'vuex';
-    import { SET_CURRENT_TEST } from "../../store/mutation-types";
+    import { mapGetters, mapState } from 'vuex';
     import { SideBar } from '../../components';
 
     export default {
@@ -106,15 +105,6 @@
             VListTileContent,
             VListTileTitle,
             VListTileSubTitle,
-        },
-        methods: {
-            ...mapMutations({
-                'setCurrentTest': SET_CURRENT_TEST
-            }),
-            setCurrentTestAndNavigate: function (test) {
-                this.setCurrentTest({testId: test.id});
-                this.$router.push('/tests/preview/' + test.id);
-            }
         },
         computed: {
             ...mapState([

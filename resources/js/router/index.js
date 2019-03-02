@@ -39,17 +39,17 @@ export default new Router({
             component: InsightsPage
         },
         {
-            path: '/tests/preview/:id',
+            path: '/tests/preview/:testId',
             name: 'Test Preview',
             component: TestPreviewPage
         },
         {
-            path: '/tests/:id',
+            path: '/tests/:testId',
             name: 'View Test',
             component: ViewTestPage
         },
         {
-            path: '/tests/:id/invite',
+            path: '/tests/:testId/invite',
             name: 'Send Invites',
             component: SendInvitesPage
         }

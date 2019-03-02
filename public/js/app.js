@@ -7942,7 +7942,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-btn",
-                { attrs: { to: "library", large: "", flat: "" } },
+                { attrs: { to: "/library", large: "", flat: "" } },
                 [
                   _c("v-icon", [_vm._v("library_books")]),
                   _vm._v(" "),
@@ -7953,7 +7953,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-btn",
-                { attrs: { to: "code-pair", large: "", flat: "" } },
+                { attrs: { to: "/code-pair", large: "", flat: "" } },
                 [
                   _c("v-icon", [_vm._v("people")]),
                   _vm._v(" "),
@@ -7964,7 +7964,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-btn",
-                { attrs: { to: "insights", large: "", flat: "" } },
+                { attrs: { to: "/insights", large: "", flat: "" } },
                 [
                   _c("v-icon", [_vm._v("insert_chart")]),
                   _vm._v(" "),

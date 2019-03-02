@@ -18,15 +18,15 @@
                     <v-icon>question_answer</v-icon>
                     <span>Tests</span>
                 </v-btn>
-                <v-btn to="library" large flat>
+                <v-btn to="/library" large flat>
                     <v-icon>library_books</v-icon>
                     <span>Library</span>
                 </v-btn>
-                <v-btn to="code-pair" large flat>
+                <v-btn to="/code-pair" large flat>
                     <v-icon>people</v-icon>
                     <span>CodePair</span>
                 </v-btn>
-                <v-btn to="insights" large flat>
+                <v-btn to="/insights" large flat>
                     <v-icon>insert_chart</v-icon>
                     <span>Insights</span>
                 </v-btn>

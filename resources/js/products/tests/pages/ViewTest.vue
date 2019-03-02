@@ -133,7 +133,7 @@
         computed: {
             ...mapGetters([
                 "currentTest",
-                'currentTestQuestions',
+                "currentTestQuestions",
                 "getDifficultyType",
                 "getQuestionType",
                 "getQuestionTags"
@@ -182,7 +182,7 @@
                     {
                         text: this.currentTest.name,
                         disabled: false,
-                        href: '/#/tests/' + this.currentTest.id
+                        href: '/#/tests/preview/' + this.currentTest.id
                     },
                     {
                         text: 'Questions',

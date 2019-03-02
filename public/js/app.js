@@ -1091,7 +1091,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       items: ['questions', 'candidates', 'insights', 'settings']
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(["currentTest", 'currentTestQuestions', "getDifficultyType", "getQuestionType", "getQuestionTags"]), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(["currentTest", "currentTestQuestions", "getDifficultyType", "getQuestionType", "getQuestionTags"]), {
     headers: function headers() {
       return [{
         text: "Questions (".concat(this.currentTest.questionIds.length, ")"),
@@ -1128,7 +1128,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, {
         text: this.currentTest.name,
         disabled: false,
-        href: '/#/tests/' + this.currentTest.id
+        href: '/#/tests/preview/' + this.currentTest.id
       }, {
         text: 'Questions',
         disabled: true,
@@ -8013,8 +8013,8 @@ var render = function() {
                       }
                     },
                     [
-                      _vm._v("\n                    ©2018 — "),
-                      _c("strong", [_vm._v("Bhanu Teja")])
+                      _vm._v("\n                    ©2019 — "),
+                      _c("strong", [_vm._v("BHANU TEJA")])
                     ]
                   )
                 ],

@@ -61,7 +61,7 @@
                             white--text
                             xs12
                     >
-                        &copy;2018 — <strong>Bhanu Teja</strong>
+                        &copy;2019 — <strong>BHANU TEJA</strong>
                     </v-flex>
                 </v-layout>
             </v-footer>

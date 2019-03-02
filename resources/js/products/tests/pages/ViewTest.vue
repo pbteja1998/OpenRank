@@ -19,8 +19,8 @@
                 <v-tabs v-model="tabId">
                     <v-tabs-slider color="success"></v-tabs-slider>
 
-                    <v-tab v-for="item in items" :key="item">
-                        {{ item }}
+                    <v-tab v-for="item in tabItems" :key="item.id">
+                        {{ item.title }}
                     </v-tab>
                 </v-tabs>
             </template>
@@ -125,8 +125,23 @@
             expand: false,
             selected: [],
             tabId: 0,
-            items: [
-                'questions', 'candidates', 'insights', 'settings'
+            tabItems: [
+                {
+                    id: 1,
+                    title: "Questions"
+                },
+                {
+                    id: 2,
+                    title: "Candidates"
+                },
+                {
+                    id: 3,
+                    title: "Insights"
+                },
+                {
+                    id: 4,
+                    title: "Settings"
+                }
             ],
         }),
 
@@ -185,7 +200,7 @@
                         href: '/#/tests/preview/' + this.currentTest.id
                     },
                     {
-                        text: 'Questions',
+                        text: this.tabItems[this.tabId].title,
                         disabled: true,
                         href: '/#/tests/' + this.currentTest.id
                     },

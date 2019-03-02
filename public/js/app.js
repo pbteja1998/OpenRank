@@ -1088,7 +1088,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       expand: false,
       selected: [],
       tabId: 0,
-      items: ['questions', 'candidates', 'insights', 'settings']
+      tabItems: [{
+        id: 1,
+        title: "Questions"
+      }, {
+        id: 2,
+        title: "Candidates"
+      }, {
+        id: 3,
+        title: "Insights"
+      }, {
+        id: 4,
+        title: "Settings"
+      }]
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(["currentTest", "currentTestQuestions", "getDifficultyType", "getQuestionType", "getQuestionTags"]), {
@@ -1130,7 +1142,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         disabled: false,
         href: '/#/tests/preview/' + this.currentTest.id
       }, {
-        text: 'Questions',
+        text: this.tabItems[this.tabId].title,
         disabled: true,
         href: '/#/tests/' + this.currentTest.id
       }];
@@ -9114,11 +9126,11 @@ var render = function() {
                     [
                       _c("v-tabs-slider", { attrs: { color: "success" } }),
                       _vm._v(" "),
-                      _vm._l(_vm.items, function(item) {
-                        return _c("v-tab", { key: item }, [
+                      _vm._l(_vm.tabItems, function(item) {
+                        return _c("v-tab", { key: item.id }, [
                           _vm._v(
                             "\n                    " +
-                              _vm._s(item) +
+                              _vm._s(item.title) +
                               "\n                "
                           )
                         ])

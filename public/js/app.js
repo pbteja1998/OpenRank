@@ -815,6 +815,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -839,7 +843,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     VListTileContent: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VListTileContent"],
     VListTileTitle: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VListTileTitle"],
     VListTileSubTitle: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VListTileSubTitle"],
-    VListTileAction: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VListTileAction"]
+    VListTileAction: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VListTileAction"],
+    VFlex: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VFlex"]
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])({
     'selectQuestion': _store_mutation_types__WEBPACK_IMPORTED_MODULE_3__["SELECT_QUESTION"],
@@ -8473,154 +8478,157 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-layout",
-                {
-                  attrs: {
-                    row: "",
-                    "align-start": "",
-                    "justify-space-between": ""
-                  }
-                },
+                { attrs: { row: "", wrap: "" } },
                 [
                   _c(
-                    "v-card",
+                    "v-flex",
+                    { attrs: { "d-flex": "", xs12: "", sm12: "", md7: "" } },
                     [
-                      _c("v-subheader", [
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(
-                              this.filteredQuestions.length + " QUESTIONS"
-                            ) +
-                            "\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("v-divider"),
-                      _vm._v(" "),
-                      _vm._l(_vm.filteredQuestions, function(question) {
-                        return _c(
-                          "v-card",
-                          { key: question.id },
-                          [
-                            _c(
-                              "v-card-title",
-                              { attrs: { "primary-title": "" } },
+                      _c(
+                        "v-card",
+                        [
+                          _c("v-subheader", [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(
+                                  this.filteredQuestions.length + " QUESTIONS"
+                                ) +
+                                "\n                        "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("v-divider"),
+                          _vm._v(" "),
+                          _vm._l(_vm.filteredQuestions, function(question) {
+                            return _c(
+                              "v-card",
+                              { key: question.id },
                               [
                                 _c(
-                                  "v-layout",
-                                  {
-                                    attrs: {
-                                      row: "",
-                                      "align-start": "",
-                                      "justify-space-between": ""
-                                    }
-                                  },
+                                  "v-card-title",
+                                  { attrs: { "primary-title": "" } },
                                   [
                                     _c(
-                                      "div",
+                                      "v-layout",
+                                      {
+                                        attrs: {
+                                          row: "",
+                                          "align-start": "",
+                                          "justify-space-between": ""
+                                        }
+                                      },
                                       [
-                                        _c("div", {}, [
-                                          _vm._v(_vm._s(question.name))
-                                        ]),
-                                        _vm._v(" "),
                                         _c(
-                                          "span",
-                                          { staticClass: "grey--text" },
+                                          "div",
                                           [
-                                            _vm._v(
-                                              _vm._s(
-                                                _vm.questionType(
-                                                  question.questionTypeId
-                                                ).title
-                                              )
+                                            _c("div", {}, [
+                                              _vm._v(_vm._s(question.name))
+                                            ]),
+                                            _vm._v(" "),
+                                            _c(
+                                              "span",
+                                              { staticClass: "grey--text" },
+                                              [
+                                                _vm._v(
+                                                  _vm._s(
+                                                    _vm.questionType(
+                                                      question.questionTypeId
+                                                    ).title
+                                                  )
+                                                )
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-chip",
+                                              {
+                                                staticClass: "mr-2",
+                                                attrs: {
+                                                  color: _vm.difficultyChipColor(
+                                                    question.difficultyTypeId
+                                                  ),
+                                                  outline: ""
+                                                }
+                                              },
+                                              [
+                                                _c(
+                                                  "v-icon",
+                                                  { attrs: { left: "" } },
+                                                  [_vm._v("highlight")]
+                                                ),
+                                                _vm._v(
+                                                  "\n                                            " +
+                                                    _vm._s(
+                                                      _vm.difficultyType(
+                                                        question.difficultyTypeId
+                                                      ).title
+                                                    ) +
+                                                    "\n                                        "
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _vm._l(
+                                              _vm.getQuestionTags(
+                                                question.questionTagIds
+                                              ),
+                                              function(tag) {
+                                                return [
+                                                  _c(
+                                                    "v-chip",
+                                                    {
+                                                      key: tag.id,
+                                                      staticClass: "mr-2",
+                                                      attrs: {
+                                                        label: "",
+                                                        small: ""
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                " +
+                                                          _vm._s(tag.title) +
+                                                          "\n                                            "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              }
                                             )
-                                          ]
+                                          ],
+                                          2
                                         ),
                                         _vm._v(" "),
                                         _c(
-                                          "v-chip",
+                                          "v-btn",
                                           {
-                                            staticClass: "mr-2",
                                             attrs: {
-                                              color: _vm.difficultyChipColor(
-                                                question.difficultyTypeId
-                                              ),
-                                              outline: ""
+                                              icon: "",
+                                              large: "",
+                                              right: "",
+                                              top: ""
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.selectQuestion({
+                                                  questionId: question.id
+                                                })
+                                              }
                                             }
                                           },
                                           [
                                             _c(
                                               "v-icon",
-                                              { attrs: { left: "" } },
-                                              [_vm._v("highlight")]
-                                            ),
-                                            _vm._v(
-                                              "\n                                            " +
-                                                _vm._s(
-                                                  _vm.difficultyType(
-                                                    question.difficultyTypeId
-                                                  ).title
-                                                ) +
-                                                "\n                                        "
+                                              {
+                                                attrs: {
+                                                  color: "green lighten-1"
+                                                }
+                                              },
+                                              [_vm._v("add_circle")]
                                             )
                                           ],
                                           1
-                                        ),
-                                        _vm._v(" "),
-                                        _vm._l(
-                                          _vm.getQuestionTags(
-                                            question.questionTagIds
-                                          ),
-                                          function(tag) {
-                                            return [
-                                              _c(
-                                                "v-chip",
-                                                {
-                                                  key: tag.id,
-                                                  staticClass: "mr-2",
-                                                  attrs: {
-                                                    label: "",
-                                                    small: ""
-                                                  }
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "\n                                                " +
-                                                      _vm._s(tag.title) +
-                                                      "\n                                            "
-                                                  )
-                                                ]
-                                              )
-                                            ]
-                                          }
-                                        )
-                                      ],
-                                      2
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-btn",
-                                      {
-                                        attrs: {
-                                          icon: "",
-                                          large: "",
-                                          right: "",
-                                          top: ""
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.selectQuestion({
-                                              questionId: question.id
-                                            })
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _c(
-                                          "v-icon",
-                                          {
-                                            attrs: { color: "green lighten-1" }
-                                          },
-                                          [_vm._v("add_circle")]
                                         )
                                       ],
                                       1
@@ -8631,49 +8639,44 @@ var render = function() {
                               ],
                               1
                             )
-                          ],
-                          1
-                        )
-                      })
+                          })
+                        ],
+                        2
+                      )
                     ],
-                    2
+                    1
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-card",
+                    "v-flex",
+                    {
+                      attrs: {
+                        "d-flex": "",
+                        xs12: "",
+                        sm12: "",
+                        md4: "",
+                        "offset-md1": ""
+                      }
+                    },
                     [
                       _c(
-                        "v-list",
-                        { attrs: { subheader: "", "three-line": "" } },
+                        "v-card",
                         [
-                          _c("v-subheader", { staticClass: "justify-center" }, [
-                            _vm._v(
-                              "\n                                TEST PREVIEW\n                            "
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("v-divider"),
-                          _vm._v(" "),
                           _c(
-                            "v-layout",
-                            {
-                              attrs: {
-                                "align-center": "",
-                                "justify-center": "",
-                                column: ""
-                              }
-                            },
+                            "v-list",
+                            { attrs: { subheader: "", "three-line": "" } },
                             [
-                              _c("v-subheader", [
-                                _vm._v(
-                                  "\n                                    " +
-                                    _vm._s(
-                                      this.selectedQuestions.length +
-                                        " QUESTIONS SELECTED"
-                                    ) +
-                                    "\n                                "
-                                )
-                              ]),
+                              _c(
+                                "v-subheader",
+                                { staticClass: "justify-center" },
+                                [
+                                  _vm._v(
+                                    "\n                                TEST PREVIEW\n                            "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("v-divider"),
                               _vm._v(" "),
                               _c(
                                 "v-layout",
@@ -8681,99 +8684,157 @@ var render = function() {
                                   attrs: {
                                     "align-center": "",
                                     "justify-center": "",
-                                    row: ""
+                                    column: ""
                                   }
                                 },
                                 [
-                                  _c(
-                                    "v-subheader",
-                                    [
-                                      _c("v-icon", { attrs: { left: "" } }, [
-                                        _vm._v("timer")
-                                      ]),
-                                      _vm._v(
-                                        "Duration: " +
-                                          _vm._s(_vm.currentTest.duration) +
-                                          " mins\n                                    "
-                                      )
-                                    ],
-                                    1
-                                  ),
+                                  _c("v-subheader", [
+                                    _vm._v(
+                                      "\n                                    " +
+                                        _vm._s(
+                                          this.selectedQuestions.length +
+                                            " QUESTIONS SELECTED"
+                                        ) +
+                                        "\n                                "
+                                    )
+                                  ]),
                                   _vm._v(" "),
                                   _c(
-                                    "v-subheader",
+                                    "v-layout",
+                                    {
+                                      attrs: {
+                                        "align-center": "",
+                                        "justify-center": "",
+                                        row: ""
+                                      }
+                                    },
                                     [
-                                      _c("v-icon", [_vm._v("score")]),
-                                      _vm._v(
-                                        "Total Score: " +
-                                          _vm._s(_vm.totalPoints) +
-                                          "\n                                    "
+                                      _c(
+                                        "v-subheader",
+                                        [
+                                          _c(
+                                            "v-icon",
+                                            { attrs: { left: "" } },
+                                            [_vm._v("timer")]
+                                          ),
+                                          _vm._v(
+                                            "Duration: " +
+                                              _vm._s(_vm.currentTest.duration) +
+                                              " mins\n                                    "
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-subheader",
+                                        [
+                                          _c("v-icon", [_vm._v("score")]),
+                                          _vm._v(
+                                            "Total Score: " +
+                                              _vm._s(_vm.totalPoints) +
+                                              "\n                                    "
+                                          )
+                                        ],
+                                        1
                                       )
                                     ],
                                     1
                                   )
                                 ],
                                 1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _vm._l(_vm.selectedQuestions, function(question) {
-                            return [
-                              _c("v-divider"),
+                              ),
                               _vm._v(" "),
-                              _c(
-                                "v-list-tile",
-                                {
-                                  key: question.id,
-                                  on: { click: function($event) {} }
-                                },
-                                [
+                              _vm._l(_vm.selectedQuestions, function(question) {
+                                return [
+                                  _c("v-divider"),
+                                  _vm._v(" "),
                                   _c(
-                                    "v-list-tile-content",
-                                    { on: { click: function($event) {} } },
+                                    "v-list-tile",
+                                    {
+                                      key: question.id,
+                                      on: { click: function($event) {} }
+                                    },
                                     [
-                                      _c("v-list-tile-title", [
-                                        _vm._v(_vm._s(question.name))
-                                      ]),
+                                      _c(
+                                        "v-list-tile-content",
+                                        { on: { click: function($event) {} } },
+                                        [
+                                          _c("v-list-tile-title", [
+                                            _vm._v(_vm._s(question.name))
+                                          ]),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-list-tile-sub-title",
+                                            [
+                                              _vm._v(
+                                                "\n                                            " +
+                                                  _vm._s(
+                                                    _vm.questionType(
+                                                      question.questionTypeId
+                                                    ).title
+                                                  ) +
+                                                  "\n                                            "
+                                              ),
+                                              _c(
+                                                "v-chip",
+                                                {
+                                                  attrs: {
+                                                    color: _vm.difficultyChipColor(
+                                                      question.difficultyTypeId
+                                                    ),
+                                                    outline: ""
+                                                  }
+                                                },
+                                                [
+                                                  _c(
+                                                    "v-icon",
+                                                    { attrs: { left: "" } },
+                                                    [_vm._v("highlight")]
+                                                  ),
+                                                  _vm._v(
+                                                    "\n                                                " +
+                                                      _vm._s(
+                                                        _vm.difficultyType(
+                                                          question.difficultyTypeId
+                                                        ).title
+                                                      ) +
+                                                      "\n                                            "
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      ),
                                       _vm._v(" "),
                                       _c(
-                                        "v-list-tile-sub-title",
+                                        "v-list-tile-action",
                                         [
-                                          _vm._v(
-                                            "\n                                            " +
-                                              _vm._s(
-                                                _vm.questionType(
-                                                  question.questionTypeId
-                                                ).title
-                                              ) +
-                                              "\n                                            "
-                                          ),
                                           _c(
-                                            "v-chip",
+                                            "v-btn",
                                             {
-                                              attrs: {
-                                                color: _vm.difficultyChipColor(
-                                                  question.difficultyTypeId
-                                                ),
-                                                outline: ""
+                                              attrs: { icon: "", large: "" },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.unselectQuestion({
+                                                    questionId: question.id
+                                                  })
+                                                }
                                               }
                                             },
                                             [
                                               _c(
                                                 "v-icon",
-                                                { attrs: { left: "" } },
-                                                [_vm._v("highlight")]
-                                              ),
-                                              _vm._v(
-                                                "\n                                                " +
-                                                  _vm._s(
-                                                    _vm.difficultyType(
-                                                      question.difficultyTypeId
-                                                    ).title
-                                                  ) +
-                                                  "\n                                            "
+                                                {
+                                                  attrs: {
+                                                    color: "red lighten-1"
+                                                  }
+                                                },
+                                                [_vm._v("remove_circle")]
                                               )
                                             ],
                                             1
@@ -8783,44 +8844,14 @@ var render = function() {
                                       )
                                     ],
                                     1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-list-tile-action",
-                                    [
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          attrs: { icon: "", large: "" },
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.unselectQuestion({
-                                                questionId: question.id
-                                              })
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _c(
-                                            "v-icon",
-                                            {
-                                              attrs: { color: "red lighten-1" }
-                                            },
-                                            [_vm._v("remove_circle")]
-                                          )
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
                                   )
-                                ],
-                                1
-                              )
-                            ]
-                          })
+                                ]
+                              })
+                            ],
+                            2
+                          )
                         ],
-                        2
+                        1
                       )
                     ],
                     1

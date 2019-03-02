@@ -28,7 +28,8 @@
                             Go To Test
                         </v-btn>
                 </v-layout>
-                <v-layout row align-start justify-space-between>
+                <v-layout row wrap>
+                    <v-flex d-flex xs12 sm12 md7>
                         <v-card>
                             <v-subheader>
                                 {{ `${this.filteredQuestions.length} QUESTIONS` }}
@@ -62,6 +63,8 @@
                                 </v-card-title>
                             </v-card>
                         </v-card>
+                    </v-flex>
+                    <v-flex d-flex xs12 sm12 md4 offset-md1>
                         <v-card>
                             <v-list
                                     subheader
@@ -109,6 +112,7 @@
                                 </template>
                             </v-list>
                         </v-card>
+                    </v-flex>
                 </v-layout>
             </v-layout>
         </v-container>
@@ -134,6 +138,7 @@
         VListTileTitle,
         VListTileSubTitle,
         VListTileAction,
+        VFlex
     } from 'vuetify/lib';
     import { mapState, mapGetters, mapMutations } from 'vuex';
     import { SideBar } from "../../../components";
@@ -160,6 +165,7 @@
             VListTileTitle,
             VListTileSubTitle,
             VListTileAction,
+            VFlex
         },
         methods: {
             ...mapMutations({

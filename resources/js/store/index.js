@@ -5,6 +5,7 @@ import myPluginWithSnapshot from './plugins';
 import {
     TOGGLE_LEFT_DRAWER,
     SET_LEFT_SIDEBAR_TAB_ID,
+    INIT_SELECTED_QUESTIONS,
     SELECT_QUESTION,
     UNSELECT_QUESTION,
     SAVE_TEST_QUESTIONS,
@@ -328,6 +329,10 @@ export default new Vuex.Store({
         },
         [SET_LEFT_SIDEBAR_TAB_ID] (state, payload) {
             state.leftSidebarTabId = payload.tabId;
+        },
+        [INIT_SELECTED_QUESTIONS] (state) {
+            let testIndex = getIndexFromId(state.tests, getCurrentTestId(state));
+            state.selectedQuestionIds = state.tests[testIndex].questionIds
         },
         [SELECT_QUESTION] (state, payload) {
             state.selectedQuestionIds.push(payload.questionId);

@@ -142,7 +142,7 @@
     } from 'vuetify/lib';
     import { mapState, mapGetters, mapMutations } from 'vuex';
     import { SideBar } from "../../../components";
-    import { SELECT_QUESTION, UNSELECT_QUESTION, SAVE_TEST_QUESTIONS } from "../../../store/mutation-types";
+    import { INIT_SELECTED_QUESTIONS, SELECT_QUESTION, UNSELECT_QUESTION, SAVE_TEST_QUESTIONS } from "../../../store/mutation-types";
 
     export default {
         name: 'TestPreviewPage',
@@ -169,9 +169,10 @@
         },
         methods: {
             ...mapMutations({
-                'selectQuestion': SELECT_QUESTION,
-                'unselectQuestion': UNSELECT_QUESTION,
-                'saveTestQuestions': SAVE_TEST_QUESTIONS
+                "selectQuestion": SELECT_QUESTION,
+                "unselectQuestion": UNSELECT_QUESTION,
+                "saveTestQuestions": SAVE_TEST_QUESTIONS,
+                "initialize": INIT_SELECTED_QUESTIONS
             }),
             saveTestQuestionsAndNavigate: function () {
                 this.saveTestQuestions();
@@ -305,6 +306,11 @@
                     }
                 ]
             }
+        },
+        beforeRouteEnter (to, from, next) {
+            next(vm => {
+                vm.initialize();
+            })
         }
     }
 

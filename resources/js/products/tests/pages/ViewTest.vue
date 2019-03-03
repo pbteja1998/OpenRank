@@ -26,7 +26,7 @@
             </v-btn>
             <v-btn>Try Test</v-btn>
             <v-btn color="success" @click="publishDialog=true" v-if="!currentTest.published">Publish</v-btn>
-            <v-btn color="success" v-else>
+            <v-btn color="success" v-else :to="'/tests/invite/' + currentTest.id">
                 <v-icon>person_add</v-icon>&nbsp;&nbsp;Invite
             </v-btn>
             <v-dialog v-model="publishDialog" max-width="290">
@@ -81,6 +81,7 @@
                                     small
                                     class="mr-2"
                                     @click=""
+                                    :disabled="currentTest.published"
                             >
                                 edit
                             </v-icon>
@@ -98,6 +99,7 @@
                                     small
                                     @click="deleteDialog=true"
                                     color="red"
+                                    :disabled="currentTest.published"
                             >
                                 delete
                             </v-icon>
@@ -269,7 +271,7 @@
         methods: {
             ...mapMutations({
                 "removeQuestion": REMOVE_QUESTION_FROM_CURRENT_TEST,
-                "publishTest": PUBLISH_CURRENT_TEST
+                "publishTest": PUBLISH_CURRENT_TEST,
             }),
             removeQuestionAndCloseDialog: function (questionId) {
                 this.removeQuestion({questionId: questionId});

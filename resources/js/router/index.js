@@ -49,7 +49,7 @@ export default new Router({
             component: ViewTestPage
         },
         {
-            path: '/tests/:testId/invite',
+            path: '/tests/invite/:testId',
             name: 'Send Invites',
             component: SendInvitesPage
         }

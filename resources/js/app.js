@@ -5,9 +5,11 @@ import { sync } from 'vuex-router-sync';
 import router from './router';
 import store from './store';
 import Vuetify from 'vuetify/lib';
+import CKEditor from '@ckeditor/ckeditor5-vue';
 
 const unsync = sync(store, router);
 Vue.use(Vuetify);
+Vue.use( CKEditor );
 
 Vue.config.productionTip = false;
 

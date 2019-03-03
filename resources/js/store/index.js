@@ -8,7 +8,8 @@ import {
     SELECT_QUESTION,
     UNSELECT_QUESTION,
     SAVE_TEST_QUESTIONS,
-    REMOVE_QUESTION_FROM_CURRENT_TEST
+    REMOVE_QUESTION_FROM_CURRENT_TEST,
+    PUBLISH_CURRENT_TEST
 } from './mutation-types';
 
 Vue.use(Vuex);
@@ -24,6 +25,10 @@ const getIndexFromId = (array, id) => {
 const getIndicesFromId = (array, ids) => {
     ids = ids.map(id => Number(id));
     return [...Array(array.length).keys()].filter(index => ids.includes(array[index].id));
+};
+
+const getCurrentTestId = state => {
+    return state.route.params.testId;
 };
 
 export default new Vuex.Store({
@@ -331,24 +336,28 @@ export default new Vuex.Store({
             state.selectedQuestionIds = state.selectedQuestionIds.filter(questionId => questionId !== payload.questionId);
         },
         [SAVE_TEST_QUESTIONS] (state) {
-            let testIndex = getIndexFromId(state.tests, state.route.params.testId);
+            let testIndex = getIndexFromId(state.tests, getCurrentTestId(state));
 
             // REFERENCE: https://vuejs.org/v2/guide/list.html#Caveats
             Vue.set(state.tests, testIndex, { ...state.tests[testIndex], questionIds: state.selectedQuestionIds});
         },
         [REMOVE_QUESTION_FROM_CURRENT_TEST] (state, payload) {
-            let testIndex = getIndexFromId(state.tests, state.route.params.testId);
+            let testIndex = getIndexFromId(state.tests, getCurrentTestId(state));
             let questionIds = state.tests[testIndex].questionIds.filter(questionId => questionId !== payload.questionId);
 
             // REFERENCE: https://vuejs.org/v2/guide/list.html#Caveats
             Vue.set(state.tests, testIndex, { ...state.tests[testIndex], questionIds: questionIds });
+        },
+        [PUBLISH_CURRENT_TEST] (state) {
+            let testIndex = getIndexFromId(state.tests, getCurrentTestId(state));
+            state.tests[testIndex].published = true;
         }
     },
     actions: {
     },
     getters: {
         currentTestId: state => {
-            return state.route.params.testId;
+            return getCurrentTestId(state);
         },
         currentTestIndex: (state, getters) => {
             return getIndexFromId(state.tests, getters.currentTestId);

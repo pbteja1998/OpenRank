@@ -1,5 +1,19 @@
 <template>
     <div>
+        <v-snackbar
+                v-model="publishedSnackbar"
+                top
+        >
+            <v-icon color="success" dark>check_circle</v-icon>
+            Test is published
+            <v-btn
+                    dark
+                    flat
+                    @click="publishedSnackbar = false"
+            >
+                Close
+            </v-btn>
+        </v-snackbar>
         <v-toolbar tabs flat extended color="white" class="elevation-1 pt-4">
             <v-breadcrumbs :items="breadcrumbItems">
                 <v-icon slot="divider">forward</v-icon>
@@ -11,10 +25,24 @@
                 <v-icon small>lock</v-icon>
             </v-btn>
             <v-btn>Try Test</v-btn>
-            <v-btn color="success">Publish</v-btn>
+            <v-btn color="success" @click="publishDialog=true" v-if="!currentTest.published">Publish</v-btn>
+            <v-btn color="success" v-else>
+                <v-icon>person_add</v-icon>&nbsp;&nbsp;Invite
+            </v-btn>
+            <v-dialog v-model="publishDialog" max-width="290">
+                <v-card>
+                    <v-card-title>Are you sure that you want to publish {{ currentTest.name }}?</v-card-title>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="success" flat @click="publishDialog = false">No</v-btn>
+                        <v-btn color="red" flat @click="publishTestAndCloseDialog">Yes</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
             <!--<v-btn color="primary" dark @click="expand = !expand">-->
                 <!--{{ expand ? 'Close' : 'Keep' }} other rows-->
             <!--</v-btn>-->
+
             <template v-slot:extension>
                 <v-tabs v-model="tabId">
                     <v-tabs-slider color="success"></v-tabs-slider>
@@ -114,9 +142,10 @@
         VDialog,
         VCardTitle,
         VCardActions,
+        VSnackbar
     } from 'vuetify/lib';
     import { mapGetters, mapMutations } from 'vuex';
-    import { REMOVE_QUESTION_FROM_CURRENT_TEST } from "../../../store/mutation-types";
+    import { REMOVE_QUESTION_FROM_CURRENT_TEST, PUBLISH_CURRENT_TEST } from "../../../store/mutation-types";
 
     export default {
         name: 'ViewTestPage',
@@ -138,10 +167,13 @@
             VDialog,
             VCardTitle,
             VCardActions,
+            VSnackbar
         },
         data: () => ({
+            publishedSnackbar: false,
             expand: false,
             deleteDialog: false,
+            publishDialog: false,
             selected: [],
             tabId: 0,
             tabItems: [
@@ -236,11 +268,17 @@
         },
         methods: {
             ...mapMutations({
-                "removeQuestion": REMOVE_QUESTION_FROM_CURRENT_TEST
+                "removeQuestion": REMOVE_QUESTION_FROM_CURRENT_TEST,
+                "publishTest": PUBLISH_CURRENT_TEST
             }),
             removeQuestionAndCloseDialog: function (questionId) {
                 this.removeQuestion({questionId: questionId});
                 this.deleteDialog = false;
+            },
+            publishTestAndCloseDialog: function () {
+                this.publishTest();
+                this.publishDialog = false;
+                this.publishedSnackbar = true;
             }
         }
     }

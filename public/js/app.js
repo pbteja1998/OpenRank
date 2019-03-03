@@ -1063,6 +1063,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1085,12 +1113,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     VChip: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VChip"],
     VDialog: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VDialog"],
     VCardTitle: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VCardTitle"],
-    VCardActions: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VCardActions"]
+    VCardActions: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VCardActions"],
+    VSnackbar: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VSnackbar"]
   },
   data: function data() {
     return {
+      publishedSnackbar: false,
       expand: false,
       deleteDialog: false,
+      publishDialog: false,
       selected: [],
       tabId: 0,
       tabItems: [{
@@ -1169,13 +1200,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   }),
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapMutations"])({
-    "removeQuestion": _store_mutation_types__WEBPACK_IMPORTED_MODULE_2__["REMOVE_QUESTION_FROM_CURRENT_TEST"]
+    "removeQuestion": _store_mutation_types__WEBPACK_IMPORTED_MODULE_2__["REMOVE_QUESTION_FROM_CURRENT_TEST"],
+    "publishTest": _store_mutation_types__WEBPACK_IMPORTED_MODULE_2__["PUBLISH_CURRENT_TEST"]
   }), {
     removeQuestionAndCloseDialog: function removeQuestionAndCloseDialog(questionId) {
       this.removeQuestion({
         questionId: questionId
       });
       this.deleteDialog = false;
+    },
+    publishTestAndCloseDialog: function publishTestAndCloseDialog() {
+      this.publishTest();
+      this.publishDialog = false;
+      this.publishedSnackbar = true;
     }
   })
 });
@@ -9118,6 +9155,39 @@ var render = function() {
     "div",
     [
       _c(
+        "v-snackbar",
+        {
+          attrs: { top: "" },
+          model: {
+            value: _vm.publishedSnackbar,
+            callback: function($$v) {
+              _vm.publishedSnackbar = $$v
+            },
+            expression: "publishedSnackbar"
+          }
+        },
+        [
+          _c("v-icon", { attrs: { color: "success", dark: "" } }, [
+            _vm._v("check_circle")
+          ]),
+          _vm._v("\n        Test is published\n        "),
+          _c(
+            "v-btn",
+            {
+              attrs: { dark: "", flat: "" },
+              on: {
+                click: function($event) {
+                  _vm.publishedSnackbar = false
+                }
+              }
+            },
+            [_vm._v("\n            Close\n        ")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
         "v-toolbar",
         {
           staticClass: "elevation-1 pt-4",
@@ -9188,7 +9258,88 @@ var render = function() {
           _vm._v(" "),
           _c("v-btn", [_vm._v("Try Test")]),
           _vm._v(" "),
-          _c("v-btn", { attrs: { color: "success" } }, [_vm._v("Publish")])
+          !_vm.currentTest.published
+            ? _c(
+                "v-btn",
+                {
+                  attrs: { color: "success" },
+                  on: {
+                    click: function($event) {
+                      _vm.publishDialog = true
+                    }
+                  }
+                },
+                [_vm._v("Publish")]
+              )
+            : _c(
+                "v-btn",
+                { attrs: { color: "success" } },
+                [
+                  _c("v-icon", [_vm._v("person_add")]),
+                  _vm._v("  Invite\n        ")
+                ],
+                1
+              ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { "max-width": "290" },
+              model: {
+                value: _vm.publishDialog,
+                callback: function($$v) {
+                  _vm.publishDialog = $$v
+                },
+                expression: "publishDialog"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", [
+                    _vm._v(
+                      "Are you sure that you want to publish " +
+                        _vm._s(_vm.currentTest.name) +
+                        "?"
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "success", flat: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.publishDialog = false
+                            }
+                          }
+                        },
+                        [_vm._v("No")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "red", flat: "" },
+                          on: { click: _vm.publishTestAndCloseDialog }
+                        },
+                        [_vm._v("Yes")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
         ],
         1
       ),
@@ -53864,6 +54015,10 @@ var getIndicesFromId = function getIndicesFromId(array, ids) {
   });
 };
 
+var getCurrentTestId = function getCurrentTestId(state) {
+  return state.route.params.testId;
+};
+
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
     leftDrawer: true,
@@ -54110,13 +54265,13 @@ var getIndicesFromId = function getIndicesFromId(array, ids) {
       return questionId !== payload.questionId;
     });
   }), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_4__["SAVE_TEST_QUESTIONS"], function (state) {
-    var testIndex = getIndexFromId(state.tests, state.route.params.testId); // REFERENCE: https://vuejs.org/v2/guide/list.html#Caveats
+    var testIndex = getIndexFromId(state.tests, getCurrentTestId(state)); // REFERENCE: https://vuejs.org/v2/guide/list.html#Caveats
 
     vue__WEBPACK_IMPORTED_MODULE_0___default.a.set(state.tests, testIndex, _objectSpread({}, state.tests[testIndex], {
       questionIds: state.selectedQuestionIds
     }));
   }), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_4__["REMOVE_QUESTION_FROM_CURRENT_TEST"], function (state, payload) {
-    var testIndex = getIndexFromId(state.tests, state.route.params.testId);
+    var testIndex = getIndexFromId(state.tests, getCurrentTestId(state));
     var questionIds = state.tests[testIndex].questionIds.filter(function (questionId) {
       return questionId !== payload.questionId;
     }); // REFERENCE: https://vuejs.org/v2/guide/list.html#Caveats
@@ -54124,11 +54279,14 @@ var getIndicesFromId = function getIndicesFromId(array, ids) {
     vue__WEBPACK_IMPORTED_MODULE_0___default.a.set(state.tests, testIndex, _objectSpread({}, state.tests[testIndex], {
       questionIds: questionIds
     }));
+  }), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_4__["PUBLISH_CURRENT_TEST"], function (state) {
+    var testIndex = getIndexFromId(state.tests, getCurrentTestId(state));
+    state.tests[testIndex].published = true;
   }), _mutations),
   actions: {},
   getters: {
     currentTestId: function currentTestId(state) {
-      return state.route.params.testId;
+      return getCurrentTestId(state);
     },
     currentTestIndex: function currentTestIndex(state, getters) {
       return getIndexFromId(state.tests, getters.currentTestId);
@@ -54236,7 +54394,7 @@ var getIndicesFromId = function getIndicesFromId(array, ids) {
 /*!**********************************************!*\
   !*** ./resources/js/store/mutation-types.js ***!
   \**********************************************/
-/*! exports provided: TOGGLE_LEFT_DRAWER, SET_LEFT_SIDEBAR_TAB_ID, SELECT_QUESTION, UNSELECT_QUESTION, SAVE_TEST_QUESTIONS, REMOVE_QUESTION_FROM_CURRENT_TEST */
+/*! exports provided: TOGGLE_LEFT_DRAWER, SET_LEFT_SIDEBAR_TAB_ID, SELECT_QUESTION, UNSELECT_QUESTION, SAVE_TEST_QUESTIONS, REMOVE_QUESTION_FROM_CURRENT_TEST, PUBLISH_CURRENT_TEST */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -54247,12 +54405,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UNSELECT_QUESTION", function() { return UNSELECT_QUESTION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SAVE_TEST_QUESTIONS", function() { return SAVE_TEST_QUESTIONS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REMOVE_QUESTION_FROM_CURRENT_TEST", function() { return REMOVE_QUESTION_FROM_CURRENT_TEST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PUBLISH_CURRENT_TEST", function() { return PUBLISH_CURRENT_TEST; });
 var TOGGLE_LEFT_DRAWER = 'TOGGLE_LEFT_DRAWER';
 var SET_LEFT_SIDEBAR_TAB_ID = 'SET_LEFT_SIDEBAR_TAB_ID';
 var SELECT_QUESTION = 'SELECT_QUESTION';
 var UNSELECT_QUESTION = 'UNSELECT_QUESTION';
 var SAVE_TEST_QUESTIONS = 'SAVE_TEST_QUESTIONS';
 var REMOVE_QUESTION_FROM_CURRENT_TEST = 'REMOVE_QUESTION_FROM_CURRENT_TEST';
+var PUBLISH_CURRENT_TEST = 'PUBLISH_CURRENT_TEST';
 
 /***/ }),
 

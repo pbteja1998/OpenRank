@@ -205,6 +205,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -222,7 +227,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     VContainer: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VContainer"],
     VFooter: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VFooter"],
     VLayout: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VLayout"],
-    VFlex: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VFlex"]
+    VFlex: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VFlex"],
+    VToolbarItems: vuetify_lib__WEBPACK_IMPORTED_MODULE_0__["VToolbarItems"]
   },
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapMutations"])({
     toggleLeftDrawer: _store_mutation_types__WEBPACK_IMPORTED_MODULE_1__["TOGGLE_LEFT_DRAWER"]
@@ -231,6 +237,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       footerLinks: ['Home', 'About Us', 'Team', 'Services', 'Blog', 'Contact Us']
     };
+  },
+  computed: {
+    linksSlot: function linksSlot() {
+      if (this.$vuetify.breakpoint.mdAndUp) {
+        return 'default';
+      } else {
+        return 'extension';
+      }
+    }
   }
 });
 
@@ -8181,7 +8196,7 @@ var render = function() {
                 app: "",
                 dark: "",
                 color: "#343E4A",
-                fixed: "",
+                flat: "",
                 "clipped-left": ""
               }
             },
@@ -8190,52 +8205,72 @@ var render = function() {
                 on: { click: _vm.toggleLeftDrawer }
               }),
               _vm._v(" "),
-              _c("v-toolbar-title", { staticClass: "white--text" }, [
-                _vm._v("OpenRank")
-              ]),
+              _c(
+                "router-link",
+                {
+                  staticStyle: { "text-decoration": "none" },
+                  attrs: { to: "/" }
+                },
+                [
+                  _c("v-toolbar-title", { staticClass: "white--text" }, [
+                    _vm._v("\n                    OpenRank\n                ")
+                  ])
+                ],
+                1
+              ),
               _vm._v(" "),
               _c("v-spacer"),
               _vm._v(" "),
               _c(
-                "v-btn",
-                { attrs: { to: "/tests", large: "", flat: "" } },
+                "v-toolbar-items",
+                {
+                  attrs: { slot: _vm.linksSlot, router: "" },
+                  slot: _vm.linksSlot
+                },
                 [
-                  _c("v-icon", [_vm._v("question_answer")]),
+                  _c(
+                    "v-btn",
+                    { attrs: { to: "/tests", flat: "" } },
+                    [
+                      _c("v-icon", [_vm._v("question_answer")]),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Tests")])
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
-                  _c("span", [_vm._v("Tests")])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                { attrs: { to: "/library", large: "", flat: "" } },
-                [
-                  _c("v-icon", [_vm._v("library_books")]),
+                  _c(
+                    "v-btn",
+                    { attrs: { to: "/library", flat: "" } },
+                    [
+                      _c("v-icon", [_vm._v("library_books")]),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Library")])
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
-                  _c("span", [_vm._v("Library")])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                { attrs: { to: "/code-pair", large: "", flat: "" } },
-                [
-                  _c("v-icon", [_vm._v("people")]),
+                  _c(
+                    "v-btn",
+                    { attrs: { to: "/code-pair", flat: "" } },
+                    [
+                      _c("v-icon", [_vm._v("people")]),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("CodePair")])
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
-                  _c("span", [_vm._v("CodePair")])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                { attrs: { to: "/insights", large: "", flat: "" } },
-                [
-                  _c("v-icon", [_vm._v("insert_chart")]),
-                  _vm._v(" "),
-                  _c("span", [_vm._v("Insights")])
+                  _c(
+                    "v-btn",
+                    { attrs: { to: "/insights", flat: "" } },
+                    [
+                      _c("v-icon", [_vm._v("insert_chart")]),
+                      _vm._v(" "),
+                      _c("span", [_vm._v("Insights")])
+                    ],
+                    1
+                  )
                 ],
                 1
               )

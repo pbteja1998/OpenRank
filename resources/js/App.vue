@@ -5,31 +5,36 @@
                     app
                     dark
                     color="#343E4A"
-                    fixed
+                    flat
                     clipped-left
             >
                 <v-toolbar-side-icon @click="toggleLeftDrawer"></v-toolbar-side-icon>
 
-                <v-toolbar-title class="white--text">OpenRank</v-toolbar-title>
+                <router-link to="/" style="text-decoration: none;">
+                    <v-toolbar-title class="white--text">
+                        OpenRank
+                    </v-toolbar-title>
+                </router-link>
 
                 <v-spacer></v-spacer>
-
-                <v-btn to="/tests" large flat>
-                    <v-icon>question_answer</v-icon>
-                    <span>Tests</span>
-                </v-btn>
-                <v-btn to="/library" large flat>
-                    <v-icon>library_books</v-icon>
-                    <span>Library</span>
-                </v-btn>
-                <v-btn to="/code-pair" large flat>
-                    <v-icon>people</v-icon>
-                    <span>CodePair</span>
-                </v-btn>
-                <v-btn to="/insights" large flat>
-                    <v-icon>insert_chart</v-icon>
-                    <span>Insights</span>
-                </v-btn>
+                <v-toolbar-items router :slot="linksSlot">
+                    <v-btn to="/tests" flat>
+                        <v-icon>question_answer</v-icon>
+                        <span>Tests</span>
+                    </v-btn>
+                    <v-btn to="/library" flat>
+                        <v-icon>library_books</v-icon>
+                        <span>Library</span>
+                    </v-btn>
+                    <v-btn to="/code-pair" flat>
+                        <v-icon>people</v-icon>
+                        <span>CodePair</span>
+                    </v-btn>
+                    <v-btn to="/insights" flat>
+                        <v-icon>insert_chart</v-icon>
+                        <span>Insights</span>
+                    </v-btn>
+                </v-toolbar-items>
             </v-toolbar>
             <v-content>
                 <v-container fluid>
@@ -82,7 +87,8 @@
         VContainer,
         VFooter,
         VLayout,
-        VFlex
+        VFlex,
+        VToolbarItems
     } from 'vuetify/lib';
     import { TOGGLE_LEFT_DRAWER } from "./store/mutation-types";
     import { mapMutations } from 'vuex';
@@ -101,7 +107,8 @@
             VContainer,
             VFooter,
             VLayout,
-            VFlex
+            VFlex,
+            VToolbarItems
         },
         methods: {
             ...mapMutations({
@@ -118,6 +125,15 @@
                     'Blog',
                     'Contact Us'
                 ]
+            }
+        },
+        computed: {
+            linksSlot () {
+                if (this.$vuetify.breakpoint.mdAndUp) {
+                    return 'default'
+                } else {
+                    return 'extension'
+                }
             }
         }
     };

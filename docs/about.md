@@ -18,6 +18,7 @@ This project mainly uses
     - [Vuex](https://vuex.vuejs.org/) - A state management pattern + library for Vue Js applications.
     - [Vuex-Router Sync](https://github.com/vuejs/vuex-router-sync) - Syncs vue-router's current $route as part of vuex store's state.
     - [Vuetify](https://vuetifyjs.com/en/) - Material Design Component Framework
+    - [Vee Validate](https://baianat.github.io/vee-validate/) - Template Based Validation Framework for Vue Js
     - [Material Design Bootstrap (Vue Version)](https://mdbootstrap.com/docs/vue/) - Material Design Vue Bootstrap UI Kit.
         - [Bootstrap](https://getbootstrap.com/docs/4.0/getting-started/introduction/) - An open source toolkit for developing with HTML, CSS, and JS.
         - [Vue Notification](https://github.com/euvl/vue-notification) - A VueJs 2 library for showing notifications .

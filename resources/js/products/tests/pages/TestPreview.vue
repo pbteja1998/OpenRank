@@ -1,152 +1,319 @@
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-    <mdb-container fluid class="custom-flex-css">
-        <main-header>
-            <template v-slot:title>Tests</template>
-            <mdb-breadcrumb>
-                <mdb-breadcrumb-item><router-link to="/tests">Tests</router-link></mdb-breadcrumb-item>
-                <mdb-breadcrumb-item><router-link :to="'/tests/preview/' + currentTest.id">{{ currentTest.name }}</router-link></mdb-breadcrumb-item>
-                <mdb-breadcrumb-item active>Library - HackerRank</mdb-breadcrumb-item>
-            </mdb-breadcrumb>
-
-            <template v-slot:others>
-                <router-link :to="'/tests/' + currentTest.id"><mdb-btn color="default" @click="goToTest()" class="float-right mr-5">Go to test</mdb-btn></router-link>
+<template>
+    <div>
+        <side-bar
+                :tab-items="tabItems"
+                :breadcrumb-items="breadcrumbItems"
+                :selected-filter-item-ids="selectedFilterItemIds"
+                :tabs="tabs"
+        >
+            <template v-slot:head>
+                <v-text-field
+                        solo
+                        label="Search for a question"
+                        append-icon="search"
+                        v-model="searchQuestion"
+                        clearable
+                ></v-text-field>
             </template>
-        </main-header>
+        </side-bar>
 
-        <hr />
+        <v-container fluid>
+            <v-layout column>
+                <v-layout row align-start justify-space-between>
+                        <v-breadcrumbs :items="breadcrumbItems">
+                            <v-icon slot="divider">forward</v-icon>
+                        </v-breadcrumbs>
 
-        <main-content>
-            <template v-slot:leftSideBar>
-                <div class="form-group px-5 pt-5 pb-3 m-0">
-                    <input class="form-control" type="text" placeholder="Search for a question.." aria-label="Search" v-model="searchQuestion" />
-                </div>
-                <mdb-accordion :panes="leftSideBarPanes" custom/>
-            </template>
+                        <v-btn large @click="saveTestQuestionsAndNavigate">
+                            Go To Test
+                        </v-btn>
+                </v-layout>
+                <v-layout row wrap>
+                    <v-flex d-flex xs12 sm12 md7>
+                        <v-card>
+                            <v-subheader>
+                                {{ `${this.filteredQuestions.length} QUESTIONS` }}
+                            </v-subheader>
+                            <v-divider></v-divider>
+                            <v-card v-for="question in filteredQuestions" :key="question.id" hover ripple>
+                                <v-card-title primary-title>
+                                    <v-layout row align-start justify-space-between>
+                                        <div>
+                                            <div class="">{{ question.name }}</div>
+                                            <span class="grey--text">{{ questionType(question.questionTypeId).title }}</span>
+                                            <v-chip :color="difficultyChipColor(question.difficultyTypeId)" outline class="mr-2">
+                                                <v-icon left>highlight</v-icon>
+                                                {{ difficultyType(question.difficultyTypeId).title }}
+                                            </v-chip>
+                                            <template v-for="tag in getQuestionTags(question.questionTagIds)">
+                                                <v-chip
+                                                        label
+                                                        :key="tag.id"
+                                                        class="mr-2"
+                                                        small
+                                                >
+                                                    {{ tag.title }}
+                                                </v-chip>
+                                            </template>
+                                        </div>
+                                        <v-btn icon large @click="selectQuestion({questionId: question.id})" right top>
+                                            <v-icon color="green lighten-1">add_circle</v-icon>
+                                        </v-btn>
+                                    </v-layout>
+                                </v-card-title>
+                            </v-card>
+                        </v-card>
+                    </v-flex>
+                    <v-flex d-flex xs12 sm12 md4 offset-md1>
+                        <v-card>
+                            <v-list
+                                    subheader
+                                    three-line
+                            >
+                                <v-subheader class="justify-center">
+                                    TEST PREVIEW
+                                </v-subheader>
+                                <v-divider></v-divider>
+                                <v-layout align-center justify-center column>
+                                    <v-subheader>
+                                        {{ `${this.selectedQuestions.length} QUESTIONS SELECTED` }}
+                                    </v-subheader>
+                                    <v-layout align-center justify-center row>
+                                        <v-subheader>
+                                            <v-icon left>timer</v-icon>Duration: {{ currentTest.duration }} mins
+                                        </v-subheader>
+                                        <v-subheader>
+                                            <v-icon>score</v-icon>Total Score: {{ totalPoints }}
+                                        </v-subheader>
+                                    </v-layout>
+                                </v-layout>
+                                <template v-for="question in selectedQuestions">
+                                    <v-divider></v-divider>
+                                    <v-list-tile :key="question.id" @click="">
 
-            <mdb-list-group>
-                <mdb-list-group-item href="#" :action="true" class="flex-column text-black-50" v-for="question in filteredQuestions" :key="question.id" style="align-items: flex-start!important;">
-                    <div class="d-flex flex-row w-100 justify-content-between">
-                        <h5 class="mb-1">{{ question.name }}
-                            <!--<small class="text-muted float-right">{{ test.duration }} min</small>-->
-                        </h5>
-                        <button class="btn btn-success btn-sm" @click="selectQuestion({questionId: question.id})"><mdb-icon icon="plus"></mdb-icon></button>
-                    </div>
-                    <div class="d-flex flex-row w-100 align-items-start">
-                        <button class="btn btn-sm" style="color: black;">{{ question.type }}</button>
-                        <button class="btn btn-success btn-sm" v-if="question.difficulty === 'EASY'">{{ question.difficulty }}</button>
-                        <button class="btn btn-warning btn-sm" v-else-if="question.difficulty === 'MEDIUM'">{{ question.difficulty }}</button>
-                        <button class="btn btn-danger btn-sm" v-else>{{ question.difficulty }}</button>
-                        <span v-for="tag in question.tags">
-                            <button class="btn btn-info btn-sm">{{ tag }}</button>
-                        </span>
-                    </div>
-                </mdb-list-group-item>
-            </mdb-list-group>
+                                        <v-list-tile-content @click="">
+                                            <v-list-tile-title>{{ question.name }}</v-list-tile-title>
+                                            <v-list-tile-sub-title>
+                                                {{ questionType(question.questionTypeId).title }}
+                                                <v-chip :color="difficultyChipColor(question.difficultyTypeId)" outline>
+                                                    <v-icon left>highlight</v-icon>
+                                                    {{ difficultyType(question.difficultyTypeId).title }}
+                                                </v-chip>
+                                            </v-list-tile-sub-title>
+                                        </v-list-tile-content>
 
-            <template v-slot:rightSideBar>
-                <div class="p-3" style="letter-spacing: 0.01rem;font-weight: bold;color: rgb(109, 109, 109);">
-                    <h5>TEST PREVIEW</h5>
-                    <p class="text-sm">Duration: {{ currentTest.duration }} mins</p>
-                </div>
-                <mdb-list-group>
-                    <mdb-list-group-item href="#" :action="true" class="flex-column text-black-50" v-for="question in selectedQuestions" :key="question.id" style="align-items: flex-start!important;">
-                        <div class="d-flex flex-row w-100 justify-content-between">
-                            <h5 class="mb-1">{{ question.name | truncate(20) }}</h5>
-                            <button class="btn btn-danger btn-sm" @click="unSelectQuestion({questionId: question.id})"><mdb-icon icon="minus"></mdb-icon></button>
-                        </div>
-                        <div class="d-flex flex-row w-100 align-items-start">
-                            <button class="btn btn-sm" style="color: black;">{{ question.type }}</button>
-                            <button class="btn btn-success btn-sm" v-if="question.difficulty === 'EASY'">{{ question.difficulty }}</button>
-                            <button class="btn btn-warning btn-sm" v-else-if="question.difficulty === 'MEDIUM'">{{ question.difficulty }}</button>
-                            <button class="btn btn-danger btn-sm" v-else>{{ question.difficulty }}</button>
-                        </div>
-                    </mdb-list-group-item>
-                </mdb-list-group>
-            </template>
-        </main-content>
-    </mdb-container>
+                                        <v-list-tile-action>
+                                            <v-btn icon large @click="unselectQuestion({questionId: question.id})">
+                                                <v-icon color="red lighten-1">remove_circle</v-icon>
+                                            </v-btn>
+                                        </v-list-tile-action>
+
+                                    </v-list-tile>
+                                </template>
+                            </v-list>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+            </v-layout>
+        </v-container>
+    </div>
 </template>
 
 <script>
-    import { mdbContainer, mdbBreadcrumb, mdbBreadcrumbItem, mdbBtn, mdbListGroup, mdbListGroupItem, mdbIcon } from 'mdbvue';
-    import { mainHeader, mainContent, mdbAccordion } from '../../../components';
-    import { mapGetters, mapState, mapMutations } from 'vuex';
-    import { SELECT_QUESTION, UNSELECT_QUESTION, ADD_QUESTIONS_TO_TEST } from "../../../store/mutation-types";
+    import {
+        VTextField,
+        VContainer,
+        VLayout,
+        VBreadcrumbs,
+        VIcon,
+        VBtn,
+        VCard,
+        VSubheader,
+        VDivider,
+        VCardTitle,
+        VChip,
+        VList,
+        VListTile,
+        VListTileContent,
+        VListTileTitle,
+        VListTileSubTitle,
+        VListTileAction,
+        VFlex
+    } from 'vuetify/lib';
+    import { mapState, mapGetters, mapMutations } from 'vuex';
+    import { SideBar } from "../../../components";
+    import { INIT_SELECTED_QUESTIONS, SELECT_QUESTION, UNSELECT_QUESTION, SAVE_TEST_QUESTIONS } from "../../../store/mutation-types";
 
     export default {
         name: 'TestPreviewPage',
         components: {
-            mdbContainer,
-            mainHeader,
-            mdbBreadcrumb,
-            mdbBreadcrumbItem,
-            mdbBtn,
-            mdbListGroup,
-            mdbListGroupItem,
-            mainContent,
-            mdbAccordion,
-            mdbIcon,
+            SideBar,
+            VTextField,
+            VContainer,
+            VLayout,
+            VBreadcrumbs,
+            VIcon,
+            VBtn,
+            VCard,
+            VSubheader,
+            VDivider,
+            VCardTitle,
+            VChip,
+            VList,
+            VListTile,
+            VListTileContent,
+            VListTileTitle,
+            VListTileSubTitle,
+            VListTileAction,
+            VFlex
         },
         methods: {
             ...mapMutations({
-                'selectQuestion': SELECT_QUESTION,
-                'unSelectQuestion': UNSELECT_QUESTION,
-                'addQuestions': ADD_QUESTIONS_TO_TEST
+                "selectQuestion": SELECT_QUESTION,
+                "unselectQuestion": UNSELECT_QUESTION,
+                "saveTestQuestions": SAVE_TEST_QUESTIONS,
+                "initialize": INIT_SELECTED_QUESTIONS
             }),
-            goToTest: function () {
-                this.addQuestions();
+            saveTestQuestionsAndNavigate: function () {
+                this.saveTestQuestions();
                 this.$router.push('/tests/' + this.currentTest.id);
             }
         },
-        mounted: function () {
-            if(this.$store.state.currentTestId === 0) {
-                this.$router.push('/tests/');
-            }
-        },
         computed: {
-            ...mapState([
-               'questions',
-            ]),
             ...mapGetters([
-                'selectedQuestions',
-                'unSelectedQuestions',
-                'currentTest'
+                "currentTest",
             ]),
-            filteredQuestions() {
-                return this.unSelectedQuestions.filter(question => {
+            ...mapGetters({
+                "questionType": "getQuestionType",
+                "difficultyType": "getDifficultyType",
+                "language": "getLanguage",
+            }),
+            ...mapGetters([
+                "getQuestionTags",
+                "nonSelectedQuestions",
+                "selectedQuestions",
+                "currentTest"
+            ]),
+            ...mapState([
+                "leftSidebarTabId",
+                "difficultyTypes",
+                "questionTypes",
+                "questionTags",
+                "languages",
+                "questions",
+                "selectedQuestionIds"
+            ]),
+            breadcrumbItems: function () {
+                return [
+                    {
+                        text: 'Tests',
+                        disabled: false,
+                        href: '/#/tests'
+                    },
+                    {
+                        text: this.currentTest.name,
+                        disabled: false,
+                        href: '/#/tests/preview/' + this.currentTest.id
+                    },
+                    {
+                        text: !this.leftSidebarTabId ? 'Library - OpenRank' : 'Library - My Company',
+                        disabled: true,
+                        href: '/#/tests/preview/' + this.currentTest.id
+                    },
+                ]
+            },
+            tabItems: function () {
+                return [
+                    {
+                        index: 0,
+                        action: 'highlight',
+                        title: 'Difficulty',
+                        items: this.difficultyTypes
+                    },
+                    {
+                        index: 1,
+                        action: 'code',
+                        title: 'Type',
+                        items: this.questionTypes
+                    },
+                    {
+                        index: 2,
+                        action: 'label',
+                        title: 'Tags',
+                        items: this.questionTags
+                    },
+                    {
+                        index: 3,
+                        action: 'language',
+                        title: 'Languages',
+                        items: this.languages
+                    }
+                ];
+            },
+            filteredQuestions: function () {
+                if(this.searchQuestion === null) return this.nonSelectedQuestions;
+                let filteredQuestions = this.nonSelectedQuestions.filter(question => {
                     return question.name.toLowerCase().includes(this.searchQuestion.toLowerCase()) ||
-                        question.type.toLowerCase().includes(this.searchQuestion.toLowerCase()) ||
-                        question.difficulty.toLowerCase().includes(this.searchQuestion.toLowerCase()) ||
-                        question.tags.filter(tag => {
-                            return tag.toLowerCase().includes(this.searchQuestion.toLowerCase());
-                        }).length > 0;
-                })
+                        this.questionType(question.questionTypeId).title.toLowerCase().includes(this.searchQuestion.toLowerCase()) ||
+                        this.difficultyType(question.difficultyTypeId).title.toLowerCase().includes(this.searchQuestion.toLowerCase());
+                });
+                let empty = true;
+                for(let i = 0; i < this.selectedFilterItemIds.length; i++) {
+                    if(this.selectedFilterItemIds[i].length > 0) {
+                        empty = false;
+                        break;
+                    }
+                }
+                if(empty) {
+                    return filteredQuestions;
+                } else {
+                    return filteredQuestions.filter(question => {
+                        // TODO: Remove the following hard-coded code and replace it with generalized code.
+                        return this.selectedFilterItemIds[0].includes(question.difficultyTypeId) ||
+                            this.selectedFilterItemIds[1].includes(question.questionTypeId) ||
+                            this.selectedFilterItemIds[2].filter(tagId => question.questionTagIds.includes(tagId)).length > 0 ||
+                            this.selectedFilterItemIds[3].filter(langId => question.languageIds.includes(langId)).length > 0;
+                    });
+                }
+            },
+            difficultyChipColor: function () {
+                return difficultyTypeId => {
+                    if(difficultyTypeId === 1) {
+                        return "green";
+                    } else if(difficultyTypeId === 2) {
+                        return "yellow darken-3";
+                    } else {
+                        return "red";
+                    }
+                }
+            },
+            totalPoints: function () {
+                return this.selectedQuestions.reduce((totalPoints, question) => totalPoints + question.points, 0);
             }
         },
-        data() {
+        data () {
             return {
-                leftSideBarPanes: [
+                searchQuestion: '',
+                selectedFilterItemIds: [[], [], [], []],
+                tabs: [
                     {
-                        title: 'Difficulty',
-                        content: 'Anim pariatur cliche reprehenderit,',
+                        name: 'OpenRank',
+                        id: 1
                     },
                     {
-                        title: 'Type',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-                    {
-                        title: 'Tags',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-                    {
-                        title: 'Languages',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-                ],
-                searchQuestion: ''
-            };
+                        name: 'My Company',
+                        id: 2
+                    }
+                ]
+            }
+        },
+        beforeRouteEnter (to, from, next) {
+            next(vm => {
+                vm.initialize();
+            })
         }
-    };
+    }
+
 </script>
 
 <style scoped>

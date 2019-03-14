@@ -1,409 +1,422 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import 'es6-promise/auto'
+import myPluginWithSnapshot from './plugins';
 import {
-    TOGGLE_CREATE_TEST_MODAL,
-    SHOW_CREATE_TEST_MODAL,
-    HIDE_CREATE_TEST_MODAL,
-    UPDATE_NEW_TEST,
-    CHANGE_CURRENT_TEST,
-    TOGGLE_TEST_CHECKED_STATE,
-    TOGGLE_QUESTION_SELECTION,
+    TOGGLE_LEFT_DRAWER,
+    SET_LEFT_SIDEBAR_TAB_ID,
+    INIT_SELECTED_QUESTIONS,
     SELECT_QUESTION,
     UNSELECT_QUESTION,
-    ADD_QUESTIONS_TO_TEST,
-    PUBLISH_CURRENT_TEST,
-    PUBLISH_TEST
+    SAVE_TEST_QUESTIONS,
+    REMOVE_QUESTION_FROM_CURRENT_TEST,
+    PUBLISH_CURRENT_TEST
 } from './mutation-types';
-import myPluginWithSnapshot from './plugins';
 
 Vue.use(Vuex);
 
 const getIndexFromId = (array, id) => {
-    let indices = [...Array(array.length).keys()].filter(index => array[index].id === id);
+    id = Number(id);
+    // let indices = [...Array(array.length).keys()].filter(index => array[index].id === id);
+    let indices = getIndicesFromId(array, [id]);
     if(indices.length > 0) return indices[0];
-    else return 0;
+    else return -1;
 };
 
-const selectedItems = items => {
-    return items.filter(item => item.selected);
+const getIndicesFromId = (array, ids) => {
+    ids = ids.map(id => Number(id));
+    return [...Array(array.length).keys()].filter(index => ids.includes(array[index].id));
 };
 
-const unSelectedItems = items => {
-    return items.filter(item => !item.selected);
+const getCurrentTestId = state => {
+    return state.route.params.testId;
 };
 
 export default new Vuex.Store({
     state: {
-        newTest: {
-            roles: [],
-            workExperience: 0,
-            jdLink: '',
-            name: '',
-            duration: 0,
-            testType: 'predefined'
-        },
-        currentTestId: 0,
+        leftDrawer: true,
+        leftSidebarTabId: 0,
+        searchFilter: '',
         jobProfiles: [
             {
-                name: 'Software Developer',
-                id: 1
+                id: 1,
+                title: 'Software Developer',
             },
             {
-                name: 'Full Stack Developer',
-                id: 2
+                id: 2,
+                title: 'Full-stack Developer',
             },
             {
-                name: 'Frontend Developer',
-                id: 3
+                id: 3,
+                title: 'Front-end Developer',
             },
             {
-                name: 'Backend Developer',
-                id: 4
+                id: 4,
+                title: 'Back-end Developer',
             },
             {
-                name: 'C++ Developer',
-                id: 5
+                id: 5,
+                title: 'C++ Developer',
             },
             {
-                name: 'Python Developer',
-                id: 6
+                id: 6,
+                title: 'Python Developer',
             },
             {
-                name: 'Java Developer',
-                id: 7
+                id: 7,
+                title: 'Java Developer'
             },
         ],
-        workExperiences: [
+        workExperienceTypes: [
             {
-                name: 'Intern',
-                id: 1
+                id: 1,
+                title: 'Intern'
             },
             {
-                name: 'New Graduate',
-                id: 2
+                id: 2,
+                title: 'New Graduate'
             },
             {
-                name: '0-2 years',
-                id: 3
+                id: 3,
+                title: '0-2 years'
             },
             {
-                name: '2-5 years',
-                id: 4
+                id: 4,
+                title: '2-5 years'
             },
             {
-                name: '>5 years',
-                id: 5
+                id: 5,
+                title: '>5 years'
             },
             {
-                name: 'All Experience Levels',
-                id: 6
+                id: 6,
+                title: 'All Experience Levels'
+            },
+        ],
+        difficultyTypes: [
+            {
+                id: 1,
+                title: 'Easy'
+            },
+            {
+                id: 2,
+                title: 'Medium'
+            },
+            {
+                id: 3,
+                title: 'Hard'
+            }
+        ],
+        questionTypes: [
+            {
+                id: 1,
+                title: 'Coding'
+            },
+            {
+                id: 2,
+                title: 'Database'
+            }
+        ],
+        questionTags: [
+            {
+                id: 1,
+                title: 'Role Based'
+            },
+            {
+                id: 2,
+                title: 'Selection'
+            },
+            {
+                id: 3,
+                title: 'Databases'
+            },
+            {
+                id: 4,
+                title: 'SQL'
+            },
+            {
+                id: 5,
+                title: 'Problem Solving'
+            },
+            {
+                id: 6,
+                title: 'Core Skills'
+            },
+            {
+                id: 7,
+                title: 'General Programming'
+            },
+            {
+                id: 8,
+                title: 'Data Structures'
+            },
+            {
+                id: 9,
+                title: 'Greedy'
+            },
+            {
+                id: 10,
+                title: 'Arrays'
+            },
+            {
+                id: 11,
+                title: 'Algorithms'
+            },
+            {
+                id: 12,
+                title: 'Stacks'
+            },
+        ],
+        languages: [
+            {
+                id: 1,
+                title: 'C'
+            },
+            {
+                id: 2,
+                title: 'C++'
+            },
+            {
+                id: 3,
+                title: 'C++14'
+            },
+            {
+                id: 4,
+                title: 'Python'
+            },
+            {
+                id: 5,
+                title: 'Java'
             },
         ],
         tests: [
             {
                 id: 0,
                 name: 'Dummy Test',
-                role: 'Dummy Role',
-                workExperience: 0,
-                duration: 0,
-                checked: false,
-                questionIds: [1, 2, 3],
-                published: false
+                jobProfileId: 1,
+                workExperienceTypeId: 1,
+                duration: 6,
+                questionIds: [1, 2, 3, 4, 5, 6],
+                published: false,
+                active: false
             },
             {
                 id: 1,
                 name: 'HackerRank Hiring Test',
-                role: 'Software Development Internship',
-                workExperience: 0,
+                jobProfileId: 2,
+                workExperienceTypeId: 3,
                 duration: 90,
-                checked: false,
                 questionIds: [],
-                published: false
+                published: false,
+                active: true
             },
             {
                 id: 2,
                 name: 'HackerRank Software Developer Hiring Test',
-                role: 'Software Developer',
-                workExperience: 3,
+                jobProfileId: 3,
+                workExperienceTypeId: 5,
                 duration: 60,
-                checked: false,
                 questionIds: [],
-                published: false
+                published: false,
+                active: true
             },
             {
                 id: 3,
                 name: 'InterviewBit Software Developer Hiring Test',
-                role: 'Software Developer',
-                workExperience: 1,
+                jobProfileId: 4,
+                workExperienceTypeId: 4,
                 duration: 75,
-                checked: false,
                 questionIds: [],
-                published: false
+                published: false,
+                active: true
             },
             {
                 id: 4,
                 name: 'HackerEarth IIIT-H Campus Placements Hiring Test',
-                role: 'Software Developer',
-                workExperience: 0,
+                jobProfileId: 5,
+                workExperienceTypeId: 2,
                 duration: 60,
-                checked: false,
                 questionIds: [],
-                published: false
+                published: false,
+                active: true
             },
             {
                 id: 5,
-                name: 'HackerRank Campus Placements',
-                role: 'Software Developer',
-                workExperience: 0,
+                name: 'HackerRank Campus Internships',
+                jobProfileId: 6,
+                workExperienceTypeId: 1,
                 duration: 60,
-                checked: false,
                 questionIds: [],
-                published: false
+                published: false,
+                active: true
+            },
+            {
+                id: 6,
+                name: 'HackerRank Campus Placements',
+                jobProfileId: 7,
+                workExperienceTypeId: 2,
+                duration: 60,
+                questionIds: [],
+                published: false,
+                active: true
             },
         ],
+        selectedQuestionIds: [],
         questions: [
             {
                 id: 1,
                 name: 'Student Rank',
-                type: 'Database',
-                difficulty: 'EASY',
-                tags: ['Role Based', 'Selection', 'Databases', 'SQL'],
-                selected: false,
-                marks: 50
+                questionTypeId: 2,
+                difficultyTypeId: 1,
+                questionTagIds: [1, 2, 3, 4],
+                languageIds: [1, 2, 3, 4, 5],
+                points: 50
             },
             {
                 id: 2,
                 name: 'Merge Strings',
-                type: 'Coding',
-                difficulty: 'EASY',
-                tags: ['Problem Solving', 'Core Skills', 'General Programming', 'Strings'],
-                selected: false,
-                marks: 500
+                questionTypeId: 1,
+                difficultyTypeId: 1,
+                questionTagIds: [5, 6, 7],
+                languageIds: [1, 2, 3, 4, 5],
+                points: 100
             },
             {
                 id: 3,
                 name: 'Long Break',
-                type: 'Coding',
-                difficulty: 'MEDIUM',
-                tags: ['Core Skills', 'Data Structures', 'Greedy', 'Arrays'],
-                selected: false,
-                marks: 50
+                questionTypeId: 1,
+                difficultyTypeId: 2,
+                questionTagIds: [6, 8, 9, 10],
+                languageIds: [1, 2, 3, 4, 5],
+                points: 90
             },
             {
                 id: 4,
                 name: 'Maximum Difference in an Array',
-                type: 'Coding',
-                difficulty: 'MEDIUM',
-                tags: ['Problem Solving', 'Core Skills', 'Arrays', 'Algorithms', 'Data Structures'],
-                selected: false,
-                marks: 500
+                questionTypeId: 1,
+                difficultyTypeId: 3,
+                questionTagIds: [5, 6, 10, 11, 8],
+                languageIds: [1, 2, 3, 4, 5],
+                points: 500
             },
             {
                 id: 5,
                 name: 'Braces',
-                type: 'Coding',
-                difficulty: 'HARD',
-                tags: ['Problem Solving', 'Core Skills', 'Stacks', 'Algorithms', 'Data Structures'],
-                selected: false,
-                marks: 50
+                questionTypeId: 1,
+                difficultyTypeId: 1,
+                questionTagIds: [5, 6, 12, 11, 8, 10],
+                languageIds: [1, 2, 3, 4, 5],
+                points: 50
             },
             {
                 id: 6,
-                name: 'Student Rank-2',
-                type: 'Database',
-                difficulty: 'EASY',
-                tags: ['Role Based', 'Selection', 'Databases', 'SQL'],
-                selected: false,
-                marks: 500
-            },
-            {
-                id: 7,
-                name: 'Merge Strings-2',
-                type: 'Coding',
-                difficulty: 'EASY',
-                tags: ['Problem Solving', 'Core Skills', 'General Programming', 'Strings'],
-                selected: false,
-                marks: 50
-            },
-            {
-                id: 8,
-                name: 'Long Break-2',
-                type: 'Coding',
-                difficulty: 'MEDIUM',
-                tags: ['Core Skills', 'Data Structures', 'Greedy', 'Arrays'],
-                selected: false,
-                marks: 500
-            },
-            {
-                id: 9,
-                name: 'Maximum Difference in an Array-2',
-                type: 'Coding',
-                difficulty: 'MEDIUM',
-                tags: ['Problem Solving', 'Core Skills', 'Arrays', 'Algorithms', 'Data Structures'],
-                selected: false,
-                marks: 50
-            },
-            {
-                id: 10,
-                name: 'Braces-2',
-                type: 'Coding',
-                difficulty: 'HARD',
-                tags: ['Problem Solving', 'Core Skills', 'Stacks', 'Algorithms', 'Data Structures'],
-                selected: false,
-                marks: 50
-            },
-            {
-                id: 11,
-                name: 'Student Rank-3',
-                type: 'Database',
-                difficulty: 'EASY',
-                tags: ['Role Based', 'Selection', 'Databases', 'SQL'],
-                selected: false,
-                marks: 50
-            },
-            {
-                id: 12,
-                name: 'Merge Strings-3',
-                type: 'Coding',
-                difficulty: 'EASY',
-                tags: ['Problem Solving', 'Core Skills', 'General Programming', 'Strings'],
-                selected: false,
-                marks: 500
-            },
-            {
-                id: 13,
-                name: 'Long Break-3',
-                type: 'Coding',
-                difficulty: 'MEDIUM',
-                tags: ['Core Skills', 'Data Structures', 'Greedy', 'Arrays'],
-                selected: false,
-                marks: 50
-            },
-            {
-                id: 14,
-                name: 'Maximum Difference in an Array-3',
-                type: 'Coding',
-                difficulty: 'MEDIUM',
-                tags: ['Problem Solving', 'Core Skills', 'Arrays', 'Algorithms', 'Data Structures'],
-                selected: false,
-                marks: 500
-            },
-            {
-                id: 15,
-                name: 'Braces-3',
-                type: 'Coding',
-                difficulty: 'HARD',
-                tags: ['Problem Solving', 'Core Skills', 'Stacks', 'Algorithms', 'Data Structures'],
-                selected: false,
-                marks: 50
-            },
-            {
-                id: 16,
-                name: 'Student Rank-4',
-                type: 'Database',
-                difficulty: 'EASY',
-                tags: ['Role Based', 'Selection', 'Databases', 'SQL'],
-                selected: false,
-                marks: 500
-            },
-            {
-                id: 17,
-                name: 'Merge Strings-4',
-                type: 'Coding',
-                difficulty: 'EASY',
-                tags: ['Problem Solving', 'Core Skills', 'General Programming', 'Strings'],
-                selected: false,
-                marks: 50
-            },
-            {
-                id: 18,
-                name: 'Long Break-4',
-                type: 'Coding',
-                difficulty: 'MEDIUM',
-                tags: ['Core Skills', 'Data Structures', 'Greedy', 'Arrays'],
-                selected: false,
-                marks: 50
-            },
-            {
-                id: 19,
-                name: 'Maximum Difference in an Array-4',
-                type: 'Coding',
-                difficulty: 'MEDIUM',
-                tags: ['Problem Solving', 'Core Skills', 'Arrays', 'Algorithms', 'Data Structures'],
-                selected: false,
-                marks: 50
-            },
-            {
-                id: 20,
-                name: 'Braces-4',
-                type: 'Coding',
-                difficulty: 'HARD',
-                tags: ['Problem Solving', 'Core Skills', 'Stacks', 'Algorithms', 'Data Structures'],
-                selected: false,
-                marks: 50
+                name: 'Braces Extended',
+                questionTypeId: 1,
+                difficultyTypeId: 1,
+                questionTagIds: [5, 6, 12, 11, 8, 10],
+                languageIds: [1, 2, 3, 4, 5],
+                points: 50
             },
         ],
-        createTestModal: false
     },
     mutations: {
-        [TOGGLE_CREATE_TEST_MODAL] (state) {
-            state.createTestModal = !state.createTestModal
+        [TOGGLE_LEFT_DRAWER] (state, payload) {
+            if(payload.leftDrawer === undefined) {
+                state.leftDrawer = !state.leftDrawer
+            } else {
+                state.leftDrawer = payload.leftDrawer
+            }
         },
-        [SHOW_CREATE_TEST_MODAL] (state) {
-            state.createTestModal = true;
+        [SET_LEFT_SIDEBAR_TAB_ID] (state, payload) {
+            state.leftSidebarTabId = payload.tabId;
         },
-        [HIDE_CREATE_TEST_MODAL] (state) {
-            state.createTestModal = false;
-        },
-        [UPDATE_NEW_TEST] (state, payload) {
-            state.newTest = { ...state.newTest, ...payload }
-        },
-        [CHANGE_CURRENT_TEST] (state, payload) {
-            state.currentTestId = payload.id;
-        },
-        [TOGGLE_TEST_CHECKED_STATE] (state, payload) {
-            let testIndex = getIndexFromId(state.tests, payload.testId);
-            state.tests[testIndex].checked = !state.tests[testIndex].checked;
-        },
-        [TOGGLE_QUESTION_SELECTION] (state, payload) {
-            let questionIndex = getIndexFromId(state.questions, payload.questionId);
-            state.questions[questionIndex].selected = !state.questions[questionIndex].selected;
+        [INIT_SELECTED_QUESTIONS] (state) {
+            let testIndex = getIndexFromId(state.tests, getCurrentTestId(state));
+            state.selectedQuestionIds = state.tests[testIndex].questionIds
         },
         [SELECT_QUESTION] (state, payload) {
-            let questionIndex = getIndexFromId(state.questions, payload.questionId);
-            state.questions[questionIndex].selected = true;
+            state.selectedQuestionIds.push(payload.questionId);
         },
         [UNSELECT_QUESTION] (state, payload) {
-            let questionIndex = getIndexFromId(state.questions, payload.questionId);
-            state.questions[questionIndex].selected = false;
+            state.selectedQuestionIds = state.selectedQuestionIds.filter(questionId => questionId !== payload.questionId);
         },
-        [ADD_QUESTIONS_TO_TEST] (state) {
-            let selectedQuestionIds = selectedItems(state.questions).map(({id}) => id);
-            let currentTestIndex = getIndexFromId(state.tests, state.currentTestId);
-            state.tests[currentTestIndex].questionIds = selectedQuestionIds;
+        [SAVE_TEST_QUESTIONS] (state) {
+            let testIndex = getIndexFromId(state.tests, getCurrentTestId(state));
+
+            // REFERENCE: https://vuejs.org/v2/guide/list.html#Caveats
+            Vue.set(state.tests, testIndex, { ...state.tests[testIndex], questionIds: state.selectedQuestionIds});
+        },
+        [REMOVE_QUESTION_FROM_CURRENT_TEST] (state, payload) {
+            let testIndex = getIndexFromId(state.tests, getCurrentTestId(state));
+            let questionIds = state.tests[testIndex].questionIds.filter(questionId => questionId !== payload.questionId);
+
+            // REFERENCE: https://vuejs.org/v2/guide/list.html#Caveats
+            Vue.set(state.tests, testIndex, { ...state.tests[testIndex], questionIds: questionIds });
         },
         [PUBLISH_CURRENT_TEST] (state) {
-            let currentTestIndex = getIndexFromId(state.tests, state.currentTestId);
-            state.tests[currentTestIndex].published = true;
-        },
-        [PUBLISH_TEST] (state, payload) {
-            let testIndex = getIndexFromId(state.tests, payload.testId);
+            let testIndex = getIndexFromId(state.tests, getCurrentTestId(state));
             state.tests[testIndex].published = true;
         }
     },
     actions: {
-
     },
     getters: {
-        currentTest: state => {
-            return state.tests[getIndexFromId(state.tests, state.currentTestId)];
+        currentTestId: state => {
+            return getCurrentTestId(state);
+        },
+        currentTestIndex: (state, getters) => {
+            return getIndexFromId(state.tests, getters.currentTestId);
+        },
+        currentTest: (state, getters) => {
+            return state.tests[getters.currentTestIndex];
+        },
+        activeTests: state => {
+            return state.tests.filter(({active}) => active);
+        },
+        archivedTests: state => {
+            return state.tests.filter(({active}) => !active);
+        },
+        getTestIndexFromId: state => testId => {
+            return getIndexFromId(state.tests, testId);
+        },
+        getTestFromId: (state, getters) => testId => {
+            return state.tests[getters.getTestFromId(testId)];
+        },
+        getJobProfileIndex: state => jobProfileId => {
+            return getIndexFromId(state.jobProfiles, jobProfileId);
+        },
+        getJobProfileFromId: (state, getters) => jobProfileId => {
+            return state.jobProfiles[getters.getJobProfileIndex(jobProfileId)];
+        },
+        getWorkExperienceTypeIndexFromId: state => workExperienceTypeId => {
+            return getIndexFromId(state.workExperienceTypes, workExperienceTypeId);
+        },
+        getWorkExperienceTypeFromId: (state, getters) => workExperienceTypeId => {
+            return state.workExperienceTypes[getters.getWorkExperienceTypeIndexFromId(workExperienceTypeId)];
+        },
+        getQuestionTypeIndex: state => questionTypeId => {
+            return getIndexFromId(state.questionTypes, questionTypeId);
+        },
+        getQuestionType: (state, getters) => questionTypeId => {
+            return state.questionTypes[getters.getQuestionTypeIndex(questionTypeId)];
+        },
+        getDifficultyTypeIndex: state => difficultyTypeId => {
+            return getIndexFromId(state.difficultyTypes, difficultyTypeId);
+        },
+        getDifficultyType: (state, getters) => difficultyTypeId => {
+            return state.difficultyTypes[getters.getDifficultyTypeIndex(difficultyTypeId)];
+        },
+        getQuestionTagIndices: state => questionTagIds => {
+            return getIndicesFromId(state.questionTags, questionTagIds);
+        },
+        getQuestionTags: state => questionTagIds => {
+            return state.questionTags.filter(tag => questionTagIds.includes(tag.id));
         },
         selectedQuestions: state => {
-            return selectedItems(state.questions);
+            return state.questions.filter(question => state.selectedQuestionIds.includes(question.id));
         },
-        unSelectedQuestions: state => {
-            return unSelectedItems(state.questions);
+        nonSelectedQuestions: state => {
+            return state.questions.filter(question => !state.selectedQuestionIds.includes(question.id));
         },
         currentTestQuestions: (state, getters) => {
             return state.questions.filter(question => getters.currentTest.questionIds.includes(question.id));

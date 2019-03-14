@@ -1,152 +1,216 @@
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-    <mdb-container fluid class="custom-flex-css">
-        <main-header>
-            <template v-slot:title>Tests</template>
-
-            <mdb-breadcrumb>
-                <mdb-breadcrumb-item><router-link to="/tests">Tests</router-link></mdb-breadcrumb-item>
-                <mdb-breadcrumb-item active>Active</mdb-breadcrumb-item>
-            </mdb-breadcrumb>
-
-            <template v-slot:others>
-                <mdb-btn color="success" @click="showModal" class="float-right mr-5">Create Test</mdb-btn>
-                <create-test-modal />
+<template>
+    <div>
+        <side-bar
+                :tab-items="tabItems"
+                :breadcrumb-items="breadcrumbItems"
+                :selected-filter-item-ids="selectedFilterItemIds"
+                :tabs="tabs"
+        >
+            <template v-slot:head>
+                <v-text-field
+                        solo
+                        label="Search for a test"
+                        append-icon="search"
+                        v-model="searchTest"
+                        clearable
+                ></v-text-field>
             </template>
-        </main-header>
+        </side-bar>
+        <v-container fluid>
+            <v-layout column>
+                <v-layout row align-start justify-space-between>
+                    <v-breadcrumbs :items="breadcrumbItems">
+                        <v-icon slot="divider">forward</v-icon>
+                    </v-breadcrumbs>
 
-        <hr />
+                    <v-btn large color="success">
+                        Create Test
+                    </v-btn>
+                </v-layout>
+                <v-layout row align-start justify-space-between fill-height>
+                    <v-card>
+                        <v-list
+                                subheader
+                                three-line
+                        >
+                            <v-subheader>
+                                {{ `${this.filteredTests.length} TESTS` }}
+                            </v-subheader>
+                            <template v-for="test in filteredTests">
+                                <v-divider></v-divider>
+                                <v-list-tile :key="test.id" @click="" :to="'/tests/preview/' + test.id">
+                                    <v-list-tile-action @click.stop.prevent="">
+                                        <v-checkbox
+                                                :value="test.id"
+                                                v-model="selectedTestIds"
+                                        ></v-checkbox>
+                                    </v-list-tile-action>
 
-        <main-content>
-            <template v-slot:leftSideBar>
-                <div class="form-group px-5 pt-5 pb-3 m-0">
-                    <input class="form-control" type="text" placeholder="Search for a test.." aria-label="Search" v-model="searchTest" />
-                </div>
-                <mdb-accordion :panes="leftSideBarPanes" custom/>
-            </template>
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>{{ test.name }}</v-list-tile-title>
+                                        <v-list-tile-sub-title>{{ jobProfile(test.jobProfileId).title }}</v-list-tile-sub-title>
+                                        <v-list-tile-sub-title>{{ workExperienceType(test.workExperienceTypeId).title }}</v-list-tile-sub-title>
+                                    </v-list-tile-content>
 
-            <mdb-list-group>
-                <mdb-list-group-item href="#" :action="true" class="flex-row text-black-50" style="align-items: flex-start!important;" v-for="test in filteredTests" :key="test.id" v-if="test.id !== 0">
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" :id="test.id" :checked="test.checked" @input="updateCheckedState(test)" style="display: none;" />
-                        <label class="form-check-label" :for="test.id"></label>
-                    </div>
-                    <div class="d-flex flex-column w-100 justify-content-between" @click="selectTestAndNavigate(test.id)" style="cursor: pointer;">
-                        <h5 class="mb-1">{{ test.name }}
-                            <small class="text-muted float-right">{{ test.duration }} min</small>
-                        </h5>
-                        <p class="mb-1">{{ test.role }}</p>
-                        <small class="text-muted">0 - {{ test.workExperience }} years</small>
-                    </div>
-                </mdb-list-group-item>
-            </mdb-list-group>
+                                </v-list-tile>
+                            </template>
+                        </v-list>
+                    </v-card>
+                </v-layout>
+            </v-layout>
+        </v-container>
+    </div>
 
-            <template v-slot:rightSideBar>
-                <mdb-accordion :panes="rightSideBarPanes" custom/>
-            </template>
-        </main-content>
-    </mdb-container>
 </template>
 
 <script>
-    import { mdbContainer, mdbRow, mdbCol, mdbBtn, mdbInput, mdbListGroup, mdbListGroupItem, mdbIcon, mdbBreadcrumb, mdbBreadcrumbItem } from 'mdbvue';
-    import { createTestModal } from './modals';
-    import { mainHeader, mainContent, mdbAccordion, mdbAccordionPane } from '../../components';
-
-    import { mapMutations, mapState } from 'vuex';
-    import { SHOW_CREATE_TEST_MODAL, CHANGE_CURRENT_TEST, TOGGLE_TEST_CHECKED_STATE } from '../../store/mutation-types';
-    import notifications from 'vue-notification';
+    import {
+        VTextField,
+        VContainer,
+        VLayout,
+        VBreadcrumbs,
+        VIcon,
+        VBtn,
+        VCard,
+        VList,
+        VSubheader,
+        VDivider,
+        VListTile,
+        VListTileAction,
+        VCheckbox,
+        VListTileContent,
+        VListTileTitle,
+        VListTileSubTitle,
+    } from 'vuetify/lib';
+    import { mapGetters, mapState } from 'vuex';
+    import { SideBar } from '../../components';
 
     export default {
         name: 'TestsPage',
         components: {
-            mdbContainer,
-            mdbRow,
-            mdbCol,
-            mdbBtn,
-            createTestModal,
-            mainContent,
-            mainHeader,
-            mdbAccordion,
-            mdbAccordionPane,
-            mdbInput,
-            mdbListGroup,
-            mdbListGroupItem,
-            mdbIcon,
-            mdbBreadcrumb,
-            mdbBreadcrumbItem,
-            notifications
-        },
-        methods: {
-            ...mapMutations({
-                showModal: SHOW_CREATE_TEST_MODAL,
-                selectTest: CHANGE_CURRENT_TEST,
-                toggleCheckedState: TOGGLE_TEST_CHECKED_STATE
-            }),
-            selectTestAndNavigate: function (id) {
-                this.selectTest({id: id});
-                this.$router.push('/tests/preview/' + id);
-            },
-            updateCheckedState(test) {
-                // undo the action done as the state is not yet updated
-                document.getElementById(test.id).checked = !document.getElementById(test.id).checked;
-
-                // change the checked state through a mutation
-                this.toggleCheckedState({testId: test.id});
-            }
+            SideBar,
+            VTextField,
+            VContainer,
+            VLayout,
+            VBreadcrumbs,
+            VIcon,
+            VBtn,
+            VCard,
+            VList,
+            VSubheader,
+            VDivider,
+            VListTile,
+            VListTileAction,
+            VCheckbox,
+            VListTileContent,
+            VListTileTitle,
+            VListTileSubTitle,
         },
         computed: {
             ...mapState([
-               'tests'
+                "leftSidebarTabId"
             ]),
-            filteredTests() {
-                return this.tests.filter(test => {
+            breadcrumbItems: function () {
+                return [
+                    {
+                        text: 'Tests',
+                        disabled: false,
+                        href: '/#/tests'
+                    },
+                    {
+                        text: !this.leftSidebarTabId ? 'Active' : 'Archived',
+                        disabled: true,
+                        href: '/#/tests'
+                    }
+                ]
+            },
+            ...mapGetters([
+                "activeTests",
+                "archivedTests"
+            ]),
+            ...mapGetters({
+                jobProfile: "getJobProfileFromId",
+                workExperienceType: "getWorkExperienceTypeFromId"
+            }),
+            ...mapState([
+                "jobProfiles",
+                "workExperienceTypes"
+            ]),
+            tests: function () {
+                return this.leftSidebarTabId === 0 ? this.activeTests : this.archivedTests;
+            },
+            filteredTests: function () {
+                if(this.searchTest === null) return this.tests;
+                let filteredTests = this.tests.filter(test => {
                     return test.name.toLowerCase().includes(this.searchTest.toLowerCase()) ||
-                        test.role.toLowerCase().includes(this.searchTest.toLowerCase());
-                })
+                            this.jobProfile(test.jobProfileId).title.toLowerCase().includes(this.searchTest.toLowerCase()) ||
+                            this.workExperienceType(test.workExperienceTypeId).title.toLowerCase().includes(this.searchTest.toLowerCase()) ||
+                            test.duration.toString().toLowerCase().includes(this.searchTest.toLowerCase());
+                });
+                let empty = true;
+                for(let i = 0; i < this.selectedFilterItemIds.length; i++) {
+                    if(this.selectedFilterItemIds[i].length > 0) {
+                        empty = false;
+                        break;
+                    }
+                }
+                if(empty) {
+                    return filteredTests;
+                } else {
+                    return filteredTests.filter(test => {
+                        // TODO: Remove the following hard-coded code and replace it with generalized code.
+                        return this.selectedFilterItemIds[2].includes(test.jobProfileId) || this.selectedFilterItemIds[3].includes(test.workExperienceTypeId);
+                    });
+                }
+            },
+            tabItems: function () {
+                return [
+                    {
+                        index: 0,
+                        action: 'label',
+                        title: 'Labels',
+                        // active: true,
+                        items: []
+                    },
+                    {
+                        index: 1,
+                        action: 'verified_user',
+                        title: 'Owner',
+                        items: []
+                    },
+                    {
+                        index: 2,
+                        action: 'extension',
+                        title: 'Role',
+                        items: this.jobProfiles
+                    },
+                    {
+                        index: 3,
+                        action: 'work',
+                        title: 'Work Experience',
+                        items: this.workExperienceTypes
+                    }
+                ];
+            },
+        },
+        data () {
+            return {
+                searchTest: '',
+                selectedTestIds: [],
+                selectedFilterItemIds: [[],[],[],[]],
+                tabs: [
+                    {
+                        name: 'Active Tests',
+                        id: 1
+                    },
+                    {
+                        name: 'Archived Tests',
+                        id: 2
+                    }
+                ],
             }
         },
-        data() {
-            return {
-                leftSideBarPanes: [
-                    {
-                        title: 'Labels',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-                    {
-                        title: 'Owner',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-                    {
-                        title: 'Role',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-                    {
-                        title: 'Work Experience',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-               ],
-                rightSideBarPanes: [
-                    {
-                        title: 'Difficulty',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-                    {
-                        title: 'Type',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-                    {
-                        title: 'Tags',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-                    {
-                        title: 'Languages',
-                        content: 'Anim pariatur cliche reprehenderit,',
-                    },
-                ],
-                searchTest: ''
-            };
-        }
-    };
+    }
 </script>
 
 <style scoped>

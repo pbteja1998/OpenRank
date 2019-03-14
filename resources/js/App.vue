@@ -1,73 +1,144 @@
 <template>
-    <div id="app" class="flyout">
-        <mdb-navbar dark position="top" class="default-color" scrolling :scrollingOffset="20">
-            <mdb-navbar-brand to="/" waves style="font-weight: bolder;">
-                Open Rank
-            </mdb-navbar-brand>
-            <mdb-navbar-toggler>
-                <mdb-navbar-nav right>
-                    <mdb-nav-item exact to="/" waves-fixed>Home</mdb-nav-item>
-                    <mdb-nav-item to="/tests" waves-fixed>Tests</mdb-nav-item>
-                    <mdb-nav-item to="/code-pair" waves-fixed>Code Pair</mdb-nav-item>
-                    <mdb-nav-item to="/library" waves-fixed>Library</mdb-nav-item>
-                    <mdb-nav-item to="/insights" waves-fixed>Insights</mdb-nav-item>
-                </mdb-navbar-nav>
-            </mdb-navbar-toggler>
-        </mdb-navbar>
-        <notifications group="tests" position="top center"/>
-        <main class="custom-flex-css" :style="{marginTop: '60px'}">
-            <router-view></router-view>
-        </main>
-        <mdb-footer color="default-color">
-            <p class="footer-copyright mb-0 py-3 text-center">
-                &copy; {{new Date().getFullYear()}} Copyright: <a href="https://github.com/pbteja1998"> Bhanu Teja</a>
-            </p>
-        </mdb-footer>
+    <div id="app">
+        <v-app>
+            <v-toolbar
+                    app
+                    dark
+                    color="#343E4A"
+                    flat
+                    clipped-left
+            >
+                <v-toolbar-side-icon @click="toggleLeftDrawer"></v-toolbar-side-icon>
+
+                <router-link to="/" style="text-decoration: none;">
+                    <v-toolbar-title class="white--text">
+                        OpenRank
+                    </v-toolbar-title>
+                </router-link>
+
+                <v-spacer></v-spacer>
+                <v-toolbar-items router :slot="linksSlot">
+                    <v-btn to="/tests" flat>
+                        <v-icon>question_answer</v-icon>
+                        <span>Tests</span>
+                    </v-btn>
+                    <v-btn to="/library" flat>
+                        <v-icon>library_books</v-icon>
+                        <span>Library</span>
+                    </v-btn>
+                    <v-btn to="/code-pair" flat>
+                        <v-icon>people</v-icon>
+                        <span>CodePair</span>
+                    </v-btn>
+                    <v-btn to="/insights" flat>
+                        <v-icon>insert_chart</v-icon>
+                        <span>Insights</span>
+                    </v-btn>
+                </v-toolbar-items>
+            </v-toolbar>
+            <v-content>
+                <v-container fluid>
+                    <router-view></router-view>
+                </v-container>
+            </v-content>
+            <v-footer
+                    app
+                    height="auto"
+                    color="#343E4A"
+            >
+                <v-layout
+                        justify-center
+                        row
+                        wrap
+                >
+                    <v-btn
+                            v-for="link in footerLinks"
+                            :key="link"
+                            color="white"
+                            flat
+                            round
+                    >
+                        {{ link }}
+                    </v-btn>
+                    <v-flex
+                            py-3
+                            text-xs-center
+                            white--text
+                            xs12
+                    >
+                        &copy;2019 — <strong>BHANU TEJA</strong>
+                    </v-flex>
+                </v-layout>
+            </v-footer>
+        </v-app>
     </div>
 </template>
 
 <script>
-    import { mdbNavbar, mdbNavItem, mdbNavbarNav, mdbNavbarToggler, mdbNavbarBrand, mdbFooter } from 'mdbvue';
+    import {
+        VApp,
+        VToolbar,
+        VToolbarSideIcon,
+        VToolbarTitle,
+        VSpacer,
+        VBtn,
+        VIcon,
+        VContent,
+        VContainer,
+        VFooter,
+        VLayout,
+        VFlex,
+        VToolbarItems
+    } from 'vuetify/lib';
+    import { TOGGLE_LEFT_DRAWER } from "./store/mutation-types";
+    import { mapMutations } from 'vuex';
 
     export default {
         name: 'app',
         components: {
-            mdbNavbar,
-            mdbNavItem,
-            mdbNavbarNav,
-            mdbNavbarToggler,
-            mdbNavbarBrand,
-            mdbFooter
+            VApp,
+            VToolbar,
+            VToolbarSideIcon,
+            VToolbarTitle,
+            VSpacer,
+            VBtn,
+            VIcon,
+            VContent,
+            VContainer,
+            VFooter,
+            VLayout,
+            VFlex,
+            VToolbarItems
+        },
+        methods: {
+            ...mapMutations({
+                toggleLeftDrawer: TOGGLE_LEFT_DRAWER
+            })
+        },
+        data () {
+            return {
+                footerLinks: [
+                    'Home',
+                    'About Us',
+                    'Team',
+                    'Services',
+                    'Blog',
+                    'Contact Us'
+                ]
+            }
+        },
+        computed: {
+            linksSlot () {
+                if (this.$vuetify.breakpoint.mdAndUp) {
+                    return 'default'
+                } else {
+                    return 'extension'
+                }
+            }
         }
     };
 
 </script>
 
 <style>
-    .flyout {
-        display:flex;
-        flex-direction: column;
-        min-height:100vh;
-        justify-content: space-between;
-    }
-    .active{
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-    .demo-section {
-        padding: 20px 0;
-    }
-    .demo-section > section {
-        border: 1px solid #e0e0e0;
-        padding: 15px;
-    }
-    .demo-section > h4 {
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-    .demo-title {
-        color: #9e9e9e;
-        font-weight: 700;
-        margin-bottom: 0;
-        padding-left: 15px;
-    }
 </style>

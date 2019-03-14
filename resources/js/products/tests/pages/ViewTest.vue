@@ -1,138 +1,290 @@
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-    <mdb-container fluid class="custom-flex-css">
-        <main-header>
-            <template v-slot:title>Tests</template>
-            <mdb-breadcrumb>
-                <mdb-breadcrumb-item><router-link to="/tests">Tests</router-link></mdb-breadcrumb-item>
-                <mdb-breadcrumb-item><router-link :to="'/tests/preview/' + currentTest.id">{{ currentTest.name }}</router-link></mdb-breadcrumb-item>
-                <mdb-breadcrumb-item active>Questions</mdb-breadcrumb-item>
-            </mdb-breadcrumb>
+<template>
+    <div>
+        <v-snackbar
+                v-model="publishedSnackbar"
+                top
+        >
+            <v-icon color="success" dark>check_circle</v-icon>
+            Test is published
+            <v-btn
+                    dark
+                    flat
+                    @click="publishedSnackbar = false"
+            >
+                Close
+            </v-btn>
+        </v-snackbar>
+        <v-toolbar tabs flat extended color="white" class="elevation-1 pt-4">
+            <v-breadcrumbs :items="breadcrumbItems">
+                <v-icon slot="divider">forward</v-icon>
+            </v-breadcrumbs>
+            <v-spacer></v-spacer>
+            <v-toolbar-title class="text-xs-center">{{ currentTest.name }}</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn icon outline color="primary" small>
+                <v-icon small>lock</v-icon>
+            </v-btn>
+            <v-btn>Try Test</v-btn>
+            <v-btn color="success" @click="publishDialog=true" v-if="!currentTest.published">Publish</v-btn>
+            <v-btn color="success" v-else :to="'/tests/invite/' + currentTest.id">
+                <v-icon>person_add</v-icon>&nbsp;&nbsp;Invite
+            </v-btn>
+            <v-dialog v-model="publishDialog" max-width="290">
+                <v-card>
+                    <v-card-title>Are you sure that you want to publish {{ currentTest.name }}?</v-card-title>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="success" flat @click="publishDialog = false">No</v-btn>
+                        <v-btn color="red" flat @click="publishTestAndCloseDialog">Yes</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+            <!--<v-btn color="primary" dark @click="expand = !expand">-->
+                <!--{{ expand ? 'Close' : 'Keep' }} other rows-->
+            <!--</v-btn>-->
 
-            <template v-slot:others>
-                <!--<span class="mr-3"><mdb-icon icon="lock" />&nbsp;&nbsp;Lock</span>-->
-                <mdb-btn class="float-right"><mdb-icon icon="ellipsis-v" color="primary" style="cursor: pointer;" /></mdb-btn>
-                <mdb-btn class="float-right" color="success" @click="publishTest" v-if="!currentTest.published">Publish</mdb-btn>
-                <router-link :to="'/tests/' + currentTest.id + '/invite'" style="color: white;" v-else>
-                    <mdb-btn class="float-right" color="success" style="text-transform: initial;">
-                    <mdb-icon icon="user-plus" class="mr-2" />Invite
-                    </mdb-btn>
-                </router-link>
-                <mdb-btn class="float-right" style="color: black; text-transform: initial"><mdb-icon far icon="eye-slash" class="mr-2" />Try Test</mdb-btn>
-                <mdb-btn class="float-right" style="color: blue; text-transform: initial"><mdb-icon icon="lock" class="mr-2" />Lock</mdb-btn>
+            <template v-slot:extension>
+                <v-tabs v-model="tabId">
+                    <v-tabs-slider color="success"></v-tabs-slider>
+
+                    <v-tab v-for="item in tabItems" :key="item.id">
+                        {{ item.title }}
+                    </v-tab>
+                </v-tabs>
             </template>
-        </main-header>
-
-        <hr />
-
-        <main-content margin-left="2" main-content-col="8" class="mt-3">
-            <mdb-tbl bordered class="text-center">
-                <mdb-tbl-head>
-                    <tr>
-                        <th>Questions({{ currentTestQuestions.length }})</th>
-                        <th>Type</th>
-                        <th>Difficulty</th>
-                        <th>Points</th>
-                        <th>Actions</th>
-                    </tr>
-                </mdb-tbl-head>
-                <mdb-tbl-body>
-                    <tr v-for="question in currentTestQuestions">
-                        <th scope="row">{{ question.name }}</th>
-                        <td>{{ question.type }}</td>
-                        <td class="text-success" v-if="question.difficulty === 'EASY'">{{ question.difficulty }}</td>
-                        <td class="text-warning" v-else-if="question.difficulty === 'MEDIUM'">{{ question.difficulty }}</td>
-                        <td class="text-danger" v-else>{{ question.difficulty }}</td>
-                        <td>{{ question.marks }}</td>
-                        <td>
-                            <mdb-tooltip :options="{placement: 'top'}">
-                                <div class="tooltip">
-                                    Edit
-                                </div>
-                                <mdb-icon slot="reference" icon="pencil-alt" color="" style="cursor: pointer;" class="mr-3 custom-hover" />
-                            </mdb-tooltip>
-                            <mdb-tooltip :options="{placement: 'top'}">
-                                <div class="tooltip">
-                                    Insights
-                                </div>
-                                <mdb-icon slot="reference" icon="chart-bar" color="" style="cursor: pointer;" class="mr-3 custom-hover" />
-                            </mdb-tooltip>
-                            <mdb-popover trigger="click" :options="{placement: 'bottom'}">
-                                <div class="popover">
-                                    <div class="popover-header">
-                                        Actions
-                                    </div>
-                                    <div class="popover-body">
-                                        <mdb-btn style="color: black;">Try question</mdb-btn>
-                                        <mdb-btn style="color: black;">Remove</mdb-btn>
-                                    </div>
-                                </div>
-                                <mdb-icon slot="reference" icon="ellipsis-v" color="" style="cursor: pointer;" class="mr-3 custom-hover" />
-                            </mdb-popover>
+        </v-toolbar>
+        <v-container>
+            <v-data-table
+                    v-model="selected"
+                    :headers="headers"
+                    :items="questions"
+                    :expand="expand"
+                    item-key="name"
+                    select-all
+                    class="elevation-1"
+            >
+                <template v-slot:items="props">
+                    <tr @click="props.expanded = !props.expanded">
+                        <td @click.stop="">
+                            <v-checkbox
+                                    v-model="props.selected"
+                                    primary
+                                    hide-details
+                            ></v-checkbox>
+                        </td>
+                        <td class="text-xs-center">{{ props.item.name }}</td>
+                        <td class="text-xs-center">{{ props.item.questionType.title }}</td>
+                        <td class="text-xs-center">{{ props.item.difficultyType.title }}</td>
+                        <td class="text-xs-center">{{ props.item.points }}</td>
+                        <td class="justify-center layout px-0" @click.stop="">
+                            <v-icon
+                                    small
+                                    class="mr-2"
+                                    @click=""
+                                    :disabled="currentTest.published"
+                            >
+                                edit
+                            </v-icon>
+                            <v-dialog v-model="deleteDialog" max-width="290">
+                                <v-card>
+                                    <v-card-title>Are you sure that you want to remove {{ props.item.name.toUpperCase() }} from the test?</v-card-title>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn color="success" flat @click="deleteDialog = false">No</v-btn>
+                                        <v-btn color="red" flat @click="removeQuestionAndCloseDialog(props.item.id)">Yes</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                            <v-icon
+                                    small
+                                    @click="deleteDialog=true"
+                                    color="red"
+                                    :disabled="currentTest.published"
+                            >
+                                delete
+                            </v-icon>
                         </td>
                     </tr>
-                </mdb-tbl-body>
-            </mdb-tbl>
-        </main-content>
-    </mdb-container>
+                </template>
+                <template v-slot:expand="props" v-slot:items="props">
+                    <v-card>
+                        <template v-for="tag in getQuestionTags(props.item.questionTagIds)">
+                            <v-chip
+                                    label
+                                    :key="tag.id"
+                                    class="mr-2"
+                                    small
+                            >
+                                {{ tag.title }}
+                            </v-chip>
+                        </template>
+                    </v-card>
+                </template>
+            </v-data-table>
+        </v-container>
+    </div>
 </template>
 
 <script>
-    import { mdbContainer, mdbBreadcrumb, mdbBreadcrumbItem, mdbBtn, mdbIcon, mdbTbl, mdbTblHead, mdbTblBody, mdbTooltip, mdbPopover } from 'mdbvue';
-    import { mainHeader, mainContent } from '../../../components';
+    import {
+        VToolbar,
+        VBreadcrumbs,
+        VIcon,
+        VSpacer,
+        VToolbarTitle,
+        VBtn,
+        VTabs,
+        VTabsSlider,
+        VTab,
+        VContainer,
+        VDataTable,
+        VCheckbox,
+        VCard,
+        VChip,
+        VDialog,
+        VCardTitle,
+        VCardActions,
+        VSnackbar
+    } from 'vuetify/lib';
     import { mapGetters, mapMutations } from 'vuex';
-    import { PUBLISH_CURRENT_TEST } from "../../../store/mutation-types";
+    import { REMOVE_QUESTION_FROM_CURRENT_TEST, PUBLISH_CURRENT_TEST } from "../../../store/mutation-types";
 
     export default {
-        name: 'TestViewPage',
+        name: 'ViewTestPage',
         components: {
-            mdbContainer,
-            mainHeader,
-            mdbBreadcrumb,
-            mdbBreadcrumbItem,
-            mdbBtn,
-            mdbIcon,
-            mainContent,
-            mdbTbl,
-            mdbTblHead,
-            mdbTblBody,
-            mdbTooltip,
-            mdbPopover
+            VToolbar,
+            VBreadcrumbs,
+            VIcon,
+            VSpacer,
+            VToolbarTitle,
+            VBtn,
+            VTabs,
+            VTabsSlider,
+            VTab,
+            VContainer,
+            VDataTable,
+            VCheckbox,
+            VCard,
+            VChip,
+            VDialog,
+            VCardTitle,
+            VCardActions,
+            VSnackbar
+        },
+        data: () => ({
+            publishedSnackbar: false,
+            expand: false,
+            deleteDialog: false,
+            publishDialog: false,
+            selected: [],
+            tabId: 0,
+            tabItems: [
+                {
+                    id: 1,
+                    title: "Questions"
+                },
+                {
+                    id: 2,
+                    title: "Candidates"
+                },
+                {
+                    id: 3,
+                    title: "Insights"
+                },
+                {
+                    id: 4,
+                    title: "Settings"
+                }
+            ],
+        }),
+
+        computed: {
+            ...mapGetters([
+                "currentTest",
+                "currentTestQuestions",
+                "getDifficultyType",
+                "getQuestionType",
+                "getQuestionTags"
+            ]),
+            headers: function () {
+                return [
+                    {
+                        text: `Questions (${this.currentTest.questionIds.length})`,
+                        align: 'center',
+                        sortable: false,
+                        value: 'name'
+                    },
+                    {
+                        text: 'Type',
+                        align: 'center',
+                        sortable: false,
+                        value: 'questionType'
+                    },
+                    {
+                        text: 'Difficulty',
+                        align: 'center',
+                        sortable: false,
+                        value: 'difficultyType'
+                    },
+                    {
+                        text: `Points (${this.totalPoints})`,
+                        align: 'center',
+                        sortable: true,
+                        value: 'points'
+                    },
+                    {
+                        text: 'Actions',
+                        align: 'center',
+                        value: 'name',
+                        sortable: false,
+                    }
+                ];
+            },
+            breadcrumbItems: function () {
+                return [
+                    {
+                        text: 'Tests',
+                        disabled: false,
+                        href: '/#/tests'
+                    },
+                    {
+                        text: this.currentTest.name,
+                        disabled: false,
+                        href: '/#/tests/preview/' + this.currentTest.id
+                    },
+                    {
+                        text: this.tabItems[this.tabId].title,
+                        disabled: true,
+                        href: '/#/tests/' + this.currentTest.id
+                    },
+                ]
+            },
+            questions: function () {
+                return this.currentTestQuestions.map(question => {
+                    return {...question, difficultyType: this.getDifficultyType(question.difficultyTypeId), questionType: this.getQuestionType(question.questionTypeId)};
+                });
+            },
+            totalPoints: function () {
+                return this.questions.reduce((totalPoints, question) => totalPoints + question.points, 0);
+            }
         },
         methods: {
             ...mapMutations({
-                publishCurrentTest: PUBLISH_CURRENT_TEST
+                "removeQuestion": REMOVE_QUESTION_FROM_CURRENT_TEST,
+                "publishTest": PUBLISH_CURRENT_TEST,
             }),
-            publishTest: function () {
-                this.publishCurrentTest();
-                this.$notify({group: 'tests', type: 'success', text: 'Test is published', duration: 1000})
+            removeQuestionAndCloseDialog: function (questionId) {
+                this.removeQuestion({questionId: questionId});
+                this.deleteDialog = false;
             },
-        },
-        mounted: function () {
-            if(this.$store.state.currentTestId === 0) {
-                // this.$router.push('/tests/');
+            publishTestAndCloseDialog: function () {
+                this.publishTest();
+                this.publishDialog = false;
+                this.publishedSnackbar = true;
             }
-        },
-        computed: {
-            ...mapGetters([
-                'currentTest',
-                'currentTestQuestions'
-            ])
-        },
-        data() {
-            return {
-            };
         }
-    };
+    }
 </script>
 
 <style scoped>
-    thead > tr {
-        text-transform: uppercase;
-    }
-    thead > tr > th {
-        font-weight: bold;
-    }
-    .custom-hover:hover {
-        color: blue;
-    }
 </style>
